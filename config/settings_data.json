@@ -17,6 +17,7 @@
     "show_lang_toggle": true,
     "lang_fr_url": "/",
     "lang_en_url": "/?lang=en",
+    "footer_logo_height": 64,
     "footer_menu": "footer",
     "footer_copy": "© 1999–2026 Alain Dupont. Droit d'auteur OPIC Canada No. 477714. Tous droits réservés."
   },

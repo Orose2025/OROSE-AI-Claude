@@ -511,6 +511,7 @@ h1, h2, h3, h4 {
    ============================================================ */
 .eoc-footer { background: var(--eoc-bg-secondary); border-top: 1px solid var(--eoc-groove); padding: 3.5rem 1.5rem 2.5rem; text-align: center; }
 .eoc-footer__logo { font-family: var(--eoc-font-display); font-style: italic; font-weight: 700; color: var(--eoc-gold); font-size: 1.3rem; }
+.eoc-footer__logo-img { display: block; width: auto; height: 64px; margin: 0 auto 0.5rem; }
 .eoc-footer__links { list-style:none; display:flex; gap:1.75rem; justify-content:center; flex-wrap:wrap; margin: 1.5rem 0; padding:0; }
 .eoc-footer__links a { font-family: var(--eoc-font-ui); text-transform: uppercase; letter-spacing: .12em; font-size: .78rem; color: var(--eoc-cream); }
 .eoc-footer__copy { color: var(--eoc-wood); font-size: .8rem; margin-top: 1rem; }

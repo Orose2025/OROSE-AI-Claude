@@ -158,6 +158,16 @@
     "name": "Pied de page / Footer",
     "settings": [
       {
+        "type": "range",
+        "id": "footer_logo_height",
+        "label": "Hauteur du logo (pied de page) / Footer logo height",
+        "min": 36,
+        "max": 120,
+        "step": 4,
+        "unit": "px",
+        "default": 64
+      },
+      {
         "type": "link_list",
         "id": "footer_menu",
         "label": "Menu pied de page / Footer menu"
