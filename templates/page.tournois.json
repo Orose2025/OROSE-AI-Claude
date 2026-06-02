@@ -1,0 +1,22 @@
+{
+  "sections": {
+    "main": {
+      "type": "eoc-flex",
+      "settings": {
+        "show_page_title": false,
+        "width": "narrow",
+        "bg_color": "#1A1008"
+      },
+      "blocks": {
+        "kicker": { "type": "kicker", "settings": { "text": "TOURNOIS / TOURNAMENTS", "center": true } },
+        "title": { "type": "heading", "settings": { "text": "Mesurez votre stratégie", "size": 48, "color": "#E8C96A", "italic": true, "align": "center" } },
+        "intro": { "type": "text", "settings": { "content": "<p>Rejoignez la communauté ÉCHEC O CUBE lors de nos tournois. Format, dates et inscriptions seront annoncés ici. / Join the ÉCHEC O CUBE community at our tournaments. Format, dates and registration will be announced here.</p>", "align": "center", "max_width": 700, "center_box": true } },
+        "feature": { "type": "image_text", "settings": { "image_position": "right", "heading": "Prochain tournoi", "content": "<p><strong>Date :</strong> à confirmer<br><strong>Lieu :</strong> à confirmer<br><strong>Format :</strong> élimination simple, parties au meilleur des points.</p><p>Modifiez ce bloc pour annoncer votre prochain événement. / Edit this block to announce your next event.</p>", "button_label": "S'INSCRIRE / REGISTER", "button_link": "/pages/contact" } },
+        "div": { "type": "divider", "settings": {} },
+        "rules": { "type": "text", "settings": { "content": "<p>Règlement de tournoi, classement et historique des champions à venir. / Tournament rules, rankings and champions history coming soon.</p>", "align": "center", "max_width": 700, "center_box": true } }
+      },
+      "block_order": ["kicker", "title", "intro", "feature", "div", "rules"]
+    }
+  },
+  "order": ["main"]
+}

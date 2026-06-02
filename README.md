@@ -110,6 +110,23 @@ Chaque bloc a sa couleur de fond, sa largeur et ses marges. Aucune ligne de code
 > Les pages d'accueil (7 sections), Règles et 404 ont elles aussi tous leurs
 > textes, images et couleurs éditables dans le personnalisateur.
 
+### Gabarits de pages dédiés / Dedicated page templates
+
+Quatre gabarits prêts à remplir (contenu de départ bilingue, tout modifiable) :
+
+| Page | Gabarit à choisir (Admin › Pages › Modèle de thème) |
+|------|------------------------------------------------------|
+| Le Jeu | `page.le-jeu` |
+| Vision | `page.vision` |
+| Tournois | `page.tournois` |
+| Jouer | `page.jouer` |
+| À propos de nous | `page.about` |
+| Contact | `page.contact` |
+
+**Pour utiliser un gabarit** : Admin › *Boutique en ligne › Pages* › créez/ouvrez la
+page › à droite, **Modèle de thème** › choisissez le gabarit › *Enregistrer*.
+Ensuite, dans *Personnaliser*, modifiez/ajoutez/remplacez tous les blocs et images.
+
 ## 🚀 Installation
 
 Ces fichiers constituent une **surcouche éditoriale du thème Dawn**.
