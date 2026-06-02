@@ -1,10 +1,33 @@
-{%- comment -%} ÉCHEC O CUBE — 404 (entièrement modifiable) {%- endcomment -%}
-<section class="eoc-page eoc-center" id="eoc-404">
-  <div class="eoc-container eoc-narrow">
-    <h1 style="color:var(--eoc-gold);font-style:italic;font-size:{{ section.settings.code_size }}px;line-height:1">{{ section.settings.code }}</h1>
-    <p style="color:var(--eoc-cream)">{{ section.settings.message }}</p>
+{%- comment -%}
+  ÉCHEC O CUBE — 404 (plein écran, image clé en arrière-plan, tout modifiable)
+  Full-bleed 404 with a key background image behind the content.
+{%- endcomment -%}
+<section class="eoc-404-hero" id="eoc-404">
+  <div class="eoc-404-hero__bg">
+    {%- if section.settings.bg_image != blank -%}
+      <img src="{{ section.settings.bg_image | image_url: width: 2400 }}"
+           srcset="{{ section.settings.bg_image | image_url: width: 1000 }} 1000w,
+                   {{ section.settings.bg_image | image_url: width: 2400 }} 2400w"
+           sizes="100vw"
+           alt="{{ section.settings.bg_image.alt | escape | default: 'ÉCHEC O CUBE' }}"
+           width="2400" height="1350">
+    {%- elsif section.settings.bg_filename != blank -%}
+      <img src="{{ section.settings.bg_filename | file_img_url: '2400x' }}" alt="ÉCHEC O CUBE">
+    {%- else -%}
+      <div class="eoc-404-hero__placeholder"></div>
+    {%- endif -%}
+  </div>
+  <div class="eoc-404-hero__overlay" style="opacity: {{ section.settings.bg_overlay | divided_by: 100.0 }}"></div>
+
+  <div class="eoc-404-hero__content">
+    {%- if section.settings.code != blank -%}
+      <h1 style="color:var(--eoc-gold);font-style:italic;font-size:{{ section.settings.code_size }}px;line-height:1;margin:0 0 1rem">{{ section.settings.code }}</h1>
+    {%- endif -%}
+    {%- if section.settings.message != blank -%}
+      <p style="color:var(--eoc-cream);font-size:1.4rem;margin:0 0 2rem">{{ section.settings.message }}</p>
+    {%- endif -%}
     {%- if section.settings.button_label != blank -%}
-      <p><a href="{{ section.settings.button_link | default: routes.root_url }}" class="eoc-btn">{{ section.settings.button_label }}</a></p>
+      <a href="{{ section.settings.button_link | default: routes.root_url }}" class="eoc-btn eoc-btn--solid">{{ section.settings.button_label }}</a>
     {%- endif -%}
   </div>
 </section>
@@ -14,8 +37,13 @@
   "name": "EOC — 404",
   "tag": "section",
   "settings": [
-    { "type": "text", "id": "code", "label": "Grand texte / Big text", "default": "404" },
-    { "type": "range", "id": "code_size", "label": "Taille du grand texte / Big text size", "min": 40, "max": 160, "step": 4, "unit": "px", "default": 64 },
+    { "type": "header", "content": "Image clé en arrière-plan / Key background image" },
+    { "type": "image_picker", "id": "bg_image", "label": "Image de fond (plein écran) / Full-width background image" },
+    { "type": "text", "id": "bg_filename", "label": "OU nom de fichier (Contenu › Fichiers) / OR filename", "info": "Utilisé si aucune image choisie ci-dessus. / Used if no image picked above." },
+    { "type": "range", "id": "bg_overlay", "label": "Assombrissement / Darken overlay", "min": 0, "max": 90, "step": 5, "unit": "%", "default": 45 },
+    { "type": "header", "content": "Texte / Text" },
+    { "type": "text", "id": "code", "label": "Grand texte (laisser vide pour masquer) / Big text", "default": "" },
+    { "type": "range", "id": "code_size", "label": "Taille du grand texte / Big text size", "min": 40, "max": 200, "step": 4, "unit": "px", "default": 88 },
     { "type": "text", "id": "message", "label": "Message", "default": "Page introuvable. / Page not found." },
     { "type": "text", "id": "button_label", "label": "Bouton / Button", "default": "ACCUEIL / HOME" },
     { "type": "url", "id": "button_link", "label": "Lien du bouton / Button link" }

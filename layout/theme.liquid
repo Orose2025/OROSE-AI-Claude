@@ -58,7 +58,7 @@
             <img src="{{ nav_logo_src }}"
                  alt="ÉCHEC O CUBE"
                  class="eoc-nav__logo-img"
-                 style="height: {{ settings.header_logo_height | default: 104 }}px">
+                 style="height: {{ settings.header_logo_height | default: 152 }}px">
           {%- else -%}
             <span class="gold">{{ settings.brand_logo_word1 | default: 'ÉCHEC' }}</span>
             <span class="cream">{{ settings.brand_logo_word2 | default: 'O CUBE' }}</span>
@@ -117,7 +117,10 @@
       {%- endif -%}
       <ul class="eoc-footer__links">
         {%- for link in linklists[settings.footer_menu].links -%}
-          <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {%- assign link_title_dc = link.title | downcase | strip -%}
+          {%- unless link_title_dc == 'search' or link_title_dc == 'recherche' -%}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {%- endunless -%}
         {%- else -%}
           <li><a href="/pages/rules">Règles / Rules</a></li>
           <li><a href="{{ routes.all_products_collection_url }}">Boutique / Shop</a></li>

@@ -196,7 +196,7 @@ h1, h2, h3, h4 {
 }
 .eoc-nav__logo .gold { color: var(--eoc-gold); }
 .eoc-nav__logo .cream { color: var(--eoc-cream); }
-.eoc-nav__logo-img { display: block; width: auto; height: 104px; max-height: 22vh; }
+.eoc-nav__logo-img { display: block; width: auto; height: 152px; max-height: 28vh; }
 .eoc-nav__links {
   display: flex;
   gap: 2rem;
@@ -518,6 +518,25 @@ h1, h2, h3, h4 {
 .eoc-footer__links { list-style:none; display:flex; gap:1.75rem; justify-content:center; flex-wrap:wrap; margin: 1.5rem 0; padding:0; }
 .eoc-footer__links a { font-family: var(--eoc-font-ui); text-transform: uppercase; letter-spacing: .12em; font-size: .78rem; color: var(--eoc-cream); }
 .eoc-footer__copy { color: var(--eoc-wood); font-size: .8rem; margin-top: 1rem; }
+
+/* ============================================================
+   404 — full-bleed key image hero
+   ============================================================ */
+.eoc-404-hero {
+  position: relative;
+  min-height: 88vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 9rem 1.5rem 5rem;
+  overflow: hidden;
+}
+.eoc-404-hero__bg { position: absolute; inset: 0; z-index: 0; }
+.eoc-404-hero__bg img { width: 100%; height: 100%; object-fit: cover; }
+.eoc-404-hero__placeholder { width: 100%; height: 100%; background: var(--eoc-bg-secondary); }
+.eoc-404-hero__overlay { position: absolute; inset: 0; z-index: 1; background: var(--eoc-bg-primary); opacity: .45; }
+.eoc-404-hero__content { position: relative; z-index: 3; max-width: 760px; }
 
 /* ============================================================
    BILINGUAL PAGES (rules / about side by side)
