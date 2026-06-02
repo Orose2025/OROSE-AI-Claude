@@ -64,6 +64,9 @@ h1, h2, h3, h4 {
 .eoc-container { max-width: var(--eoc-maxwidth); margin: 0 auto; width: 100%; }
 .eoc-narrow { max-width: 760px; margin-left: auto; margin-right: auto; }
 .eoc-center { text-align: center; }
+.eoc-order-2 { order: 2; }
+.eoc-flex .eoc-rte p { margin: 0 0 1rem; }
+.eoc-flex .eoc-rte a { text-decoration: underline; }
 .visually-hidden { position:absolute!important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
 
 .eoc-kicker {
@@ -180,7 +183,7 @@ h1, h2, h3, h4 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: .9rem 1.5rem;
+  padding: .5rem 1.5rem;
   gap: 1.5rem;
 }
 .eoc-nav__logo {
@@ -193,7 +196,7 @@ h1, h2, h3, h4 {
 }
 .eoc-nav__logo .gold { color: var(--eoc-gold); }
 .eoc-nav__logo .cream { color: var(--eoc-cream); }
-.eoc-nav__logo-img { display: block; width: auto; height: 44px; }
+.eoc-nav__logo-img { display: block; width: auto; height: 104px; max-height: 22vh; }
 .eoc-nav__links {
   display: flex;
   gap: 2rem;
@@ -533,6 +536,7 @@ h1, h2, h3, h4 {
   :root { --eoc-section-pad: 4.5rem; }
   .eoc-nav__links { display: none; }
   .eoc-nav__toggle { display: flex; }
+  .eoc-nav__logo-img { height: 64px !important; max-height: 64px; }
   .eoc-nav__links.is-open {
     display: flex; flex-direction: column;
     position: absolute; top: 100%; left: 0; right: 0;

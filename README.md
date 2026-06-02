@@ -91,6 +91,25 @@ il remplace le logo texte dans la **barre de navigation** ET au **centre du hér
 
 > Tant qu'aucune image n'est choisie, un logo texte de secours s'affiche.
 
+## 🧱 Tout modifier sur chaque page (sans code)
+
+Le thème inclut un **constructeur de contenu flexible** (`eoc-flex`) utilisé par
+défaut sur **toutes les pages** (À propos, Contact, Le Jeu, Vision, Tournois,
+Jouer, etc.). Dans **Personnaliser**, vous pouvez **ajouter, glisser-déposer,
+réordonner et supprimer** des blocs :
+
+- **Sur-titre**, **Titre** (taille/couleur/alignement réglables)
+- **Texte riche** (gras, italique, liens, listes)
+- **Texte bilingue FR / EN** côte à côte
+- **Image** (avec légende) et **Image + Texte** (image à gauche ou à droite)
+- **Citation**, **Bouton** (3 styles), **Formulaire de contact**
+- **Contenu de la page** (le texte saisi dans *Admin › Pages*), **Espace**, **Séparateur**
+
+Chaque bloc a sa couleur de fond, sa largeur et ses marges. Aucune ligne de code.
+
+> Les pages d'accueil (7 sections), Règles et 404 ont elles aussi tous leurs
+> textes, images et couleurs éditables dans le personnalisateur.
+
 ## 🚀 Installation
 
 Ces fichiers constituent une **surcouche éditoriale du thème Dawn**.

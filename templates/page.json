@@ -1,4 +1,17 @@
 {
-  "sections": { "main": { "type": "eoc-page" } },
+  "sections": {
+    "main": {
+      "type": "eoc-flex",
+      "settings": {
+        "show_page_title": true,
+        "width": "narrow",
+        "bg_color": "#1A1008"
+      },
+      "blocks": {
+        "content": { "type": "page_content" }
+      },
+      "block_order": ["content"]
+    }
+  },
   "order": ["main"]
 }

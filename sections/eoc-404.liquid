@@ -1,12 +1,24 @@
-{%- comment -%} ÉCHEC O CUBE — 404 {%- endcomment -%}
+{%- comment -%} ÉCHEC O CUBE — 404 (entièrement modifiable) {%- endcomment -%}
 <section class="eoc-page eoc-center" id="eoc-404">
   <div class="eoc-container eoc-narrow">
-    <h1 style="color:var(--eoc-gold);font-style:italic;font-size:4rem">404</h1>
-    <p style="color:var(--eoc-cream)">Page introuvable. / Page not found.</p>
-    <p><a href="{{ routes.root_url }}" class="eoc-btn">Accueil / Home</a></p>
+    <h1 style="color:var(--eoc-gold);font-style:italic;font-size:{{ section.settings.code_size }}px;line-height:1">{{ section.settings.code }}</h1>
+    <p style="color:var(--eoc-cream)">{{ section.settings.message }}</p>
+    {%- if section.settings.button_label != blank -%}
+      <p><a href="{{ section.settings.button_link | default: routes.root_url }}" class="eoc-btn">{{ section.settings.button_label }}</a></p>
+    {%- endif -%}
   </div>
 </section>
 
 {% schema %}
-{ "name": "EOC — 404", "tag": "section", "settings": [] }
+{
+  "name": "EOC — 404",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "code", "label": "Grand texte / Big text", "default": "404" },
+    { "type": "range", "id": "code_size", "label": "Taille du grand texte / Big text size", "min": 40, "max": 160, "step": 4, "unit": "px", "default": 64 },
+    { "type": "text", "id": "message", "label": "Message", "default": "Page introuvable. / Page not found." },
+    { "type": "text", "id": "button_label", "label": "Bouton / Button", "default": "ACCUEIL / HOME" },
+    { "type": "url", "id": "button_link", "label": "Lien du bouton / Button link" }
+  ]
+}
 {% endschema %}
