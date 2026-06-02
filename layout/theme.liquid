@@ -46,12 +46,19 @@
     <header class="eoc-nav">
       <nav class="eoc-nav__inner" aria-label="Principale / Main">
         <a href="{{ routes.root_url }}" class="eoc-nav__logo" aria-label="ÉCHEC O CUBE">
-          {%- if settings.header_logo != blank -%}
-            <img src="{{ settings.header_logo | image_url: height: 160 }}"
+          {%- liquid
+            assign nav_logo_default = settings.default_logo_filename | default: 'ECHEC_O_CUBE_LOGO_v5_transparent.png'
+            if settings.header_logo != blank
+              assign nav_logo_src = settings.header_logo | image_url: height: 160
+            else
+              assign nav_logo_src = nav_logo_default | file_img_url: 'x160'
+            endif
+          -%}
+          {%- if nav_logo_src != blank -%}
+            <img src="{{ nav_logo_src }}"
                  alt="ÉCHEC O CUBE"
                  class="eoc-nav__logo-img"
-                 style="height: {{ settings.header_logo_height | default: 44 }}px"
-                 width="{{ settings.header_logo.width }}" height="{{ settings.header_logo.height }}">
+                 style="height: {{ settings.header_logo_height | default: 44 }}px">
           {%- else -%}
             <span class="gold">{{ settings.brand_logo_word1 | default: 'ÉCHEC' }}</span>
             <span class="cream">{{ settings.brand_logo_word2 | default: 'O CUBE' }}</span>

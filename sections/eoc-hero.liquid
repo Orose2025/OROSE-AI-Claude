@@ -18,12 +18,21 @@
   <div class="eoc-grain"></div>
 
   <div class="eoc-hero__content">
-    {%- if section.settings.logo_image != blank -%}
+    {%- liquid
+      assign default_logo = section.settings.default_logo_filename | default: 'ECHEC_O_CUBE_LOGO_v5_transparent.png'
+      if section.settings.logo_image != blank
+        assign logo_src = section.settings.logo_image | image_url: width: 1600
+        assign logo_src_sm = section.settings.logo_image | image_url: width: 800
+      else
+        assign logo_src = default_logo | file_img_url: '1600x'
+        assign logo_src_sm = default_logo | file_img_url: '800x'
+      endif
+    -%}
+    {%- if logo_src != blank -%}
       <h1 class="eoc-hero__logo-wrap eoc-anim-up">
         <img class="eoc-hero__logo-img"
-             src="{{ section.settings.logo_image | image_url: width: 1600 }}"
-             srcset="{{ section.settings.logo_image | image_url: width: 800 }} 800w,
-                     {{ section.settings.logo_image | image_url: width: 1600 }} 1600w"
+             src="{{ logo_src }}"
+             srcset="{{ logo_src_sm }} 800w, {{ logo_src }} 1600w"
              sizes="(max-width: 900px) 90vw, {{ section.settings.logo_max_width }}px"
              alt="ÉCHEC O CUBE — {{ section.settings.tagline_fr | escape }}"
              style="max-width: {{ section.settings.logo_max_width | default: 720 }}px"
@@ -57,7 +66,8 @@
     { "type": "image_picker", "id": "hero_image", "label": "Image héros (AffichePub.png) / Hero image" },
     { "type": "range", "id": "overlay_opacity", "label": "Opacité du voile sombre / Dark overlay opacity", "min": 0, "max": 90, "step": 5, "unit": "%", "default": 55 },
     { "type": "header", "content": "Logo officiel / Official logo" },
-    { "type": "image_picker", "id": "logo_image", "label": "Image du logo (héros) / Hero logo image", "info": "Téléversez le logo officiel ÉCHEC O CUBE. S'affiche à la place du texte. / Upload the official logo; replaces the text logo." },
+    { "type": "image_picker", "id": "logo_image", "label": "Image du logo (héros) / Hero logo image", "info": "Optionnel : remplace le logo par défaut. / Optional: overrides the default logo." },
+    { "type": "text", "id": "default_logo_filename", "label": "Nom du fichier logo par défaut / Default logo filename", "info": "Fichier dans Contenu › Fichiers utilisé si aucune image choisie. / File in Content › Files used when no image is selected.", "default": "ECHEC_O_CUBE_LOGO_v5_transparent.png" },
     { "type": "range", "id": "logo_max_width", "label": "Largeur max du logo / Logo max width", "min": 320, "max": 1100, "step": 20, "unit": "px", "default": 720 },
     { "type": "header", "content": "Logo texte (si pas d'image) / Text logo (fallback)" },
     { "type": "text", "id": "logo_word1", "label": "Mot 1 (or) / Word 1 (gold)", "default": "ÉCHEC" },

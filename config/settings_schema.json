@@ -107,8 +107,15 @@
         "default": 44
       },
       {
+        "type": "text",
+        "id": "default_logo_filename",
+        "label": "Nom du fichier logo par défaut / Default logo filename",
+        "info": "Fichier dans Contenu › Fichiers utilisé par défaut. / File in Content › Files used by default.",
+        "default": "ECHEC_O_CUBE_LOGO_v5_transparent.png"
+      },
+      {
         "type": "paragraph",
-        "content": "Si aucune image n'est choisie, le logo texte ci-dessous est utilisé. / If no image is set, the text logo below is used."
+        "content": "Si ni l'image ni le fichier ne sont trouvés, le logo texte ci-dessous est utilisé. / If neither the image nor the file is found, the text logo below is used."
       },
       {
         "type": "text",
