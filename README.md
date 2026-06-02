@@ -70,7 +70,9 @@ Chaque image est un réglage **image_picker** — aucune image n'est codée en d
 |---------|--------------|---------|
 | **Logo officiel (nav)** | `logo-echecocube.png` | En-tête — *Réglages du thème › Marque & en-tête › Image du logo* |
 | **Logo officiel (héros)** | `logo-echecocube.png` | Héros — *Customizer › section Héros › Image du logo* |
-| Image héros | `AffichePub.png` | Héros |
+| Image héros (fond plein écran) | `Pub-Echec_O_Cube.png` | Héros + fond 404 |
+| **Vidéo de partie** | `VIDÉO-PARTI-ÉCHEC O CUBE.mp4` | Section Vidéo (accueil) |
+| Image héros (alternative) | `AffichePub.png` | Héros |
 | Image macro | `IMG_20931.jpg` | Concept |
 | Image plein largeur | `IMG_20861.jpg` | Le Jeu |
 | Image de fond | `PARTI2JOUEURS.png` | Expérience |

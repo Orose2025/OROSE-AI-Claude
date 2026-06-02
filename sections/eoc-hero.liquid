@@ -9,6 +9,9 @@
            sizes="100vw"
            alt="{{ section.settings.hero_image.alt | escape | default: 'ÉCHEC O CUBE' }}"
            width="2400" height="1350" fetchpriority="high">
+    {%- elsif section.settings.hero_bg_filename != blank -%}
+      <img src="{{ section.settings.hero_bg_filename | file_img_url: '2400x' }}"
+           alt="ÉCHEC O CUBE" width="2400" height="1350" fetchpriority="high">
     {%- else -%}
       <div style="width:100%;height:100%;background:var(--eoc-bg-secondary)"></div>
     {%- endif -%}
@@ -63,7 +66,8 @@
   "class": "eoc-section-wrap",
   "settings": [
     { "type": "header", "content": "Image de fond / Background image" },
-    { "type": "image_picker", "id": "hero_image", "label": "Image héros (AffichePub.png) / Hero image" },
+    { "type": "image_picker", "id": "hero_image", "label": "Image héros / Hero image" },
+    { "type": "text", "id": "hero_bg_filename", "label": "OU nom de fichier (Contenu › Fichiers) / OR filename", "info": "Utilisé si aucune image choisie. / Used if no image picked.", "default": "Pub-Echec_O_Cube.png" },
     { "type": "range", "id": "overlay_opacity", "label": "Opacité du voile sombre / Dark overlay opacity", "min": 0, "max": 90, "step": 5, "unit": "%", "default": 55 },
     { "type": "header", "content": "Logo officiel / Official logo" },
     { "type": "image_picker", "id": "logo_image", "label": "Image du logo (héros) / Hero logo image", "info": "Optionnel : remplace le logo par défaut. / Optional: overrides the default logo." },

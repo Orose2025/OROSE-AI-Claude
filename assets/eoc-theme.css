@@ -520,6 +520,18 @@ h1, h2, h3, h4 {
 .eoc-footer__copy { color: var(--eoc-wood); font-size: .8rem; margin-top: 1rem; }
 
 /* ============================================================
+   VIDEO section
+   ============================================================ */
+.eoc-video__frame {
+  margin: 0 auto;
+  border: 1px solid var(--eoc-groove);
+  box-shadow: 0 18px 50px rgba(0,0,0,.55);
+  background: #000;
+  line-height: 0;
+}
+.eoc-video__el { width: 100%; height: auto; display: block; }
+
+/* ============================================================
    404 — full-bleed key image hero
    ============================================================ */
 .eoc-404-hero {
