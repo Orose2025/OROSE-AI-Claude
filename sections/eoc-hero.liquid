@@ -18,11 +18,26 @@
   <div class="eoc-grain"></div>
 
   <div class="eoc-hero__content">
-    <h1 class="eoc-hero__logo eoc-anim-up">
-      <span class="gold">{{ section.settings.logo_word1 }}</span><span class="dot"></span><span class="cream">{{ section.settings.logo_word2 }}</span>
-    </h1>
-    <p class="eoc-hero__tag-fr eoc-anim-up eoc-d1">{{ section.settings.tagline_fr }}</p>
-    <p class="eoc-hero__tag-en eoc-anim-up eoc-d1">{{ section.settings.tagline_en }}</p>
+    {%- if section.settings.logo_image != blank -%}
+      <h1 class="eoc-hero__logo-wrap eoc-anim-up">
+        <img class="eoc-hero__logo-img"
+             src="{{ section.settings.logo_image | image_url: width: 1600 }}"
+             srcset="{{ section.settings.logo_image | image_url: width: 800 }} 800w,
+                     {{ section.settings.logo_image | image_url: width: 1600 }} 1600w"
+             sizes="(max-width: 900px) 90vw, {{ section.settings.logo_max_width }}px"
+             alt="ÉCHEC O CUBE — {{ section.settings.tagline_fr | escape }}"
+             style="max-width: {{ section.settings.logo_max_width | default: 720 }}px"
+             width="1600" height="900" fetchpriority="high">
+      </h1>
+    {%- else -%}
+      <h1 class="eoc-hero__logo eoc-anim-up">
+        <span class="gold">{{ section.settings.logo_word1 }}</span><span class="dot"></span><span class="cream">{{ section.settings.logo_word2 }}</span>
+      </h1>
+    {%- endif -%}
+    {%- if section.settings.show_taglines -%}
+      <p class="eoc-hero__tag-fr eoc-anim-up eoc-d1">{{ section.settings.tagline_fr }}</p>
+      <p class="eoc-hero__tag-en eoc-anim-up eoc-d1">{{ section.settings.tagline_en }}</p>
+    {%- endif -%}
     <div class="eoc-hero__ctas eoc-anim-up eoc-d2">
       <a href="{{ section.settings.cta1_link }}" class="eoc-btn">{{ section.settings.cta1_label }}</a>
       <a href="{{ section.settings.cta2_link }}" class="eoc-btn eoc-btn--cream">{{ section.settings.cta2_label }}</a>
@@ -41,10 +56,14 @@
     { "type": "header", "content": "Image de fond / Background image" },
     { "type": "image_picker", "id": "hero_image", "label": "Image héros (AffichePub.png) / Hero image" },
     { "type": "range", "id": "overlay_opacity", "label": "Opacité du voile sombre / Dark overlay opacity", "min": 0, "max": 90, "step": 5, "unit": "%", "default": 55 },
-    { "type": "header", "content": "Logo" },
+    { "type": "header", "content": "Logo officiel / Official logo" },
+    { "type": "image_picker", "id": "logo_image", "label": "Image du logo (héros) / Hero logo image", "info": "Téléversez le logo officiel ÉCHEC O CUBE. S'affiche à la place du texte. / Upload the official logo; replaces the text logo." },
+    { "type": "range", "id": "logo_max_width", "label": "Largeur max du logo / Logo max width", "min": 320, "max": 1100, "step": 20, "unit": "px", "default": 720 },
+    { "type": "header", "content": "Logo texte (si pas d'image) / Text logo (fallback)" },
     { "type": "text", "id": "logo_word1", "label": "Mot 1 (or) / Word 1 (gold)", "default": "ÉCHEC" },
     { "type": "text", "id": "logo_word2", "label": "Mot 2 (crème) / Word 2 (cream)", "default": "CUBE" },
     { "type": "header", "content": "Slogans / Taglines" },
+    { "type": "checkbox", "id": "show_taglines", "label": "Afficher les slogans sous le logo / Show taglines under logo", "default": true },
     { "type": "text", "id": "tagline_fr", "label": "Slogan FR", "default": "Le jeu de stratégie où la physique valide chaque coup." },
     { "type": "text", "id": "tagline_en", "label": "Tagline EN", "default": "The strategy game where physics validates every move." },
     { "type": "header", "content": "Boutons d'action / Call to action" },

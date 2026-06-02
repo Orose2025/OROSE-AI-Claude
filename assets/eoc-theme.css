@@ -193,6 +193,7 @@ h1, h2, h3, h4 {
 }
 .eoc-nav__logo .gold { color: var(--eoc-gold); }
 .eoc-nav__logo .cream { color: var(--eoc-cream); }
+.eoc-nav__logo-img { display: block; width: auto; height: 44px; }
 .eoc-nav__links {
   display: flex;
   gap: 2rem;
@@ -249,6 +250,15 @@ h1, h2, h3, h4 {
 }
 .eoc-hero__logo .gold { color: var(--eoc-gold); }
 .eoc-hero__logo .cream { color: var(--eoc-cream); }
+/* Official logo image in hero */
+.eoc-hero__logo-wrap { margin: 0 auto; line-height: 0; }
+.eoc-hero__logo-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+  filter: drop-shadow(0 8px 28px rgba(0,0,0,.65));
+}
 .eoc-hero__logo .dot {
   display: inline-block;
   width: .42em; height: .42em;

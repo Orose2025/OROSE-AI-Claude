@@ -87,6 +87,30 @@
     "name": "Marque & en-tête / Brand & header",
     "settings": [
       {
+        "type": "header",
+        "content": "Logo officiel / Official logo"
+      },
+      {
+        "type": "image_picker",
+        "id": "header_logo",
+        "label": "Image du logo (nav) / Logo image (nav)",
+        "info": "Téléversez le logo officiel ÉCHEC O CUBE. S'affiche à la place du texte. / Upload the official logo; replaces the text."
+      },
+      {
+        "type": "range",
+        "id": "header_logo_height",
+        "label": "Hauteur du logo nav / Nav logo height",
+        "min": 28,
+        "max": 80,
+        "step": 2,
+        "unit": "px",
+        "default": 44
+      },
+      {
+        "type": "paragraph",
+        "content": "Si aucune image n'est choisie, le logo texte ci-dessous est utilisé. / If no image is set, the text logo below is used."
+      },
+      {
         "type": "text",
         "id": "brand_logo_word1",
         "label": "Logo mot 1 (or) / Logo word 1 (gold)",

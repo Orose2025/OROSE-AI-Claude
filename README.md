@@ -68,6 +68,8 @@ Chaque image est un réglage **image_picker** — aucune image n'est codée en d
 
 | Réglage | Image source | Section |
 |---------|--------------|---------|
+| **Logo officiel (nav)** | `logo-echecocube.png` | En-tête — *Réglages du thème › Marque & en-tête › Image du logo* |
+| **Logo officiel (héros)** | `logo-echecocube.png` | Héros — *Customizer › section Héros › Image du logo* |
 | Image héros | `AffichePub.png` | Héros |
 | Image macro | `IMG_20931.jpg` | Concept |
 | Image plein largeur | `IMG_20861.jpg` | Le Jeu |
@@ -76,6 +78,18 @@ Chaque image est un réglage **image_picker** — aucune image n'est codée en d
 | Photos produit | `IMG_20801`, `IMG_20861`, `IMG_20931`, série `IMG_19xxx–21xxx` | Produit / galerie |
 
 ---
+
+### 🏷️ Insérer le logo officiel (1 seul geste, sans code)
+
+Le logo officiel ÉCHEC O CUBE s'affiche automatiquement dès qu'il est téléversé —
+il remplace le logo texte dans la **barre de navigation** ET au **centre du héros**.
+
+1. **Admin Shopify › Personnaliser** (le thème).
+2. Pour le héros : cliquez la section **Héros**, puis **Image du logo** → *Sélectionner une image* → téléversez le fichier du logo. Ajustez la **largeur max** au goût. Astuce : décochez « Afficher les slogans » si vous gardez ceux déjà inclus dans le logo.
+3. Pour la nav : **Réglages du thème › Marque & en-tête › Image du logo (nav)** → téléversez le même fichier. Ajustez la **hauteur**.
+4. Conseil : utilisez un **PNG à fond transparent** pour un rendu net sur le fond espresso sombre.
+
+> Tant qu'aucune image n'est choisie, un logo texte de secours s'affiche.
 
 ## 🚀 Installation
 

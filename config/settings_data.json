@@ -9,6 +9,7 @@
     "color_wood": "#8B6914",
     "color_groove": "#2C1F0E",
     "base_font_size": 18,
+    "header_logo_height": 44,
     "brand_logo_word1": "ÉCHEC",
     "brand_logo_word2": "CUBE",
     "main_menu": "main-menu",

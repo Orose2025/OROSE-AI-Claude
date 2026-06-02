@@ -45,9 +45,17 @@
     {%- comment -%} ===== FIXED NAVIGATION ===== {%- endcomment -%}
     <header class="eoc-nav">
       <nav class="eoc-nav__inner" aria-label="Principale / Main">
-        <a href="{{ routes.root_url }}" class="eoc-nav__logo">
-          <span class="gold">{{ settings.brand_logo_word1 | default: 'ÉCHEC' }}</span>
-          <span class="cream">{{ settings.brand_logo_word2 | default: 'O CUBE' }}</span>
+        <a href="{{ routes.root_url }}" class="eoc-nav__logo" aria-label="ÉCHEC O CUBE">
+          {%- if settings.header_logo != blank -%}
+            <img src="{{ settings.header_logo | image_url: height: 160 }}"
+                 alt="ÉCHEC O CUBE"
+                 class="eoc-nav__logo-img"
+                 style="height: {{ settings.header_logo_height | default: 44 }}px"
+                 width="{{ settings.header_logo.width }}" height="{{ settings.header_logo.height }}">
+          {%- else -%}
+            <span class="gold">{{ settings.brand_logo_word1 | default: 'ÉCHEC' }}</span>
+            <span class="cream">{{ settings.brand_logo_word2 | default: 'O CUBE' }}</span>
+          {%- endif -%}
         </a>
 
         <button class="eoc-nav__toggle" aria-label="Menu" aria-expanded="false">
