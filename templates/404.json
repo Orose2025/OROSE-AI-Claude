@@ -12,7 +12,13 @@
     "main": {
       "type": "eoc-404",
       "name": "EOC",
-      "settings": {}
+      "settings": {
+        "code": "",
+        "code_size": 48,
+        "message": "Page introuvable. / Page not found.",
+        "button_label": "ACCUEIL / HOME",
+        "button_link": ""
+      }
     }
   },
   "order": [
