@@ -1,0 +1,142 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "ÉCHEC O CUBE — Site Officiel",
+    "theme_version": "1.0.0",
+    "theme_author": "ÉCHEC O CUBE — Alain Dupont",
+    "theme_documentation_url": "https://echecocube.com",
+    "theme_support_url": "https://echecocube.com"
+  },
+  {
+    "name": "Palette de marque / Brand palette",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Couleurs ÉCHEC O CUBE — modifiables ici / Editable brand colors"
+      },
+      {
+        "type": "color",
+        "id": "color_bg_primary",
+        "label": "Fond principal / Background primary",
+        "default": "#1A1008"
+      },
+      {
+        "type": "color",
+        "id": "color_bg_secondary",
+        "label": "Fond secondaire / Background secondary",
+        "default": "#0D0705"
+      },
+      {
+        "type": "color",
+        "id": "color_gold",
+        "label": "Or bronze / Gold accent",
+        "default": "#C9982F"
+      },
+      {
+        "type": "color",
+        "id": "color_gold_light",
+        "label": "Or miel / Gold light (pâle)",
+        "default": "#E8C96A"
+      },
+      {
+        "type": "color",
+        "id": "color_cream",
+        "label": "Crème parchemin / Cream",
+        "default": "#F5ECD7"
+      },
+      {
+        "type": "color",
+        "id": "color_red",
+        "label": "Rouge crimson / Red (rouge piece)",
+        "default": "#B22222"
+      },
+      {
+        "type": "color",
+        "id": "color_wood",
+        "label": "Bois chêne / Wood warm",
+        "default": "#8B6914"
+      },
+      {
+        "type": "color",
+        "id": "color_groove",
+        "label": "Rainure / Border groove",
+        "default": "#2C1F0E"
+      }
+    ]
+  },
+  {
+    "name": "Typographie / Typography",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Les polices Playfair Display, Libre Baskerville et Cinzel sont chargées via Google Fonts. / Fonts loaded via Google Fonts."
+      },
+      {
+        "type": "range",
+        "id": "base_font_size",
+        "label": "Taille du texte de base / Base font size",
+        "min": 15,
+        "max": 20,
+        "step": 1,
+        "unit": "px",
+        "default": 18
+      }
+    ]
+  },
+  {
+    "name": "Marque & en-tête / Brand & header",
+    "settings": [
+      {
+        "type": "text",
+        "id": "brand_logo_word1",
+        "label": "Logo mot 1 (or) / Logo word 1 (gold)",
+        "default": "ÉCHEC"
+      },
+      {
+        "type": "text",
+        "id": "brand_logo_word2",
+        "label": "Logo mot 2 (crème) / Logo word 2 (cream)",
+        "default": "CUBE"
+      },
+      {
+        "type": "link_list",
+        "id": "main_menu",
+        "label": "Menu de navigation / Navigation menu",
+        "info": "Modifiable dans Boutique en ligne > Navigation"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_lang_toggle",
+        "label": "Afficher le sélecteur FR/EN / Show FR/EN toggle",
+        "default": true
+      },
+      {
+        "type": "url",
+        "id": "lang_fr_url",
+        "label": "URL Français / French URL",
+        "default": "/"
+      },
+      {
+        "type": "url",
+        "id": "lang_en_url",
+        "label": "URL English"
+      }
+    ]
+  },
+  {
+    "name": "Pied de page / Footer",
+    "settings": [
+      {
+        "type": "link_list",
+        "id": "footer_menu",
+        "label": "Menu pied de page / Footer menu"
+      },
+      {
+        "type": "text",
+        "id": "footer_copy",
+        "label": "Mention de copyright / Copyright line",
+        "default": "© 1999–2026 Alain Dupont. Droit d'auteur OPIC Canada No. 477714. Tous droits réservés."
+      }
+    ]
+  }
+]

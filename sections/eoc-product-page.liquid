@@ -1,0 +1,57 @@
+{%- comment -%} ÉCHEC O CUBE — Page produit native / Native product page {%- endcomment -%}
+<section class="eoc-section eoc-product" id="eoc-product-page" style="padding-top:9rem">
+  <div class="eoc-container">
+    <div class="eoc-product__grid">
+      <div class="eoc-product__media eoc-reveal">
+        <div class="eoc-product__main">
+          {%- if product.featured_image -%}
+            <img id="eoc-pp-main" src="{{ product.featured_image | image_url: width: 1200 }}"
+                 alt="{{ product.featured_image.alt | escape | default: product.title }}" width="1200" height="1200">
+          {%- endif -%}
+        </div>
+        {%- if product.images.size > 1 -%}
+          <div class="eoc-product__thumbs">
+            {%- for image in product.images limit: 6 -%}
+              <img src="{{ image | image_url: width: 300 }}" alt="{{ image.alt | escape }}" width="300" height="300" loading="lazy"
+                   onclick="document.getElementById('eoc-pp-main').src='{{ image | image_url: width: 1200 }}'">
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="eoc-product__info eoc-reveal">
+        <h1 class="eoc-product__title">{{ product.title }}</h1>
+        <div class="eoc-product__price">{{ product.price | money }}</div>
+        <div class="eoc-card__body" style="margin-bottom:2rem">{{ product.description }}</div>
+
+        {%- if product.available -%}
+          {%- form 'product', product -%}
+            {%- unless product.has_only_default_variant -%}
+              {%- for option in product.options_with_values -%}
+                <label class="eoc-kicker" style="margin-top:1rem">{{ option.name }}</label>
+                <select name="options[{{ option.name | escape }}]"
+                        style="width:100%;padding:.9rem;background:var(--eoc-bg-primary);color:var(--eoc-cream);border:1px solid var(--eoc-groove);margin-bottom:1rem">
+                  {%- for value in option.values -%}
+                    <option value="{{ value | escape }}">{{ value }}</option>
+                  {%- endfor -%}
+                </select>
+              {%- endfor -%}
+            {%- endunless -%}
+            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+            <button type="submit" class="eoc-btn eoc-btn--solid eoc-btn--full">Ajouter au panier / Add to cart</button>
+          {%- endform -%}
+        {%- else -%}
+          <button class="eoc-btn eoc-btn--full" disabled>Épuisé / Sold out</button>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "EOC — Page produit / Product page",
+  "tag": "section",
+  "settings": []
+}
+{% endschema %}

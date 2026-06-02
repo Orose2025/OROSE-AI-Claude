@@ -1,0 +1,6 @@
+{
+  "sections": {
+    "rules_page": { "type": "eoc-rules-page" }
+  },
+  "order": ["rules_page"]
+}

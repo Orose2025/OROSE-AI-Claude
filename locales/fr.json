@@ -1,0 +1,22 @@
+{
+  "general": {
+    "accessibility": {
+      "skip_to_content": "Passer au contenu"
+    },
+    "newsletter_form": {
+      "newsletter_email": "Courriel",
+      "confirmation": "Merci de votre inscription"
+    },
+    "404": {
+      "title": "Page introuvable",
+      "subtext": "404"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Ajouter au panier",
+      "sold_out": "Épuisé",
+      "price": { "regular_price": "Prix régulier" }
+    }
+  }
+}

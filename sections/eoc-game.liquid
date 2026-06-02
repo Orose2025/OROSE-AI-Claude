@@ -1,0 +1,65 @@
+{%- comment -%} ÉCHEC O CUBE — Section 3 : LE JEU / THE GAME {%- endcomment -%}
+<section class="eoc-section eoc-game" id="eoc-game">
+  <div class="eoc-container">
+    <h2 class="eoc-section-title eoc-reveal">{{ section.settings.title }}</h2>
+
+    <div class="eoc-cards">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'piece' -%}
+          <article class="eoc-card eoc-reveal" {{ block.shopify_attributes }}>
+            <div class="eoc-card__swatch" style="background:{{ block.settings.swatch }}"></div>
+            <h3 class="eoc-card__name">{{ block.settings.name }}</h3>
+            <div class="eoc-card__points">{{ block.settings.points }}</div>
+            <div class="eoc-card__body">{{ block.settings.description }}</div>
+          </article>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    <figure class="eoc-game__feature eoc-reveal">
+      {%- if section.settings.feature_image != blank -%}
+        <img src="{{ section.settings.feature_image | image_url: width: 1800 }}"
+             alt="{{ section.settings.feature_image.alt | escape | default: 'ÉCHEC O CUBE' }}"
+             width="1800" height="1012" loading="lazy">
+      {%- else -%}
+        <div style="aspect-ratio:16/9;background:var(--eoc-groove)"></div>
+      {%- endif -%}
+      <figcaption class="eoc-caption">{{ section.settings.caption }}</figcaption>
+    </figure>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "EOC — Le Jeu / The Game",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Titre / Title", "default": "LE JEU / THE GAME" },
+    { "type": "image_picker", "id": "feature_image", "label": "Image pleine largeur (IMG_20861.jpg)" },
+    { "type": "text", "id": "caption", "label": "Légende / Caption", "default": "ÉCHEC O CUBE — fermeture d'un carré = victoire de points" }
+  ],
+  "blocks": [
+    {
+      "type": "piece",
+      "name": "Type de pièce / Piece type",
+      "settings": [
+        { "type": "color", "id": "swatch", "label": "Couleur / Swatch", "default": "#E8C96A" },
+        { "type": "text", "id": "name", "label": "Nom / Name", "default": "PÂLE (court)" },
+        { "type": "text", "id": "points", "label": "Points", "default": "1 point" },
+        { "type": "richtext", "id": "description", "label": "Description FR/EN", "default": "<p>La pièce courte vaut 1 point. <em>The short piece is worth 1 point.</em></p>" }
+      ]
+    }
+  ],
+  "max_blocks": 3,
+  "presets": [
+    {
+      "name": "EOC — Le Jeu / The Game",
+      "blocks": [
+        { "type": "piece", "settings": { "swatch": "#E8C96A", "name": "PÂLE (court)", "points": "1 point", "description": "<p>La pièce courte, valeur 1 point. <em>The short pale piece — worth 1 point.</em></p>" } },
+        { "type": "piece", "settings": { "swatch": "#2C1F0E", "name": "FONCÉ (long)", "points": "2 points", "description": "<p>La pièce longue, valeur 2 points. <em>The long dark piece — worth 2 points.</em></p>" } },
+        { "type": "piece", "settings": { "swatch": "#B22222", "name": "ROUGE (mince)", "points": "Zone morte", "description": "<p>Le marqueur mince crée une zone morte. <em>The thin red marker creates a dead zone.</em></p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

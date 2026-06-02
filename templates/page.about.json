@@ -1,0 +1,6 @@
+{
+  "sections": {
+    "about": { "type": "eoc-about" }
+  },
+  "order": ["about"]
+}

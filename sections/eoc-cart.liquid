@@ -1,0 +1,29 @@
+{%- comment -%} ÉCHEC O CUBE — Panier / Cart {%- endcomment -%}
+<section class="eoc-page" id="eoc-cart">
+  <div class="eoc-container eoc-narrow">
+    <h1 class="eoc-center" style="color:var(--eoc-gold-light);font-style:italic;margin-bottom:2.5rem">Panier / Cart</h1>
+
+    {%- if cart.item_count > 0 -%}
+      {%- form 'cart', cart -%}
+        {%- for item in cart.items -%}
+          <div class="eoc-step" style="justify-content:space-between;align-items:center">
+            <div class="eoc-step__text">
+              <strong>{{ item.product.title }}</strong>
+              <em>{{ item.quantity }} × {{ item.price | money }}</em>
+            </div>
+            <div class="eoc-product__price" style="margin:0">{{ item.line_price | money }}</div>
+          </div>
+        {%- endfor -%}
+        <p class="eoc-product__price" style="text-align:right;margin-top:1.5rem">Total : {{ cart.total_price | money }}</p>
+        <button type="submit" name="checkout" class="eoc-btn eoc-btn--solid eoc-btn--full">Passer à la caisse / Checkout</button>
+      {%- endform -%}
+    {%- else -%}
+      <p class="eoc-center" style="color:var(--eoc-wood)">Votre panier est vide. / Your cart is empty.</p>
+      <p class="eoc-center"><a href="{{ routes.all_products_collection_url }}" class="eoc-btn">Boutique / Shop</a></p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "EOC — Panier / Cart", "tag": "section", "settings": [] }
+{% endschema %}

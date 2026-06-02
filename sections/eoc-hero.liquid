@@ -1,0 +1,58 @@
+{%- comment -%} ÉCHEC O CUBE — Section 1 : HERO {%- endcomment -%}
+<section class="eoc-hero eoc-grooves" id="eoc-hero">
+  <div class="eoc-hero__bg">
+    {%- if section.settings.hero_image != blank -%}
+      <img src="{{ section.settings.hero_image | image_url: width: 2400 }}"
+           srcset="{{ section.settings.hero_image | image_url: width: 800 }} 800w,
+                   {{ section.settings.hero_image | image_url: width: 1600 }} 1600w,
+                   {{ section.settings.hero_image | image_url: width: 2400 }} 2400w"
+           sizes="100vw"
+           alt="{{ section.settings.hero_image.alt | escape | default: 'ÉCHEC O CUBE' }}"
+           width="2400" height="1350" fetchpriority="high">
+    {%- else -%}
+      <div style="width:100%;height:100%;background:var(--eoc-bg-secondary)"></div>
+    {%- endif -%}
+  </div>
+
+  <div class="eoc-hero__overlay" style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }}"></div>
+  <div class="eoc-grain"></div>
+
+  <div class="eoc-hero__content">
+    <h1 class="eoc-hero__logo eoc-anim-up">
+      <span class="gold">{{ section.settings.logo_word1 }}</span><span class="dot"></span><span class="cream">{{ section.settings.logo_word2 }}</span>
+    </h1>
+    <p class="eoc-hero__tag-fr eoc-anim-up eoc-d1">{{ section.settings.tagline_fr }}</p>
+    <p class="eoc-hero__tag-en eoc-anim-up eoc-d1">{{ section.settings.tagline_en }}</p>
+    <div class="eoc-hero__ctas eoc-anim-up eoc-d2">
+      <a href="{{ section.settings.cta1_link }}" class="eoc-btn">{{ section.settings.cta1_label }}</a>
+      <a href="{{ section.settings.cta2_link }}" class="eoc-btn eoc-btn--cream">{{ section.settings.cta2_label }}</a>
+    </div>
+  </div>
+
+  <a href="#eoc-concept" class="eoc-hero__scroll" aria-label="Défiler / Scroll">&#8964;</a>
+</section>
+
+{% schema %}
+{
+  "name": "EOC — Héros / Hero",
+  "tag": "section",
+  "class": "eoc-section-wrap",
+  "settings": [
+    { "type": "header", "content": "Image de fond / Background image" },
+    { "type": "image_picker", "id": "hero_image", "label": "Image héros (AffichePub.png) / Hero image" },
+    { "type": "range", "id": "overlay_opacity", "label": "Opacité du voile sombre / Dark overlay opacity", "min": 0, "max": 90, "step": 5, "unit": "%", "default": 55 },
+    { "type": "header", "content": "Logo" },
+    { "type": "text", "id": "logo_word1", "label": "Mot 1 (or) / Word 1 (gold)", "default": "ÉCHEC" },
+    { "type": "text", "id": "logo_word2", "label": "Mot 2 (crème) / Word 2 (cream)", "default": "CUBE" },
+    { "type": "header", "content": "Slogans / Taglines" },
+    { "type": "text", "id": "tagline_fr", "label": "Slogan FR", "default": "Le jeu de stratégie où la physique valide chaque coup." },
+    { "type": "text", "id": "tagline_en", "label": "Tagline EN", "default": "The strategy game where physics validates every move." },
+    { "type": "header", "content": "Boutons d'action / Call to action" },
+    { "type": "text", "id": "cta1_label", "label": "Bouton 1 / Button 1", "default": "COMMANDER / ORDER" },
+    { "type": "url", "id": "cta1_link", "label": "Lien bouton 1 / Button 1 link" },
+    { "type": "text", "id": "cta2_label", "label": "Bouton 2 / Button 2", "default": "RÈGLES DU JEU / RULES" },
+    { "type": "url", "id": "cta2_link", "label": "Lien bouton 2 / Button 2 link" }
+  ],
+  "presets": [{ "name": "EOC — Héros / Hero" }]
+}
+{% endschema %}

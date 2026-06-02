@@ -1,0 +1,22 @@
+{
+  "general": {
+    "accessibility": {
+      "skip_to_content": "Skip to content"
+    },
+    "newsletter_form": {
+      "newsletter_email": "Email",
+      "confirmation": "Thanks for subscribing"
+    },
+    "404": {
+      "title": "Page not found",
+      "subtext": "404"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to cart",
+      "sold_out": "Sold out",
+      "price": { "regular_price": "Regular price" }
+    }
+  }
+}

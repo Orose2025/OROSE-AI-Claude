@@ -1,0 +1,108 @@
+{%- comment -%}
+  ÉCHEC O CUBE — Section 6 : LE PRODUIT / THE PRODUCT
+  Native Shopify product integration. Pick the real store product in the
+  theme editor (product setting). Price, variants and checkout come from
+  the live product; copy is editable below.
+{%- endcomment -%}
+{%- assign p = all_products[section.settings.product] -%}
+<section class="eoc-section eoc-product" id="eoc-product">
+  <div class="eoc-container">
+    <div class="eoc-product__grid">
+
+      {%- comment -%} ---- MEDIA / CAROUSEL ---- {%- endcomment -%}
+      <div class="eoc-product__media eoc-reveal">
+        <div class="eoc-product__main">
+          {%- if p != empty and p.featured_image -%}
+            <img id="eoc-product-main" src="{{ p.featured_image | image_url: width: 1200 }}"
+                 alt="{{ p.featured_image.alt | escape | default: p.title }}" width="1200" height="1200" loading="lazy">
+          {%- elsif section.settings.fallback_image != blank -%}
+            <img id="eoc-product-main" src="{{ section.settings.fallback_image | image_url: width: 1200 }}"
+                 alt="ÉCHEC O CUBE" width="1200" height="1200" loading="lazy">
+          {%- else -%}
+            <div style="aspect-ratio:1;background:var(--eoc-groove)"></div>
+          {%- endif -%}
+        </div>
+        {%- if p != empty and p.images.size > 1 -%}
+          <div class="eoc-product__thumbs">
+            {%- for image in p.images limit: 4 -%}
+              <img src="{{ image | image_url: width: 300 }}" alt="{{ image.alt | escape }}"
+                   width="300" height="300" loading="lazy"
+                   onclick="document.getElementById('eoc-product-main').src='{{ image | image_url: width: 1200 }}'">
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} ---- INFO ---- {%- endcomment -%}
+      <div class="eoc-product__info eoc-reveal">
+        <h2 class="eoc-product__title">
+          {{ section.settings.title_override | default: p.title | default: "ÉCHEC O CUBE — Édition Bois / Wood Edition" }}
+        </h2>
+
+        <div class="eoc-product__price">
+          {%- if p != empty and p.price > 0 -%}
+            {{ p.price | money }}
+          {%- else -%}
+            {{ section.settings.price_placeholder }}
+          {%- endif -%}
+        </div>
+
+        <ul class="eoc-product__bullets">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'bullet' -%}
+              <li {{ block.shopify_attributes }}>{{ block.settings.text }}</li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+
+        {%- if p != empty and p.available -%}
+          {%- form 'product', p -%}
+            <input type="hidden" name="id" value="{{ p.selected_or_first_available_variant.id }}">
+            <button type="submit" class="eoc-btn eoc-btn--solid eoc-btn--full">{{ section.settings.cta_label }}</button>
+          {%- endform -%}
+        {%- else -%}
+          <a href="{{ section.settings.cta_link | default: '#eoc-community' }}" class="eoc-btn eoc-btn--solid eoc-btn--full">{{ section.settings.cta_label }}</a>
+        {%- endif -%}
+
+        <p class="eoc-product__note">{{ section.settings.note }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "EOC — Produit / Product",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Produit Shopify natif / Native product" },
+    { "type": "product", "id": "product", "label": "Produit lié / Linked product (inventaire, variantes, panier réels)" },
+    { "type": "image_picker", "id": "fallback_image", "label": "Image de secours si pas de produit / Fallback image" },
+    { "type": "text", "id": "title_override", "label": "Titre (laisser vide = titre produit) / Title override", "default": "ÉCHEC O CUBE — Édition Bois / Wood Edition" },
+    { "type": "text", "id": "price_placeholder", "label": "Prix de remplacement si pas de produit / Price placeholder", "default": "PRIX À CONFIRMER / PRICE TBD" },
+    { "type": "text", "id": "cta_label", "label": "Bouton / Button", "default": "PRÉ-COMMANDER / PRE-ORDER" },
+    { "type": "url", "id": "cta_link", "label": "Lien si pas de produit / Link if no product" },
+    { "type": "text", "id": "note", "label": "Note sous le bouton / Note below button", "default": "Lancement campagne La Ruche — soyez parmi les premiers / La Ruche campaign launch — be among the first" }
+  ],
+  "blocks": [
+    {
+      "type": "bullet",
+      "name": "Point clé / Bullet",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Texte FR/EN", "default": "Édition bois artisanale — pièces taillées main / Handcrafted wood edition" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "EOC — Produit / Product",
+      "blocks": [
+        { "type": "bullet", "settings": { "text": "Édition bois artisanale — pièces taillées main / Handcrafted wood edition" } },
+        { "type": "bullet", "settings": { "text": "Plateau 9×9 cubes, 190 pièces incluses / 9×9 cube board, 190 pieces included" } },
+        { "type": "bullet", "settings": { "text": "Droit d'auteur OPIC Canada No. 477714 — Inventé au Québec 1999 / OPIC Canada Copyright — Invented in Quebec 1999" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

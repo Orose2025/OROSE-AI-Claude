@@ -1,0 +1,549 @@
+/* ============================================================
+   ÉCHEC O CUBE — Site Officiel
+   Global brand stylesheet
+   Brand palette + typography + utilities + section styles
+   Colors are driven by CSS custom properties output in
+   layout/theme.liquid from the Shopify theme settings, so the
+   store owner can change the palette from Settings > Theme
+   settings without touching this file. The values below are
+   fallbacks matching the strict brand palette.
+   ============================================================ */
+
+:root {
+  --eoc-bg-primary:   #1A1008;
+  --eoc-bg-secondary: #0D0705;
+  --eoc-gold:         #C9982F;
+  --eoc-gold-light:   #E8C96A;
+  --eoc-cream:        #F5ECD7;
+  --eoc-red:          #B22222;
+  --eoc-wood:         #8B6914;
+  --eoc-groove:       #2C1F0E;
+
+  --eoc-font-display: 'Playfair Display', Georgia, serif;
+  --eoc-font-body:    'Libre Baskerville', Georgia, serif;
+  --eoc-font-ui:      'Cinzel', 'Times New Roman', serif;
+
+  --eoc-maxwidth: 1280px;
+  --eoc-section-pad: 7rem;
+}
+
+/* ---------- Reset / base ---------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body.eoc-body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--eoc-bg-primary);
+  color: var(--eoc-cream);
+  font-family: var(--eoc-font-body);
+  font-size: 18px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: var(--eoc-gold); text-decoration: none; transition: color .25s ease; }
+a:hover { color: var(--eoc-gold-light); }
+
+h1, h2, h3, h4 {
+  font-family: var(--eoc-font-display);
+  font-weight: 700;
+  margin: 0 0 .5em;
+  color: var(--eoc-cream);
+}
+
+/* ---------- Layout utilities ---------- */
+.eoc-section { position: relative; padding: var(--eoc-section-pad) 1.5rem; overflow: hidden; }
+.eoc-container { max-width: var(--eoc-maxwidth); margin: 0 auto; width: 100%; }
+.eoc-narrow { max-width: 760px; margin-left: auto; margin-right: auto; }
+.eoc-center { text-align: center; }
+.visually-hidden { position:absolute!important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+
+.eoc-kicker {
+  font-family: var(--eoc-font-ui);
+  text-transform: uppercase;
+  letter-spacing: .28em;
+  font-size: .82rem;
+  color: var(--eoc-gold);
+  display: block;
+  margin-bottom: 1.25rem;
+}
+
+/* ---------- Buttons / CTAs ---------- */
+.eoc-btn {
+  position: relative;
+  display: inline-block;
+  font-family: var(--eoc-font-ui);
+  text-transform: uppercase;
+  letter-spacing: .18em;
+  font-size: .85rem;
+  padding: 1rem 2.25rem;
+  border: 2px solid var(--eoc-gold);
+  color: var(--eoc-gold);
+  background: transparent;
+  cursor: pointer;
+  overflow: hidden;
+  transition: color .3s ease, background .3s ease, border-color .3s ease;
+}
+.eoc-btn--solid { background: var(--eoc-gold); color: var(--eoc-bg-secondary); }
+.eoc-btn--cream { border-color: var(--eoc-cream); color: var(--eoc-cream); }
+.eoc-btn--full { display: block; width: 100%; text-align: center; }
+
+/* gold shimmer sweep on hover */
+.eoc-btn::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -120%;
+  width: 60%; height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(245,236,215,.45), transparent);
+  transform: skewX(-20deg);
+  transition: left .6s ease;
+}
+.eoc-btn:hover::after { left: 130%; }
+.eoc-btn:hover { background: var(--eoc-gold); color: var(--eoc-bg-secondary); border-color: var(--eoc-gold); }
+.eoc-btn--cream:hover { background: var(--eoc-cream); color: var(--eoc-bg-secondary); border-color: var(--eoc-cream); }
+
+/* ---------- Grain / noise overlay ---------- */
+.eoc-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .06;
+  z-index: 2;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: eoc-grain-shift 8s steps(6) infinite;
+}
+@keyframes eoc-grain-shift {
+  0%   { transform: translate(0,0); }
+  20%  { transform: translate(-4%, 3%); }
+  40%  { transform: translate(3%, -2%); }
+  60%  { transform: translate(-2%, 4%); }
+  80%  { transform: translate(4%, -3%); }
+  100% { transform: translate(0,0); }
+}
+
+/* diagonal groove pattern */
+.eoc-grooves::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .08;
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--eoc-groove) 0,
+    var(--eoc-groove) 2px,
+    transparent 2px,
+    transparent 22px
+  );
+  z-index: 0;
+}
+
+/* ============================================================
+   SCROLL ANIMATIONS (paired with eoc-animations.js)
+   ============================================================ */
+.eoc-reveal {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity .9s ease-out, transform .9s ease-out;
+  will-change: opacity, transform;
+}
+.eoc-reveal.eoc-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .eoc-reveal { opacity: 1; transform: none; transition: none; }
+  .eoc-grain { animation: none; }
+  html { scroll-behavior: auto; }
+}
+
+/* ============================================================
+   NAVIGATION (fixed top bar)
+   ============================================================ */
+.eoc-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  background: rgba(13,7,5,.90);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--eoc-groove);
+}
+.eoc-nav__inner {
+  max-width: var(--eoc-maxwidth);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .9rem 1.5rem;
+  gap: 1.5rem;
+}
+.eoc-nav__logo {
+  font-family: var(--eoc-font-display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 1.4rem;
+  letter-spacing: .02em;
+  white-space: nowrap;
+}
+.eoc-nav__logo .gold { color: var(--eoc-gold); }
+.eoc-nav__logo .cream { color: var(--eoc-cream); }
+.eoc-nav__links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  margin: 0; padding: 0;
+}
+.eoc-nav__links a {
+  font-family: var(--eoc-font-ui);
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-size: .78rem;
+  color: var(--eoc-cream);
+}
+.eoc-nav__links a:hover { color: var(--eoc-gold); }
+.eoc-nav__right { display: flex; align-items: center; gap: 1rem; }
+.eoc-lang { display: flex; gap: .35rem; font-family: var(--eoc-font-ui); font-size: .78rem; }
+.eoc-lang a { color: var(--eoc-wood); letter-spacing: .1em; }
+.eoc-lang a.is-active { color: var(--eoc-gold); }
+.eoc-nav__toggle {
+  display: none;
+  background: none; border: none; cursor: pointer;
+  flex-direction: column; gap: 5px; padding: 6px;
+}
+.eoc-nav__toggle span { width: 26px; height: 2px; background: var(--eoc-gold); display: block; }
+
+/* ============================================================
+   SECTION 1 — HERO
+   ============================================================ */
+.eoc-hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8rem 1.5rem 6rem;
+}
+.eoc-hero__bg { position: absolute; inset: 0; z-index: 0; }
+.eoc-hero__bg img { width: 100%; height: 100%; object-fit: cover; }
+.eoc-hero__overlay {
+  position: absolute; inset: 0; z-index: 1;
+  background: var(--eoc-bg-primary);
+  opacity: .55;
+}
+.eoc-hero__content { position: relative; z-index: 3; max-width: 900px; }
+.eoc-hero__logo {
+  font-family: var(--eoc-font-display);
+  font-weight: 700;
+  font-style: italic;
+  font-size: 96px;
+  line-height: 1;
+  letter-spacing: .01em;
+  margin: 0;
+}
+.eoc-hero__logo .gold { color: var(--eoc-gold); }
+.eoc-hero__logo .cream { color: var(--eoc-cream); }
+.eoc-hero__logo .dot {
+  display: inline-block;
+  width: .42em; height: .42em;
+  border: .07em solid var(--eoc-gold-light);
+  border-radius: 50%;
+  margin: 0 .12em;
+  vertical-align: .18em;
+}
+.eoc-hero__tag-fr {
+  font-family: var(--eoc-font-body);
+  font-style: italic;
+  color: var(--eoc-gold-light);
+  font-size: 24px;
+  margin: 1.5rem 0 .4rem;
+}
+.eoc-hero__tag-en {
+  font-family: var(--eoc-font-ui);
+  text-transform: uppercase;
+  letter-spacing: .2em;
+  color: var(--eoc-wood);
+  font-size: 16px;
+  margin: 0 0 2.5rem;
+}
+.eoc-hero__ctas { display: flex; gap: 1.25rem; justify-content: center; flex-wrap: wrap; }
+.eoc-hero__scroll {
+  position: absolute;
+  bottom: 2rem; left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  color: var(--eoc-gold);
+  font-size: 2rem;
+  animation: eoc-bounce 1.8s ease-in-out infinite;
+}
+@keyframes eoc-bounce {
+  0%, 100% { transform: translate(-50%, 0); }
+  50%      { transform: translate(-50%, 12px); }
+}
+/* hero entrance animation */
+.eoc-anim-up { opacity: 0; transform: translateY(28px); animation: eoc-up .8s ease-out forwards; }
+.eoc-d1 { animation-delay: .3s; }
+.eoc-d2 { animation-delay: .6s; }
+@keyframes eoc-up { to { opacity: 1; transform: none; } }
+
+/* ============================================================
+   SECTION 2 — CONCEPT (split)
+   ============================================================ */
+.eoc-concept { background: var(--eoc-bg-secondary); }
+.eoc-split { display: grid; grid-template-columns: 1fr 1fr; gap: 3.5rem; align-items: center; }
+.eoc-quote {
+  font-family: var(--eoc-font-display);
+  font-style: italic;
+  color: var(--eoc-gold);
+  font-size: 48px;
+  line-height: 1.2;
+  margin: 0 0 1.5rem;
+}
+.eoc-quote-sub { color: var(--eoc-cream); font-style: italic; font-size: 18px; }
+.eoc-concept__img img { border: 1px solid var(--eoc-groove); }
+.eoc-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 4rem;
+  text-align: center;
+  border-top: 1px solid var(--eoc-groove);
+  padding-top: 3rem;
+}
+.eoc-stat__num {
+  font-family: var(--eoc-font-display);
+  font-weight: 700;
+  color: var(--eoc-gold-light);
+  font-size: 3rem;
+  line-height: 1;
+}
+.eoc-stat__label {
+  font-family: var(--eoc-font-ui);
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  font-size: .8rem;
+  color: var(--eoc-cream);
+  margin-top: .75rem;
+}
+
+/* ============================================================
+   SECTION 3 — THE GAME (cards)
+   ============================================================ */
+.eoc-game { background: var(--eoc-bg-primary); }
+.eoc-game::before {
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(circle at 50% 0%, rgba(139,105,20,.18), transparent 60%);
+  z-index:0;
+}
+.eoc-section-title {
+  font-family: var(--eoc-font-ui);
+  text-transform: uppercase;
+  letter-spacing: .25em;
+  color: var(--eoc-gold);
+  font-size: 1.6rem;
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+.eoc-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; position: relative; z-index: 1; }
+.eoc-card {
+  background: var(--eoc-bg-primary);
+  border: 1px solid var(--eoc-groove);
+  border-top: 3px solid var(--eoc-gold);
+  padding: 2.25rem 1.75rem;
+}
+.eoc-card__swatch {
+  width: 56px; height: 56px; border-radius: 6px;
+  margin-bottom: 1.25rem;
+  box-shadow: inset 0 0 0 1px rgba(245,236,215,.15), 0 4px 14px rgba(0,0,0,.5);
+}
+.eoc-card__name {
+  font-family: var(--eoc-font-ui);
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  color: var(--eoc-cream);
+  font-size: 1.25rem;
+  margin: 0 0 .15rem;
+}
+.eoc-card__points {
+  font-family: var(--eoc-font-display);
+  font-style: italic;
+  color: var(--eoc-gold-light);
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+.eoc-card__body { color: var(--eoc-cream); font-size: .98rem; }
+.eoc-card__body em { color: var(--eoc-gold-light); }
+.eoc-game__feature { margin-top: 3.5rem; position: relative; z-index: 1; }
+.eoc-game__feature img { width: 100%; border: 1px solid var(--eoc-groove); }
+.eoc-caption {
+  font-family: var(--eoc-font-ui);
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-size: .8rem;
+  color: var(--eoc-wood);
+  text-align: center;
+  margin-top: 1rem;
+}
+
+/* ============================================================
+   SECTION 4 — EXPERIENCE
+   ============================================================ */
+.eoc-experience {
+  position: relative;
+  min-height: 88vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.eoc-experience__bg { position: absolute; inset: 0; z-index: 0; }
+.eoc-experience__bg img { width: 100%; height: 100%; object-fit: cover; }
+.eoc-experience__overlay { position: absolute; inset: 0; background: var(--eoc-bg-primary); opacity: .4; z-index: 1; }
+.eoc-experience__content { position: relative; z-index: 3; max-width: 760px; padding: 0 1.5rem; }
+.eoc-experience__title {
+  font-family: var(--eoc-font-display);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--eoc-gold-light);
+  font-size: 64px;
+  line-height: 1.1;
+  margin-bottom: 1.75rem;
+}
+.eoc-experience__body { color: var(--eoc-cream); font-size: 18px; }
+.eoc-experience__body-en { color: var(--eoc-gold-light); font-size: 15px; font-style: italic; margin-top: 1rem; }
+
+/* ============================================================
+   SECTION 5 — HOW TO PLAY
+   ============================================================ */
+.eoc-rules { background: var(--eoc-bg-primary); }
+.eoc-rules__grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 3.5rem; align-items: center; }
+.eoc-steps { list-style: none; margin: 0; padding: 0; }
+.eoc-step { display: flex; gap: 1.5rem; padding: 1.75rem 0; border-bottom: 1px solid var(--eoc-groove); }
+.eoc-step:last-child { border-bottom: none; }
+.eoc-step__num {
+  flex: none;
+  width: 54px; height: 54px;
+  border: 2px solid var(--eoc-gold);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--eoc-font-display);
+  font-weight: 700;
+  color: var(--eoc-gold);
+  font-size: 1.5rem;
+}
+.eoc-step__text { color: var(--eoc-cream); }
+.eoc-step__text em { display:block; color: var(--eoc-gold-light); font-size: .9rem; margin-top: .3rem; }
+.eoc-rules__frame {
+  border: 8px solid var(--eoc-groove);
+  box-shadow: 0 0 0 1px var(--eoc-gold), 0 18px 40px rgba(0,0,0,.55);
+  background: var(--eoc-bg-secondary);
+}
+.eoc-rules__link { display:inline-block; margin-top: 2rem; font-family: var(--eoc-font-ui); text-transform: uppercase; letter-spacing: .14em; font-size: .85rem; }
+
+/* ============================================================
+   SECTION 6 — PRODUCT
+   ============================================================ */
+.eoc-product { background: var(--eoc-bg-secondary); }
+.eoc-product__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3.5rem; align-items: start; }
+.eoc-product__media { display: flex; flex-direction: column; gap: 1rem; }
+.eoc-product__main img { width: 100%; border: 1px solid var(--eoc-groove); }
+.eoc-product__thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: .75rem; }
+.eoc-product__thumbs img { border: 1px solid var(--eoc-groove); cursor: pointer; transition: border-color .25s; }
+.eoc-product__thumbs img:hover { border-color: var(--eoc-gold); }
+.eoc-product__title { font-family: var(--eoc-font-display); font-weight: 700; font-size: 2.4rem; color: var(--eoc-cream); }
+.eoc-product__price { font-family: var(--eoc-font-ui); letter-spacing: .12em; color: var(--eoc-gold-light); font-size: 1.4rem; margin: .5rem 0 1.75rem; }
+.eoc-product__bullets { list-style: none; margin: 0 0 2rem; padding: 0; }
+.eoc-product__bullets li { position: relative; padding-left: 1.6rem; margin-bottom: 1rem; color: var(--eoc-cream); }
+.eoc-product__bullets li::before { content: '◆'; position: absolute; left: 0; color: var(--eoc-gold); font-family: var(--eoc-font-ui); }
+.eoc-product__note { font-size: .9rem; color: var(--eoc-wood); font-style: italic; margin-top: 1.25rem; }
+
+/* ============================================================
+   SECTION 7 — COMMUNITY / EMAIL
+   ============================================================ */
+.eoc-community { background: var(--eoc-bg-secondary); }
+.eoc-community__frame {
+  border: 2px solid var(--eoc-gold);
+  padding: 4.5rem 2rem;
+  text-align: center;
+  position: relative;
+  background: linear-gradient(180deg, rgba(201,152,47,.05), transparent);
+}
+.eoc-community__frame::before,
+.eoc-community__frame::after {
+  content:''; position:absolute; width: 24px; height: 24px; border: 2px solid var(--eoc-gold-light);
+}
+.eoc-community__frame::before { top: 12px; left: 12px; border-right:none; border-bottom:none; }
+.eoc-community__frame::after { bottom: 12px; right: 12px; border-left:none; border-top:none; }
+.eoc-community__title { font-family: var(--eoc-font-display); font-weight: 700; font-style: italic; color: var(--eoc-gold); font-size: 48px; margin-bottom: 1rem; }
+.eoc-community__form { display: flex; gap: .75rem; max-width: 520px; margin: 2.25rem auto 1.25rem; flex-wrap: wrap; }
+.eoc-community__form .field { flex: 1 1 240px; }
+.eoc-community__form input[type="email"] {
+  width: 100%;
+  padding: 1rem 1.1rem;
+  background: var(--eoc-bg-primary);
+  border: 1px solid var(--eoc-groove);
+  color: var(--eoc-cream);
+  font-family: var(--eoc-font-body);
+  font-size: 1rem;
+}
+.eoc-community__form input::placeholder { color: var(--eoc-wood); }
+.eoc-community__social { font-family: var(--eoc-font-ui); letter-spacing: .12em; color: var(--eoc-wood); font-size: .85rem; text-transform: uppercase; }
+.eoc-form__message { margin-top: 1rem; color: var(--eoc-gold-light); font-style: italic; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.eoc-footer { background: var(--eoc-bg-secondary); border-top: 1px solid var(--eoc-groove); padding: 3.5rem 1.5rem 2.5rem; text-align: center; }
+.eoc-footer__logo { font-family: var(--eoc-font-display); font-style: italic; font-weight: 700; color: var(--eoc-gold); font-size: 1.3rem; }
+.eoc-footer__links { list-style:none; display:flex; gap:1.75rem; justify-content:center; flex-wrap:wrap; margin: 1.5rem 0; padding:0; }
+.eoc-footer__links a { font-family: var(--eoc-font-ui); text-transform: uppercase; letter-spacing: .12em; font-size: .78rem; color: var(--eoc-cream); }
+.eoc-footer__copy { color: var(--eoc-wood); font-size: .8rem; margin-top: 1rem; }
+
+/* ============================================================
+   BILINGUAL PAGES (rules / about side by side)
+   ============================================================ */
+.eoc-page { background: var(--eoc-bg-primary); padding: 9rem 1.5rem 6rem; }
+.eoc-bi { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+.eoc-bi__col h3 { color: var(--eoc-gold); font-family: var(--eoc-font-ui); text-transform: uppercase; letter-spacing: .16em; font-size: 1rem; border-bottom: 1px solid var(--eoc-groove); padding-bottom: .75rem; }
+.eoc-bi__col { color: var(--eoc-cream); }
+.eoc-rte h2 { color: var(--eoc-gold-light); font-style: italic; }
+.eoc-rte a { text-decoration: underline; }
+
+/* ============================================================
+   RESPONSIVE — MOBILE FIRST OVERRIDES
+   ============================================================ */
+@media (max-width: 900px) {
+  :root { --eoc-section-pad: 4.5rem; }
+  .eoc-nav__links { display: none; }
+  .eoc-nav__toggle { display: flex; }
+  .eoc-nav__links.is-open {
+    display: flex; flex-direction: column;
+    position: absolute; top: 100%; left: 0; right: 0;
+    background: rgba(13,7,5,.97); padding: 1.5rem; gap: 1.25rem;
+    border-bottom: 1px solid var(--eoc-groove);
+  }
+  .eoc-hero__logo { font-size: 48px; }
+  .eoc-hero__tag-fr { font-size: 19px; }
+  .eoc-hero__ctas { flex-direction: column; }
+  .eoc-hero__ctas .eoc-btn { width: 100%; }
+  .eoc-split,
+  .eoc-rules__grid,
+  .eoc-product__grid,
+  .eoc-bi { grid-template-columns: 1fr; gap: 2.25rem; }
+  /* image above text on mobile */
+  .eoc-concept__img { order: -1; }
+  .eoc-rules__frame { order: -1; }
+  .eoc-stats { grid-template-columns: 1fr; gap: 2.5rem; }
+  .eoc-cards { grid-template-columns: 1fr; }
+  .eoc-quote { font-size: 32px; }
+  .eoc-experience__title { font-size: 38px; }
+  .eoc-community__title { font-size: 32px; }
+  .eoc-product__title { font-size: 1.9rem; }
+  .eoc-stat__num { font-size: 2.4rem; }
+}

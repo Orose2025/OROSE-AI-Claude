@@ -1,0 +1,66 @@
+{%- comment -%} ÉCHEC O CUBE — Section 2 : LE CONCEPT {%- endcomment -%}
+<section class="eoc-section eoc-concept eoc-grooves" id="eoc-concept">
+  <div class="eoc-container">
+    <div class="eoc-split eoc-reveal">
+      <div class="eoc-concept__text">
+        <blockquote class="eoc-quote">{{ section.settings.quote_fr }}</blockquote>
+        <p class="eoc-quote-sub">{{ section.settings.quote_en }}</p>
+      </div>
+      <div class="eoc-concept__img">
+        {%- if section.settings.image != blank -%}
+          <img src="{{ section.settings.image | image_url: width: 1200 }}"
+               alt="{{ section.settings.image.alt | escape | default: 'ÉCHEC O CUBE — pièce rouge' }}"
+               width="1200" height="900" loading="lazy">
+        {%- else -%}
+          <div style="aspect-ratio:4/3;background:var(--eoc-groove)"></div>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="eoc-stats eoc-reveal">
+      {%- for block in section.blocks -%}
+        <div class="eoc-stat" {{ block.shopify_attributes }}>
+          <div class="eoc-stat__num"
+               {% if block.settings.number > 0 %}data-count="{{ block.settings.number }}" data-suffix="{{ block.settings.suffix }}"{% endif %}>
+            {%- if block.settings.number > 0 -%}0{{ block.settings.suffix }}{%- else -%}{{ block.settings.number_text }}{%- endif -%}
+          </div>
+          <div class="eoc-stat__label">{{ block.settings.label }}</div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "EOC — Concept",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "quote_fr", "label": "Citation FR / Pull quote", "default": "Si le pion rentre, le coup est valide." },
+    { "type": "textarea", "id": "quote_en", "label": "Traduction EN / English translation", "default": "If the piece fits, the move is valid." },
+    { "type": "image_picker", "id": "image", "label": "Image macro (IMG_20931.jpg) / Macro image" }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Statistique / Stat block",
+      "settings": [
+        { "type": "number", "id": "number", "label": "Nombre (animé) / Number (animated). 0 = texte libre", "default": 0 },
+        { "type": "text", "id": "suffix", "label": "Suffixe / Suffix (ex: +)", "default": "" },
+        { "type": "text", "id": "number_text", "label": "Texte si nombre = 0 / Text if number is 0", "default": "1999" },
+        { "type": "text", "id": "label", "label": "Étiquette / Label", "default": "Inventé au Québec" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "EOC — Concept",
+      "blocks": [
+        { "type": "stat", "settings": { "number": 0, "number_text": "1999", "label": "Inventé au Québec" } },
+        { "type": "stat", "settings": { "number": 27, "suffix": " ans", "label": "de raffinement" } },
+        { "type": "stat", "settings": { "number": 190, "label": "pièces. Un seul chef-d'œuvre." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

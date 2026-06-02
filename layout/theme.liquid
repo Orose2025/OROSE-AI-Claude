@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="canonical" href="{{ canonical_url }}">
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+
+    <title>{{ page_title }}{% if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif %}{% if current_page != 1 %} &ndash; Page {{ current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}</title>
+
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% endif %}
+
+    {%- comment -%} Google Fonts — preconnect for performance {%- endcomment -%}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Libre+Baskerville:ital@0;1&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+
+    {{ content_for_header }}
+
+    {%- comment -%} Brand palette driven by Theme Settings -> CSS custom properties {%- endcomment -%}
+    <style>
+      :root {
+        --eoc-bg-primary: {{ settings.color_bg_primary }};
+        --eoc-bg-secondary: {{ settings.color_bg_secondary }};
+        --eoc-gold: {{ settings.color_gold }};
+        --eoc-gold-light: {{ settings.color_gold_light }};
+        --eoc-cream: {{ settings.color_cream }};
+        --eoc-red: {{ settings.color_red }};
+        --eoc-wood: {{ settings.color_wood }};
+        --eoc-groove: {{ settings.color_groove }};
+      }
+      body.eoc-body { font-size: {{ settings.base_font_size | default: 18 }}px; }
+    </style>
+
+    {{ 'eoc-theme.css' | asset_url | stylesheet_tag }}
+  </head>
+
+  <body class="eoc-body template-{{ template.name }}">
+
+    {%- comment -%} ===== FIXED NAVIGATION ===== {%- endcomment -%}
+    <header class="eoc-nav">
+      <nav class="eoc-nav__inner" aria-label="Principale / Main">
+        <a href="{{ routes.root_url }}" class="eoc-nav__logo">
+          <span class="gold">{{ settings.brand_logo_word1 | default: 'ÉCHEC' }}</span>
+          <span class="cream">{{ settings.brand_logo_word2 | default: 'O CUBE' }}</span>
+        </a>
+
+        <button class="eoc-nav__toggle" aria-label="Menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+
+        <ul class="eoc-nav__links">
+          {%- for link in linklists[settings.main_menu].links -%}
+            <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {%- else -%}
+            <li><a href="/pages/rules">Règles / Rules</a></li>
+            <li><a href="{{ routes.all_products_collection_url }}">Boutique / Shop</a></li>
+            <li><a href="#eoc-community">Communauté</a></li>
+            <li><a href="/pages/about">À propos / About</a></li>
+          {%- endfor -%}
+        </ul>
+
+        <div class="eoc-nav__right">
+          {%- if settings.show_lang_toggle -%}
+            <div class="eoc-lang">
+              <a href="{{ settings.lang_fr_url | default: '/' }}" class="is-active">FR</a>
+              <span style="color:var(--eoc-groove)">/</span>
+              <a href="{{ settings.lang_en_url | default: '/?lang=en' }}">EN</a>
+            </div>
+          {%- endif -%}
+        </div>
+      </nav>
+    </header>
+
+    <main id="MainContent" role="main">
+      {{ content_for_layout }}
+    </main>
+
+    {%- comment -%} ===== FOOTER ===== {%- endcomment -%}
+    <footer class="eoc-footer">
+      <div class="eoc-footer__logo">
+        {{ settings.brand_logo_word1 | default: 'ÉCHEC' }} {{ settings.brand_logo_word2 | default: 'O CUBE' }}
+      </div>
+      <ul class="eoc-footer__links">
+        {%- for link in linklists[settings.footer_menu].links -%}
+          <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+        {%- else -%}
+          <li><a href="/pages/rules">Règles / Rules</a></li>
+          <li><a href="{{ routes.all_products_collection_url }}">Boutique / Shop</a></li>
+          <li><a href="/pages/about">À propos / About</a></li>
+          <li><a href="{{ routes.contact_url | default: '/pages/contact' }}">Contact</a></li>
+        {%- endfor -%}
+      </ul>
+      <p class="eoc-footer__copy">
+        {{ settings.footer_copy | default: "© 1999–2026 Alain Dupont. Droit d'auteur OPIC Canada No. 477714. Tous droits réservés." }}
+      </p>
+    </footer>
+
+    <script src="{{ 'eoc-animations.js' | asset_url }}" defer></script>
+  </body>
+</html>

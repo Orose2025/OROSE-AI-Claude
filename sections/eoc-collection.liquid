@@ -1,0 +1,36 @@
+{%- comment -%} ÉCHEC O CUBE — BOUTIQUE / SHOP (collection grid, brand-styled) {%- endcomment -%}
+<section class="eoc-page" id="eoc-collection">
+  <div class="eoc-container">
+    <span class="eoc-kicker eoc-center" style="display:block">{{ section.settings.kicker }}</span>
+    <h1 class="eoc-center" style="color:var(--eoc-gold-light);font-style:italic;margin-bottom:3rem">
+      {{ collection.title | default: section.settings.fallback_title }}
+    </h1>
+
+    <div class="eoc-cards">
+      {%- for product in collection.products -%}
+        <a href="{{ product.url }}" class="eoc-card eoc-reveal" style="display:block;color:inherit">
+          {%- if product.featured_image -%}
+            <img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape | default: product.title }}"
+                 width="600" height="600" loading="lazy" style="border:1px solid var(--eoc-groove);margin-bottom:1.25rem">
+          {%- endif -%}
+          <h3 class="eoc-card__name" style="font-size:1.05rem">{{ product.title }}</h3>
+          <div class="eoc-card__points">{{ product.price | money }}</div>
+        </a>
+      {%- else -%}
+        <p style="color:var(--eoc-wood);grid-column:1/-1;text-align:center">{{ section.settings.empty_text }}</p>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "EOC — Boutique / Shop",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Sur-titre / Kicker", "default": "LA BOUTIQUE / THE SHOP" },
+    { "type": "text", "id": "fallback_title", "label": "Titre par défaut / Fallback title", "default": "Boutique ÉCHEC O CUBE" },
+    { "type": "text", "id": "empty_text", "label": "Texte si vide / Empty text", "default": "Produits bientôt disponibles / Products coming soon" }
+  ]
+}
+{% endschema %}

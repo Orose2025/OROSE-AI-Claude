@@ -1,0 +1,11 @@
+{%- comment -%} ÉCHEC O CUBE — Page générique / Generic page {%- endcomment -%}
+<section class="eoc-page" id="eoc-generic-page">
+  <div class="eoc-container eoc-narrow">
+    <h1 class="eoc-center" style="color:var(--eoc-gold-light);font-style:italic;margin-bottom:2rem">{{ page.title }}</h1>
+    <div class="eoc-rte eoc-bi__col">{{ page.content }}</div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "EOC — Page", "tag": "section", "settings": [] }
+{% endschema %}

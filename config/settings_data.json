@@ -1,0 +1,36 @@
+{
+  "current": {
+    "color_bg_primary": "#1A1008",
+    "color_bg_secondary": "#0D0705",
+    "color_gold": "#C9982F",
+    "color_gold_light": "#E8C96A",
+    "color_cream": "#F5ECD7",
+    "color_red": "#B22222",
+    "color_wood": "#8B6914",
+    "color_groove": "#2C1F0E",
+    "base_font_size": 18,
+    "brand_logo_word1": "ÉCHEC",
+    "brand_logo_word2": "CUBE",
+    "main_menu": "main-menu",
+    "show_lang_toggle": true,
+    "lang_fr_url": "/",
+    "lang_en_url": "/?lang=en",
+    "footer_menu": "footer",
+    "footer_copy": "© 1999–2026 Alain Dupont. Droit d'auteur OPIC Canada No. 477714. Tous droits réservés."
+  },
+  "presets": {
+    "ÉCHEC O CUBE — Site Officiel": {
+      "color_bg_primary": "#1A1008",
+      "color_bg_secondary": "#0D0705",
+      "color_gold": "#C9982F",
+      "color_gold_light": "#E8C96A",
+      "color_cream": "#F5ECD7",
+      "color_red": "#B22222",
+      "color_wood": "#8B6914",
+      "color_groove": "#2C1F0E",
+      "base_font_size": 18,
+      "brand_logo_word1": "ÉCHEC",
+      "brand_logo_word2": "CUBE"
+    }
+  }
+}
