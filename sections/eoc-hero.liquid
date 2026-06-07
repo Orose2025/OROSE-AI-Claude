@@ -51,8 +51,8 @@
       <p class="eoc-hero__tag-en eoc-anim-up eoc-d1">{{ section.settings.tagline_en }}</p>
     {%- endif -%}
     <div class="eoc-hero__ctas eoc-anim-up eoc-d2">
-      <a href="{{ section.settings.cta1_link }}" class="eoc-btn">{{ section.settings.cta1_label }}</a>
-      <a href="{{ section.settings.cta2_link }}" class="eoc-btn eoc-btn--cream">{{ section.settings.cta2_label }}</a>
+      <a href="{{ section.settings.cta1_link | default: '#eoc-community' }}" class="eoc-btn eoc-btn--solid">{{ section.settings.cta1_label }}</a>
+      <a href="{{ section.settings.cta2_link | default: '/pages/le-jeu' }}" class="eoc-btn">{{ section.settings.cta2_label }}</a>
     </div>
   </div>
 
@@ -81,9 +81,9 @@
     { "type": "text", "id": "tagline_fr", "label": "Slogan FR", "default": "Le jeu de stratégie où la physique valide chaque coup." },
     { "type": "text", "id": "tagline_en", "label": "Tagline EN", "default": "The strategy game where physics validates every move." },
     { "type": "header", "content": "Boutons d'action / Call to action" },
-    { "type": "text", "id": "cta1_label", "label": "Bouton 1 / Button 1", "default": "COMMANDER / ORDER" },
+    { "type": "text", "id": "cta1_label", "label": "Bouton 1 (or plein) / Button 1 (solid)", "default": "REJOINDRE LA COMMUNAUTÉ" },
     { "type": "url", "id": "cta1_link", "label": "Lien bouton 1 / Button 1 link" },
-    { "type": "text", "id": "cta2_label", "label": "Bouton 2 / Button 2", "default": "RÈGLES DU JEU / RULES" },
+    { "type": "text", "id": "cta2_label", "label": "Bouton 2 (contour) / Button 2 (outline)", "default": "DÉCOUVRIR LE JEU" },
     { "type": "url", "id": "cta2_link", "label": "Lien bouton 2 / Button 2 link" }
   ],
   "presets": [{ "name": "EOC — Héros / Hero" }]

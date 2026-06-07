@@ -142,6 +142,12 @@
         "default": true
       },
       {
+        "type": "checkbox",
+        "id": "show_nav_icons",
+        "label": "Afficher icônes recherche/compte/panier / Show search/account/cart icons",
+        "default": true
+      },
+      {
         "type": "url",
         "id": "lang_fr_url",
         "label": "URL Français / French URL",

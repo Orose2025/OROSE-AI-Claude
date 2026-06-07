@@ -211,7 +211,16 @@ h1, h2, h3, h4 {
   color: var(--eoc-cream);
 }
 .eoc-nav__links a:hover { color: var(--eoc-gold); }
-.eoc-nav__right { display: flex; align-items: center; gap: 1rem; }
+.eoc-nav__right { display: flex; align-items: center; gap: 1.1rem; }
+.eoc-nav__icon { position: relative; color: var(--eoc-cream); display: inline-flex; align-items: center; }
+.eoc-nav__icon:hover { color: var(--eoc-gold); }
+.eoc-cart-count {
+  position: absolute; top: -8px; right: -10px;
+  background: var(--eoc-gold); color: var(--eoc-bg-secondary);
+  font-family: var(--eoc-font-ui); font-size: .62rem; font-weight: 600;
+  min-width: 17px; height: 17px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; padding: 0 4px;
+}
 .eoc-lang { display: flex; gap: .35rem; font-family: var(--eoc-font-ui); font-size: .78rem; }
 .eoc-lang a { color: var(--eoc-wood); letter-spacing: .1em; }
 .eoc-lang a.is-active { color: var(--eoc-gold); }

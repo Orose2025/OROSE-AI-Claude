@@ -88,6 +88,18 @@
               <a href="{{ settings.lang_en_url | default: '/?lang=en' }}">EN</a>
             </div>
           {%- endif -%}
+          {%- if settings.show_nav_icons -%}
+            <a href="{{ routes.search_url }}" class="eoc-nav__icon" aria-label="Recherche / Search">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+            </a>
+            <a href="{{ routes.account_url | default: '/account' }}" class="eoc-nav__icon" aria-label="Compte / Account">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+            </a>
+            <a href="{{ routes.cart_url }}" class="eoc-nav__icon eoc-nav__cart" aria-label="Panier / Cart">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 7h12l-1.2 12.5a1 1 0 0 1-1 .9H8.2a1 1 0 0 1-1-.9L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+              {%- if cart.item_count > 0 -%}<span class="eoc-cart-count">{{ cart.item_count }}</span>{%- endif -%}
+            </a>
+          {%- endif -%}
         </div>
       </nav>
     </header>

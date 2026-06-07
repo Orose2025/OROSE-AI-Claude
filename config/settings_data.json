@@ -24,6 +24,7 @@
     "brand_logo_word2": "CUBE",
     "main_menu": "main-menu",
     "show_lang_toggle": true,
+    "show_nav_icons": true,
     "lang_fr_url": "/",
     "lang_en_url": "/?lang=en",
     "footer_logo_height": 64,
