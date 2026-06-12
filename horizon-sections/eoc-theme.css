@@ -220,3 +220,57 @@
   .eoc-usp .eoc-conteneur > div:last-child,
   .eoc-apropos-court .eoc-conteneur > div:last-child { order: -1; }
 }
+
+/* ============================================================
+   PAGES INTERNES — blocs réutilisables (À propos, Niveaux FEOC)
+   ============================================================ */
+.eoc-bloc { padding: 4.5rem 1.5rem; }
+.eoc-bloc--creme { background: var(--eoc-creme); color: var(--eoc-texte); }
+.eoc-bloc--blanc { background: var(--eoc-blanc); color: var(--eoc-texte); }
+.eoc-bloc--sombre { background: var(--eoc-brun); color: var(--eoc-creme); }
+.eoc-bloc--sombre h2 { color: var(--eoc-or-clair); }
+.eoc-bloc h2 { font-family: var(--eoc-font-titre); }
+.eoc-bloc p { font-size: 18px; line-height: 1.85; font-family: var(--eoc-font-corps); }
+.eoc-bloc .eoc-lead { font-size: 21px; }
+.eoc-conteneur--duo {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 3.5rem; align-items: center;
+}
+.eoc-conteneur--duo img { width: 100%; height: auto; display: block; border: 1px solid rgba(201,149,42,.3); }
+.eoc-signature { font-family: var(--eoc-font-accent); font-style: italic; font-size: 21px; line-height: 1.7; }
+.eoc-mention-opic { font-family: var(--eoc-font-titre); text-transform: uppercase; letter-spacing: .14em; font-size: 13px !important; color: var(--eoc-or); }
+
+/* Niveaux FEOC */
+.eoc-niveaux__grille { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 3rem; }
+
+/* Les trois pions — colonnes */
+.eoc-pions__grille { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin: 3rem 0; }
+.eoc-pion-carte { background: var(--eoc-blanc); border: 1px solid rgba(26,18,8,.12); border-top: 3px solid var(--eoc-or); padding: 2rem 1.5rem; text-align: center; }
+.eoc-pion-carte__pion { width: 84px; height: 26px; margin: 0 auto 1.25rem; border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,.25); }
+.eoc-pion-carte h3 { color: var(--eoc-texte); }
+.eoc-pion-carte__valeur { font-family: var(--eoc-font-titre); color: var(--eoc-or); letter-spacing: .12em; text-transform: uppercase; font-size: 15px; margin-bottom: .75rem; }
+
+/* ============================================================
+   PIED DE PAGE — 3 colonnes
+   ============================================================ */
+.eoc-footer { background: var(--eoc-noir); color: var(--eoc-creme); padding: 4.5rem 1.5rem 2.5rem; }
+.eoc-footer__colonnes {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 3rem;
+}
+.eoc-footer__logo { font-family: var(--eoc-font-titre); color: var(--eoc-or); font-size: 22px; letter-spacing: .08em; margin: 0 0 1rem; }
+.eoc-footer .eoc-signature { font-size: 17px; color: var(--eoc-creme); }
+.eoc-footer h4 { font-family: var(--eoc-font-titre); color: var(--eoc-or-clair); text-transform: uppercase; letter-spacing: .16em; font-size: 14px; margin: 0 0 1.25rem; }
+.eoc-footer ul { list-style: none; margin: 0; padding: 0; }
+.eoc-footer li { margin-bottom: .7rem; }
+.eoc-footer a { color: var(--eoc-creme); text-decoration: none; font-family: var(--eoc-font-corps); font-size: 16px; }
+.eoc-footer a:hover { color: var(--eoc-or-clair); }
+.eoc-footer__bas { max-width: 1200px; margin: 3rem auto 0; padding-top: 1.75rem; border-top: 1px solid rgba(201,149,42,.25); text-align: center; }
+.eoc-footer__bas p { font-size: 14px; color: rgba(245,240,232,.75); margin: .3rem 0; }
+
+@media (max-width: 749px) {
+  .eoc-conteneur--duo, .eoc-niveaux__grille, .eoc-pions__grille, .eoc-footer__colonnes { grid-template-columns: 1fr; gap: 2rem; }
+  .eoc-conteneur--duo > div:last-child { order: -1; }
+}

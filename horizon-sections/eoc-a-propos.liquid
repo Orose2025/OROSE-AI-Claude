@@ -1,0 +1,116 @@
+{% comment %}
+  ÉCHEC O CUBE — Page À Propos (6 sections, 100% éditable)
+  Droit d'auteur OPIC Canada No. 477714 — Alain Dupont
+{% endcomment %}
+
+<div class="eoc-section">
+
+  <header class="eoc-page-entete">
+    <p class="eoc-surtitre">{{ section.settings.surtitre }}</p>
+    <h1>{{ section.settings.titre_page }}</h1>
+    <p class="eoc-signature">{{ section.settings.accroche }}</p>
+  </header>
+
+  <section class="eoc-bloc eoc-bloc--creme">
+    <div class="eoc-conteneur--duo">
+      <div>
+        <h2>{{ section.settings.ch1_titre }}</h2>
+        <p class="eoc-lead">{{ section.settings.ch1_lead }}</p>
+        <div>{{ section.settings.ch1_texte }}</div>
+      </div>
+      <div>
+        {% if section.settings.image_invention != blank %}
+          <img src="{{ section.settings.image_invention | image_url: width: 1200 }}" alt="{{ section.settings.image_invention.alt | escape | default: 'Le plateau ÉCHEC O CUBE et ses rainures' }}" loading="lazy" width="1200" height="900">
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <section class="eoc-bloc eoc-bloc--blanc">
+    <div class="eoc-conteneur--duo">
+      <div>
+        {% if section.settings.image_alain != blank %}
+          <img src="{{ section.settings.image_alain | image_url: width: 1200 }}" alt="{{ section.settings.image_alain.alt | escape | default: 'Le prototype ÉCHEC O CUBE fabriqué par Alain Dupont' }}" loading="lazy" width="1200" height="900">
+        {% endif %}
+      </div>
+      <div>
+        <h2>{{ section.settings.ch2_titre }}</h2>
+        <div>{{ section.settings.ch2_texte }}</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="eoc-bloc eoc-bloc--creme">
+    <div class="eoc-conteneur--duo">
+      <div>
+        <h2>{{ section.settings.ch3_titre }}</h2>
+        <div>{{ section.settings.ch3_texte }}</div>
+      </div>
+      <div>
+        {% if section.settings.image_linda != blank %}
+          <img src="{{ section.settings.image_linda | image_url: width: 1200 }}" alt="{{ section.settings.image_linda.alt | escape | default: "Linda et Alain, l'équipe derrière ÉCHEC O CUBE" }}" loading="lazy" width="1200" height="900">
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <section class="eoc-bloc eoc-bloc--sombre">
+    <div class="eoc-conteneur">
+      <h2>{{ section.settings.ch4_titre }}</h2>
+      <p class="eoc-lead">{{ section.settings.ch4_lead }}</p>
+      <div>{{ section.settings.ch4_texte }}</div>
+    </div>
+  </section>
+
+  <section class="eoc-bloc eoc-bloc--blanc">
+    <div class="eoc-conteneur">
+      <h2>{{ section.settings.ch5_titre }}</h2>
+      <div>{{ section.settings.ch5_texte }}</div>
+      <h2 style="margin-top:2.5rem">{{ section.settings.ch6_titre }}</h2>
+      <div>{{ section.settings.ch6_texte }}</div>
+      <p class="eoc-mention-opic">{{ section.settings.mention }}</p>
+      {% if section.settings.bouton_texte != blank %}
+        <p style="margin-top: 32px;"><a class="eoc-bouton eoc-bouton--plein" href="{{ section.settings.bouton_lien | default: '/pages/rejoindre-la-communaute-eoc' }}">{{ section.settings.bouton_texte }}</a></p>
+      {% endif %}
+    </div>
+  </section>
+
+</div>
+
+{% schema %}
+{
+  "name": "EOC — Page À Propos",
+  "settings": [
+    { "type": "header", "content": "En-tête de page" },
+    { "type": "text", "id": "surtitre", "label": "Surtitre", "default": "Notre histoire" },
+    { "type": "text", "id": "titre_page", "label": "Titre", "default": "27 ans d'attente. Une famille qui y a cru." },
+    { "type": "textarea", "id": "accroche", "label": "Accroche", "default": "Un jeu inventé au Québec en 1999, raffiné en silence, et enfin prêt à rencontrer le monde." },
+    { "type": "header", "content": "1 — L'invention 1999" },
+    { "type": "text", "id": "ch1_titre", "label": "Titre", "default": "L'invention — 1999" },
+    { "type": "textarea", "id": "ch1_lead", "label": "Texte d'introduction", "default": "Tout commence par une intuition : et si la règle d'un jeu n'était pas écrite sur papier, mais taillée dans la matière elle-même ?" },
+    { "type": "richtext", "id": "ch1_texte", "label": "Texte", "default": "<p>En 1999, Alain Dupont conçoit un plateau rainuré où les pions s'insèrent debout. Quand un pion s'insère dans une rainure et touche un autre pion déjà posé, le coup est valide. Aucune exception, aucune dispute : le plateau lui-même arbitre la partie. La même année, l'oeuvre est protégée par le droit d'auteur OPIC Canada No. 477714.</p>" },
+    { "type": "image_picker", "id": "image_invention", "label": "Image — L'invention 1999" },
+    { "type": "header", "content": "2 — Alain" },
+    { "type": "text", "id": "ch2_titre", "label": "Titre", "default": "Alain — une idée, deux mains" },
+    { "type": "richtext", "id": "ch2_texte", "label": "Texte", "default": "<p>Inventeur autodidacte, Alain a tout fait lui-même : la mécanique, les plans, les prototypes, les ajustements au millième. Pendant 27 ans, le jeu n'a jamais cessé d'être raffiné — chaque version plus précise, plus belle, plus proche de l'idée d'origine.</p><p>ÉCHEC O CUBE n'est pas sorti d'un studio de design. Il est sorti d'un atelier québécois, une rainure à la fois.</p>" },
+    { "type": "image_picker", "id": "image_alain", "label": "Image — Alain / prototype" },
+    { "type": "header", "content": "3 — Linda" },
+    { "type": "text", "id": "ch3_titre", "label": "Titre", "default": "Linda — aide incontestée depuis le début" },
+    { "type": "richtext", "id": "ch3_texte", "label": "Texte", "default": "<p>Depuis le premier prototype, Linda est là. Première joueuse, première critique, première à croire que ce jeu méritait mieux qu'un tiroir. Son regard a façonné l'expérience du jeu autant que les rainures du plateau.</p><p>Si ÉCHEC O CUBE arrive aujourd'hui jusqu'à vous, c'est aussi grâce à Linda.</p>" },
+    { "type": "image_picker", "id": "image_linda", "label": "Image — Linda" },
+    { "type": "header", "content": "4 — La famille" },
+    { "type": "text", "id": "ch4_titre", "label": "Titre", "default": "La famille" },
+    { "type": "textarea", "id": "ch4_lead", "label": "Texte d'introduction", "default": "ÉCHEC O CUBE est une histoire de famille, jouée sur trois générations." },
+    { "type": "richtext", "id": "ch4_texte", "label": "Texte", "default": "<p>Mélanie, en Ontario. Jonathan, au Québec. Mikaël, à Montréal. Et déjà, les enfants — la relève junior — qui apprennent à glisser leurs premiers pions dans les rainures. Chaque partie de famille a été un banc d'essai, chaque réunion un tournoi improvisé.</p>" },
+    { "type": "header", "content": "5 — Pourquoi 27 ans + Ce que nous préparons" },
+    { "type": "text", "id": "ch5_titre", "label": "Titre", "default": "Pourquoi 27 ans ?" },
+    { "type": "richtext", "id": "ch5_texte", "label": "Texte", "default": "<p>Il y a 27 ans je devais tout donner à ma jeune famille. Là, 27 ans plus tard, c'est toute notre famille qui se donne au jeu ÉCHEC O CUBE.</p>" },
+    { "type": "text", "id": "ch6_titre", "label": "Titre 2", "default": "Ce que nous préparons" },
+    { "type": "richtext", "id": "ch6_texte", "label": "Texte 2", "default": "<p>En 2026, nous bâtissons la communauté ÉCHEC O CUBE : les premiers joueurs, les premières parties publiques, les fondations de la FEOC (Fédération ÉCHEC O CUBE au Canada). Au printemps 2027, le jeu sera lancé sur La Ruche, la plateforme québécoise de financement participatif.</p>" },
+    { "type": "text", "id": "mention", "label": "Mention OPIC", "default": "Droit d'auteur OPIC Canada No. 477714 — Alain Dupont" },
+    { "type": "text", "id": "bouton_texte", "label": "Bouton", "default": "Rejoindre la communauté" },
+    { "type": "url", "id": "bouton_lien", "label": "Lien du bouton" }
+  ],
+  "presets": [ { "name": "EOC — Page À Propos" } ]
+}
+{% endschema %}

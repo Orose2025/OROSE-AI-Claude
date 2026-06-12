@@ -1,0 +1,77 @@
+{% comment %}
+  ÉCHEC O CUBE — Page Niveaux FEOC (100% éditable)
+  FEOC = Fédération ÉCHEC O CUBE au Canada
+{% endcomment %}
+
+<div class="eoc-section">
+
+  <header class="eoc-page-entete">
+    <p class="eoc-surtitre">{{ section.settings.surtitre }}</p>
+    <h1>{{ section.settings.titre_page }}</h1>
+    <p class="eoc-signature">{{ section.settings.accroche }}</p>
+  </header>
+
+  <section class="eoc-bloc eoc-bloc--creme">
+    <div class="eoc-conteneur">
+      <h2>{{ section.settings.prog_titre }}</h2>
+      <p class="eoc-lead">{{ section.settings.prog_lead }}</p>
+      <div class="eoc-niveaux__grille">
+        <div class="eoc-niveau">
+          <h3>{{ section.settings.niveau1_nom }}</h3>
+          <div>{{ section.settings.niveau1_texte }}</div>
+        </div>
+        <div class="eoc-niveau">
+          <h3>{{ section.settings.niveau2_nom }}</h3>
+          <div>{{ section.settings.niveau2_texte }}</div>
+        </div>
+        <div class="eoc-niveau">
+          <h3>{{ section.settings.niveau3_nom }}</h3>
+          <div>{{ section.settings.niveau3_texte }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="eoc-bloc eoc-bloc--sombre">
+    <div class="eoc-conteneur">
+      <h2>{{ section.settings.feoc_titre }}</h2>
+      <p class="eoc-lead">{{ section.settings.feoc_lead }}</p>
+      <div>{{ section.settings.feoc_texte }}</div>
+      {% if section.settings.bouton_texte != blank %}
+        <p style="margin-top: 32px;"><a class="eoc-bouton eoc-bouton--plein" href="{{ section.settings.bouton_lien | default: '/#inscription' }}">{{ section.settings.bouton_texte }}</a></p>
+      {% endif %}
+    </div>
+  </section>
+
+</div>
+
+{% schema %}
+{
+  "name": "EOC — Niveaux FEOC",
+  "settings": [
+    { "type": "header", "content": "En-tête de page" },
+    { "type": "text", "id": "surtitre", "label": "Surtitre", "default": "FEOC — Fédération ÉCHEC O CUBE au Canada" },
+    { "type": "text", "id": "titre_page", "label": "Titre", "default": "Les niveaux officiels" },
+    { "type": "textarea", "id": "accroche", "label": "Accroche", "default": "Trois titres. Un seul chemin : la maîtrise du plateau." },
+    { "type": "header", "content": "La progression" },
+    { "type": "text", "id": "prog_titre", "label": "Titre", "default": "La progression du joueur" },
+    { "type": "textarea", "id": "prog_lead", "label": "Texte d'introduction", "default": "La FEOC reconnaît trois niveaux officiels de jeu. Chaque titre se mérite sur le plateau, en parties et en tournois reconnus par la fédération au Canada." },
+    { "type": "header", "content": "Niveau 1" },
+    { "type": "text", "id": "niveau1_nom", "label": "Nom", "default": "CANDIDAT CUBE" },
+    { "type": "richtext", "id": "niveau1_texte", "label": "Description", "default": "<p>Le premier titre officiel. Le Candidat CUBE maîtrise les fondements : l'insertion valide, l'alternance des pions et ses premières fermetures d'ÉCHEC O CUBE en partie reconnue.</p>" },
+    { "type": "header", "content": "Niveau 2" },
+    { "type": "text", "id": "niveau2_nom", "label": "Nom", "default": "MAÎTRE CUBE" },
+    { "type": "richtext", "id": "niveau2_texte", "label": "Description", "default": "<p>Le joueur accompli. Le Maître CUBE lit le plateau plusieurs coups à l'avance, prépare ses réactions en chaîne et s'illustre dans les tournois reconnus par la FEOC au Canada.</p>" },
+    { "type": "header", "content": "Niveau 3" },
+    { "type": "text", "id": "niveau3_nom", "label": "Nom", "default": "GRAND MAÎTRE CUBE" },
+    { "type": "richtext", "id": "niveau3_texte", "label": "Description", "default": "<p>Le sommet du jeu. Le Grand Maître CUBE est une référence : sa vision du plateau, ses parties et sa contribution au jeu font autorité dans la communauté ÉCHEC O CUBE.</p>" },
+    { "type": "header", "content": "La FEOC au Canada" },
+    { "type": "text", "id": "feoc_titre", "label": "Titre", "default": "La FEOC au Canada" },
+    { "type": "textarea", "id": "feoc_lead", "label": "Texte d'introduction", "default": "La Fédération ÉCHEC O CUBE au Canada encadre la pratique officielle du jeu : règlement de référence, reconnaissance des parties, organisation des tournois et attribution des titres." },
+    { "type": "richtext", "id": "feoc_texte", "label": "Texte", "default": "<p>La FEOC prend forme en même temps que la communauté, en 2026. Les premiers joueurs inscrits seront les premiers candidats aux titres officiels lorsque le jeu sera lancé au printemps 2027.</p>" },
+    { "type": "text", "id": "bouton_texte", "label": "Bouton", "default": "Rejoindre la communauté" },
+    { "type": "url", "id": "bouton_lien", "label": "Lien du bouton" }
+  ],
+  "presets": [ { "name": "EOC — Niveaux FEOC" } ]
+}
+{% endschema %}

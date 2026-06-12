@@ -1,0 +1,73 @@
+{% comment %}
+  ÉCHEC O CUBE — Pied de page officiel (3 colonnes, 100% éditable)
+  Droit d'auteur OPIC Canada No. 477714 — Alain Dupont
+{% endcomment %}
+
+<div class="eoc-section eoc-footer">
+  <div class="eoc-footer__colonnes">
+    <div>
+      <p class="eoc-footer__logo">{{ section.settings.logo_texte }}</p>
+      <p class="eoc-signature">{{ section.settings.signature }}</p>
+      <p class="eoc-mention-opic">{{ section.settings.mention }}</p>
+    </div>
+    <div>
+      <h4>{{ section.settings.titre_col2 }}</h4>
+      <ul>
+        {% if section.settings.nav1_texte != blank %}<li><a href="{{ section.settings.nav1_url | default: '/pages/le-jeu' }}">{{ section.settings.nav1_texte }}</a></li>{% endif %}
+        {% if section.settings.nav2_texte != blank %}<li><a href="{{ section.settings.nav2_url | default: '/#regles' }}">{{ section.settings.nav2_texte }}</a></li>{% endif %}
+        {% if section.settings.nav3_texte != blank %}<li><a href="{{ section.settings.nav3_url | default: '/pages/a-propos' }}">{{ section.settings.nav3_texte }}</a></li>{% endif %}
+        {% if section.settings.nav4_texte != blank %}<li><a href="{{ section.settings.nav4_url | default: '/#inscription' }}">{{ section.settings.nav4_texte }}</a></li>{% endif %}
+        {% if section.settings.nav5_texte != blank %}<li><a href="{{ section.settings.nav5_url | default: '/collections/all' }}">{{ section.settings.nav5_texte }}</a></li>{% endif %}
+      </ul>
+    </div>
+    <div>
+      <h4>{{ section.settings.titre_col3 }}</h4>
+      <ul>
+        {% if section.settings.feoc1_texte != blank %}<li><a href="{{ section.settings.feoc1_url | default: '/pages/niveaux-feoc' }}">{{ section.settings.feoc1_texte }}</a></li>{% endif %}
+        {% if section.settings.feoc2_texte != blank %}<li><a href="{{ section.settings.feoc2_url | default: '/pages/feoc-federation-echec-o-cube' }}">{{ section.settings.feoc2_texte }}</a></li>{% endif %}
+        {% if section.settings.feoc3_texte != blank %}<li><a href="{{ section.settings.feoc3_url | default: '/pages/contact' }}">{{ section.settings.feoc3_texte }}</a></li>{% endif %}
+      </ul>
+    </div>
+  </div>
+  <div class="eoc-footer__bas">
+    {% if section.settings.ligne1 != blank %}<p>{{ section.settings.ligne1 }}</p>{% endif %}
+    {% if section.settings.ligne2 != blank %}<p>{{ section.settings.ligne2 }}</p>{% endif %}
+    {% if section.settings.ligne3 != blank %}<p>{{ section.settings.ligne3 }}</p>{% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "EOC — Pied de page",
+  "settings": [
+    { "type": "header", "content": "Colonne 1 — Marque" },
+    { "type": "text", "id": "logo_texte", "label": "Logo texte", "default": "ÉCHEC O CUBE" },
+    { "type": "textarea", "id": "signature", "label": "Phrase signature", "default": "« Quand un pion s'insère dans une rainure et touche un autre pion déjà posé, le coup est valide. »" },
+    { "type": "text", "id": "mention", "label": "Mention OPIC", "default": "Droit d'auteur OPIC Canada No. 477714" },
+    { "type": "header", "content": "Colonne 2 — Navigation" },
+    { "type": "text", "id": "titre_col2", "label": "Titre", "default": "Navigation" },
+    { "type": "text", "id": "nav1_texte", "label": "Lien 1 — texte", "default": "Le Jeu" },
+    { "type": "url", "id": "nav1_url", "label": "Lien 1 — adresse" },
+    { "type": "text", "id": "nav2_texte", "label": "Lien 2 — texte", "default": "Les Règles" },
+    { "type": "url", "id": "nav2_url", "label": "Lien 2 — adresse" },
+    { "type": "text", "id": "nav3_texte", "label": "Lien 3 — texte", "default": "À Propos" },
+    { "type": "url", "id": "nav3_url", "label": "Lien 3 — adresse" },
+    { "type": "text", "id": "nav4_texte", "label": "Lien 4 — texte", "default": "La Communauté" },
+    { "type": "url", "id": "nav4_url", "label": "Lien 4 — adresse" },
+    { "type": "text", "id": "nav5_texte", "label": "Lien 5 — texte", "default": "Boutique" },
+    { "type": "url", "id": "nav5_url", "label": "Lien 5 — adresse" },
+    { "type": "header", "content": "Colonne 3 — FEOC et contact" },
+    { "type": "text", "id": "titre_col3", "label": "Titre", "default": "FEOC et contact" },
+    { "type": "text", "id": "feoc1_texte", "label": "Lien 1 — texte", "default": "Niveaux FEOC" },
+    { "type": "url", "id": "feoc1_url", "label": "Lien 1 — adresse" },
+    { "type": "text", "id": "feoc2_texte", "label": "Lien 2 — texte", "default": "FEOC — la fédération au Canada" },
+    { "type": "url", "id": "feoc2_url", "label": "Lien 2 — adresse" },
+    { "type": "text", "id": "feoc3_texte", "label": "Lien 3 — texte", "default": "Contact" },
+    { "type": "url", "id": "feoc3_url", "label": "Lien 3 — adresse" },
+    { "type": "header", "content": "Bas du pied de page" },
+    { "type": "text", "id": "ligne1", "label": "Ligne 1", "default": "ÉCHEC O CUBE — Inventé au Québec en 1999 — Lancé au printemps 2027" },
+    { "type": "text", "id": "ligne2", "label": "Ligne 2", "default": "Droit d'auteur OPIC Canada No. 477714 — Alain Dupont" },
+    { "type": "text", "id": "ligne3", "label": "Ligne 3", "default": "Site officiel : echecocube.com" }
+  ]
+}
+{% endschema %}

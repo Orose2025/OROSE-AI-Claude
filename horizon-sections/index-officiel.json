@@ -1,0 +1,80 @@
+{
+  "sections": {
+    "eoc_hero": {
+      "type": "eoc-hero",
+      "name": "EOC — ÉCHEC O CUBE accueil",
+      "settings": {
+        "image": "shopify://shop_images/Pub-EchecOCube.png",
+        "hauteur": 720,
+        "voile": 45,
+        "voile_couleur": "#1a1008",
+        "afficher_logo": true,
+        "logo_image": "shopify://shop_images/IMG_2203.png",
+        "logo_filename": "ECHEC_O_CUBE_LOGO_v5_transparent.png",
+        "logo_largeur": 540,
+        "titre": "",
+        "taille_titre": 56,
+        "couleur_titre": "#e8c96a",
+        "sous_titre": "",
+        "couleur_texte": "#f5ecd7",
+        "alignement": "center",
+        "bouton1_texte": "REJOINDRE LA COMMUNAUTÉ",
+        "bouton1_lien": "shopify://pages/rejoindre-la-communaute-eoc",
+        "bouton2_texte": "DÉCOUVRIR LE JEU",
+        "bouton2_lien": "shopify://pages/le-jeu"
+      }
+    },
+    "eoc_usp": {
+      "type": "eoc-usp",
+      "settings": {
+        "titre": "La règle intégrée dans la matière",
+        "texte": "",
+        "image": "shopify://shop_images/PLATEAU_JEUX_PIONS.png"
+      }
+    },
+    "eoc_regles": {
+      "type": "eoc-regles",
+      "settings": {
+        "titre": "Trois principes. Aucune exception."
+      }
+    },
+    "eoc_trois_pions": {
+      "type": "eoc-trois-pions",
+      "settings": {
+        "titre": "Les trois pions",
+        "intro": ""
+      }
+    },
+    "eoc_apropos_court": {
+      "type": "eoc-apropos-court",
+      "settings": {
+        "titre": "27 ans d'attente. Une famille qui y a cru.",
+        "texte": "<p>En 1999, au Québec, Alain Dupont invente un jeu de stratégie où la règle n'est pas écrite dans un livret : elle est taillée dans la matière. Le droit d'auteur est enregistré la même année à l'OPIC Canada. Puis la vie suit son cours, et le jeu attend son moment.</p><p>Ce moment est arrivé. Entouré de Linda et de toute la famille, Alain prépare la rencontre entre ÉCHEC O CUBE et le monde : la communauté se bâtit en 2026, et le jeu sera lancé au printemps 2027.</p>",
+        "lien_texte": "Lire notre histoire",
+        "lien_url": "",
+        "image": "shopify://shop_images/ECHEC_O_CUBE_-_GAME.png"
+      }
+    },
+    "eoc_inscription": {
+      "type": "eoc-inscription",
+      "settings": {
+        "surtitre": "Printemps 2027 — La Ruche",
+        "titre": "Soyez parmi les premiers.",
+        "texte": "<p>En 2026, nous bâtissons la communauté ÉCHEC O CUBE. Au printemps 2027, nous lançons sur La Ruche. Inscrivez-vous maintenant pour être avisé en premier et bénéficier des conditions fondateurs.</p>",
+        "placeholder": "Votre adresse courriel",
+        "bouton_texte": "Je m'inscris",
+        "message_succes": "Merci. Vous faites maintenant partie des premiers. Nous vous écrirons avant tout le monde.",
+        "message_erreur": "Veuillez vérifier votre adresse courriel et réessayer.",
+        "tags": "newsletter,EOC-communaute-2026"
+      }
+    }
+  },
+  "order": [
+    "eoc_hero",
+    "eoc_usp",
+    "eoc_regles",
+    "eoc_trois_pions",
+    "eoc_apropos_court",
+    "eoc_inscription"
+  ]
+}

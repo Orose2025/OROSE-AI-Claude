@@ -1,35 +1,44 @@
-{% comment %} ÉCHEC O CUBE — Section Les trois pions — 100% éditable {% endcomment %}
-
-<style>
-  #shopify-section-{{ section.id }} .eoc-pions__image-wrapper { width: 100%; text-align: center; }
-  #shopify-section-{{ section.id }} .eoc-pions__image { max-width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 8px; }
-</style>
+{% comment %} ÉCHEC O CUBE — Section Les trois pions (3 colonnes, 100% éditable) {% endcomment %}
 
 <section class="eoc-section eoc-pions">
   <div class="eoc-conteneur">
     <h2>{{ section.settings.titre }}</h2>
     {% if section.settings.intro != blank %}
-      <div class="eoc-lead" style="text-align:center;max-width:760px;margin:0 auto 2rem">{{ section.settings.intro }}</div>
+      <div class="eoc-lead" style="text-align:center;max-width:760px;margin:0 auto 1rem">{{ section.settings.intro }}</div>
     {% endif %}
-    <div class="eoc-pions__image-wrapper">
-      {% if section.settings.image != blank %}
+
+    <div class="eoc-pions__grille">
+      <div class="eoc-pion-carte">
+        <div class="eoc-pion-carte__pion" style="background: {{ section.settings.pion1_couleur }}"></div>
+        <h3>{{ section.settings.pion1_nom }}</h3>
+        <p class="eoc-pion-carte__valeur">{{ section.settings.pion1_valeur }}</p>
+        <div>{{ section.settings.pion1_texte }}</div>
+      </div>
+      <div class="eoc-pion-carte">
+        <div class="eoc-pion-carte__pion" style="background: {{ section.settings.pion2_couleur }}"></div>
+        <h3>{{ section.settings.pion2_nom }}</h3>
+        <p class="eoc-pion-carte__valeur">{{ section.settings.pion2_valeur }}</p>
+        <div>{{ section.settings.pion2_texte }}</div>
+      </div>
+      <div class="eoc-pion-carte">
+        <div class="eoc-pion-carte__pion" style="background: {{ section.settings.pion3_couleur }}"></div>
+        <h3>{{ section.settings.pion3_nom }}</h3>
+        <p class="eoc-pion-carte__valeur">{{ section.settings.pion3_valeur }}</p>
+        <div>{{ section.settings.pion3_texte }}</div>
+      </div>
+    </div>
+
+    {% if section.settings.image != blank %}
+      <div style="width:100%;text-align:center">
         <img
           src="{{ section.settings.image | image_url: width: 1400 }}"
           alt="{{ section.settings.image.alt | escape | default: 'Les trois pions ÉCHEC O CUBE' }}"
-          class="eoc-pions__image"
           loading="lazy"
           width="1400"
+          style="max-width:100%;height:auto;display:block;margin:0 auto;border-radius:8px"
         >
-      {% else %}
-        <img
-          src="https://cdn.shopify.com/s/files/1/0720/4562/5432/files/anatomie-des-pieces-pions.jpg?v=1780898690"
-          alt="Anatomie des pièces - Les trois pions"
-          class="eoc-pions__image"
-          loading="lazy"
-          width="1400"
-        >
-      {% endif %}
-    </div>
+      </div>
+    {% endif %}
   </div>
 </section>
 
@@ -39,6 +48,22 @@
   "settings": [
     { "type": "text", "id": "titre", "label": "Titre", "default": "Les trois pions" },
     { "type": "richtext", "id": "intro", "label": "Texte d'introduction (optionnel)" },
+    { "type": "header", "content": "Pion 1" },
+    { "type": "text", "id": "pion1_nom", "label": "Nom", "default": "Pion Pâle" },
+    { "type": "text", "id": "pion1_valeur", "label": "Valeur", "default": "1 point" },
+    { "type": "richtext", "id": "pion1_texte", "label": "Description", "default": "<p>Le pion court. Chaque pion pâle compte pour 1 point lorsqu'un ÉCHEC O CUBE est fermé.</p>" },
+    { "type": "color", "id": "pion1_couleur", "label": "Couleur", "default": "#e8dcc0" },
+    { "type": "header", "content": "Pion 2" },
+    { "type": "text", "id": "pion2_nom", "label": "Nom", "default": "Pion Foncé" },
+    { "type": "text", "id": "pion2_valeur", "label": "Valeur", "default": "2 points" },
+    { "type": "richtext", "id": "pion2_texte", "label": "Description", "default": "<p>Le pion long. Chaque pion foncé compte pour 2 points lorsqu'un ÉCHEC O CUBE est fermé.</p>" },
+    { "type": "color", "id": "pion2_couleur", "label": "Couleur", "default": "#2b1c0e" },
+    { "type": "header", "content": "Pion 3" },
+    { "type": "text", "id": "pion3_nom", "label": "Nom", "default": "Pion Rouge" },
+    { "type": "text", "id": "pion3_valeur", "label": "Valeur", "default": "Marqueur" },
+    { "type": "richtext", "id": "pion3_texte", "label": "Description", "default": "<p>Le marqueur. Le pion rouge ne compte aucun point : il marque le territoire et peut bloquer une fermeture adverse.</p>" },
+    { "type": "color", "id": "pion3_couleur", "label": "Couleur", "default": "#be1414" },
+    { "type": "header", "content": "Image (optionnelle, sous les colonnes)" },
     { "type": "image_picker", "id": "image", "label": "Image des trois pions" }
   ],
   "presets": [ { "name": "EOC — Les trois pions" } ]

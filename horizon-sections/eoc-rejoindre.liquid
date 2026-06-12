@@ -1,0 +1,200 @@
+{% comment %}
+  ÉCHEC O CUBE — Page Rejoindre la Communauté EOC (100% éditable, sans emoji)
+  Formulaire d'inscription avec carte FEOC gratuite
+{% endcomment %}
+
+<style>
+  .eoc-rejoindre { background: #fff; padding: 80px 20px; }
+  .eoc-rejoindre__inner { max-width: 680px; margin: 0 auto; text-align: center; }
+  .eoc-rejoindre__badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #b8960c, #d4af37, #b8960c);
+    color: #fff;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 8px 24px;
+    border-radius: 2px;
+    margin-bottom: 28px;
+  }
+  .eoc-rejoindre__titre {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(32px, 5vw, 52px);
+    color: #1a1208;
+    margin: 0 0 20px 0;
+    line-height: 1.15;
+    font-style: italic;
+  }
+  .eoc-rejoindre__sous-titre { font-size: 18px; color: #555; line-height: 1.85; margin: 0 0 16px 0; }
+  .eoc-rejoindre__offre {
+    display: inline-block;
+    background: linear-gradient(135deg, #fdf8ed, #fef5d4);
+    border: 1px solid #d4af37;
+    border-radius: 8px;
+    padding: 16px 28px;
+    margin: 0 0 44px 0;
+    font-size: 15px;
+    color: #7a5c00;
+    font-weight: 600;
+    text-align: left;
+  }
+  .eoc-rejoindre__offre-text strong { display: block; font-size: 16px; color: #5a3e00; margin-bottom: 2px; }
+  .eoc-rejoindre__offre-valeur { font-size: 13px; color: #9a7a20; font-weight: 400; }
+  .eoc-rejoindre__form { background: #fafafa; border: 1px solid #e8e0d0; border-radius: 12px; padding: 40px 44px; text-align: left; }
+  .eoc-rejoindre__form-titre {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #b8960c;
+    margin: 0 0 28px 0;
+    text-align: center;
+  }
+  .eoc-rejoindre__row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .eoc-rejoindre__field { margin-bottom: 16px; }
+  .eoc-rejoindre__label { display: block; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #444; margin-bottom: 7px; }
+  .eoc-rejoindre__input,
+  .eoc-rejoindre__select {
+    width: 100%; padding: 13px 16px; border: 1px solid #d0c8b8; border-radius: 6px;
+    font-size: 16px; color: #222; background: #fff; transition: border-color 0.2s;
+    box-sizing: border-box; appearance: none; -webkit-appearance: none;
+  }
+  .eoc-rejoindre__input:focus,
+  .eoc-rejoindre__select:focus { outline: none; border-color: #d4af37; box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.12); }
+  .eoc-rejoindre__select-wrapper { position: relative; }
+  .eoc-rejoindre__select-wrapper::after {
+    content: '\25BE'; position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+    color: #999; pointer-events: none;
+  }
+  .eoc-rejoindre__consent { margin: 20px 0 28px; display: flex; gap: 12px; align-items: flex-start; }
+  .eoc-rejoindre__consent input[type="checkbox"] { width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; accent-color: #d4af37; cursor: pointer; }
+  .eoc-rejoindre__consent-label { font-size: 14px; color: #666; line-height: 1.6; }
+  .eoc-rejoindre__submit {
+    width: 100%; padding: 16px;
+    background: linear-gradient(135deg, #b8960c, #d4af37, #b8960c);
+    color: #fff; font-family: 'Cinzel', Georgia, serif; font-size: 13px;
+    letter-spacing: 0.2em; text-transform: uppercase; border: none; border-radius: 6px;
+    cursor: pointer; transition: opacity 0.2s, transform 0.1s;
+  }
+  .eoc-rejoindre__submit:hover { opacity: 0.9; transform: translateY(-1px); }
+  .eoc-rejoindre__message { margin-top: 20px; padding: 16px 20px; border-radius: 6px; font-size: 15px; text-align: center; }
+  .eoc-rejoindre__message--succes { background: #f0faf0; border: 1px solid #4caf50; color: #2e7d32; }
+  .eoc-rejoindre__message--erreur { background: #fff5f5; border: 1px solid #f44336; color: #c62828; }
+  .eoc-rejoindre__prive { margin-top: 18px; font-size: 13px; color: #aaa; text-align: center; }
+  @media (max-width: 600px) {
+    .eoc-rejoindre__form { padding: 28px 20px; }
+    .eoc-rejoindre__row { grid-template-columns: 1fr; }
+  }
+</style>
+
+<section class="eoc-rejoindre" id="rejoindre">
+  <div class="eoc-rejoindre__inner">
+
+    <div class="eoc-rejoindre__badge">{{ section.settings.badge }}</div>
+
+    <h1 class="eoc-rejoindre__titre">{{ section.settings.titre }}</h1>
+
+    <p class="eoc-rejoindre__sous-titre">{{ section.settings.sous_titre | newline_to_br }}</p>
+
+    <div class="eoc-rejoindre__offre">
+      <div class="eoc-rejoindre__offre-text">
+        <strong>{{ section.settings.offre_titre }}</strong>
+        <span class="eoc-rejoindre__offre-valeur">{{ section.settings.offre_valeur }}</span>
+      </div>
+    </div>
+
+    {% form 'customer', class: 'eoc-rejoindre__form' %}
+      <input type="hidden" name="contact[tags]" value="{{ section.settings.tags }}">
+
+      <p class="eoc-rejoindre__form-titre">{{ section.settings.form_titre }}</p>
+
+      <div class="eoc-rejoindre__row">
+        <div class="eoc-rejoindre__field">
+          <label class="eoc-rejoindre__label" for="rejoindre-prenom">Prénom *</label>
+          <input class="eoc-rejoindre__input" type="text" id="rejoindre-prenom" name="contact[first_name]" placeholder="Votre prénom" required autocomplete="given-name">
+        </div>
+        <div class="eoc-rejoindre__field">
+          <label class="eoc-rejoindre__label" for="rejoindre-nom">Nom *</label>
+          <input class="eoc-rejoindre__input" type="text" id="rejoindre-nom" name="contact[last_name]" placeholder="Votre nom" required autocomplete="family-name">
+        </div>
+      </div>
+
+      <div class="eoc-rejoindre__field">
+        <label class="eoc-rejoindre__label" for="rejoindre-email">Adresse courriel *</label>
+        <input class="eoc-rejoindre__input" type="email" id="rejoindre-email" name="contact[email]" placeholder="votre@courriel.com" required autocomplete="email">
+      </div>
+
+      <div class="eoc-rejoindre__row">
+        <div class="eoc-rejoindre__field">
+          <label class="eoc-rejoindre__label" for="rejoindre-ville">Ville</label>
+          <input class="eoc-rejoindre__input" type="text" id="rejoindre-ville" name="contact[city]" placeholder="Votre ville" autocomplete="address-level2">
+        </div>
+        <div class="eoc-rejoindre__field">
+          <label class="eoc-rejoindre__label" for="rejoindre-province">Province / État</label>
+          <div class="eoc-rejoindre__select-wrapper">
+            <select class="eoc-rejoindre__select" id="rejoindre-province" name="contact[province]">
+              <option value="">Sélectionnez...</option>
+              <optgroup label="Canada">
+                <option value="Québec">Québec</option>
+                <option value="Ontario">Ontario</option>
+                <option value="Colombie-Britannique">Colombie-Britannique</option>
+                <option value="Alberta">Alberta</option>
+                <option value="Manitoba">Manitoba</option>
+                <option value="Saskatchewan">Saskatchewan</option>
+                <option value="Nouvelle-Écosse">Nouvelle-Écosse</option>
+                <option value="Nouveau-Brunswick">Nouveau-Brunswick</option>
+                <option value="Terre-Neuve">Terre-Neuve</option>
+                <option value="Î.-P.-É.">Île-du-Prince-Édouard</option>
+              </optgroup>
+              <optgroup label="Autre">
+                <option value="États-Unis">États-Unis</option>
+                <option value="Autre pays">Autre pays</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="eoc-rejoindre__consent">
+        <input type="checkbox" id="rejoindre-consent" name="contact[accepts_marketing]" value="true" required>
+        <label class="eoc-rejoindre__consent-label" for="rejoindre-consent">{{ section.settings.consent }}</label>
+      </div>
+
+      <button type="submit" class="eoc-rejoindre__submit">{{ section.settings.bouton_texte }}</button>
+
+      {% if form.posted_successfully? %}
+        <div class="eoc-rejoindre__message eoc-rejoindre__message--succes">{{ section.settings.message_succes }}</div>
+      {% endif %}
+
+      {% if form.errors %}
+        <div class="eoc-rejoindre__message eoc-rejoindre__message--erreur">{{ section.settings.message_erreur }} {{ form.errors | default_errors }}</div>
+      {% endif %}
+
+    {% endform %}
+
+    <p class="eoc-rejoindre__prive">{{ section.settings.prive }}</p>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "EOC — Rejoindre",
+  "settings": [
+    { "type": "text", "id": "badge", "label": "Badge", "default": "Communauté ÉCHEC O CUBE" },
+    { "type": "text", "id": "titre", "label": "Titre", "default": "Rejoignez la Communauté EOC" },
+    { "type": "textarea", "id": "sous_titre", "label": "Sous-titre", "default": "Soyez parmi les premiers membres fondateurs de la Fédération ÉCHEC O CUBE au Canada.\nInscrivez-vous dès maintenant et faites partie de l'aventure." },
+    { "type": "text", "id": "offre_titre", "label": "Offre — titre", "default": "Carte de membre FEOC gratuite — offerte en priorité" },
+    { "type": "text", "id": "offre_valeur", "label": "Offre — précision", "default": "Valeur de 25 $ · Fédération ÉCHEC O CUBE au Canada" },
+    { "type": "text", "id": "form_titre", "label": "Titre du formulaire", "default": "Votre inscription — gratuite et sans engagement" },
+    { "type": "textarea", "id": "consent", "label": "Texte de consentement", "default": "En m'inscrivant, j'accepte de recevoir les nouvelles de la communauté ÉCHEC O CUBE, les informations sur le lancement et ma carte de membre FEOC gratuite (valeur 25 $). Je peux me désabonner en tout temps." },
+    { "type": "text", "id": "bouton_texte", "label": "Bouton", "default": "Je rejoins la communauté EOC — Gratuitement" },
+    { "type": "textarea", "id": "message_succes", "label": "Message de succès", "default": "Bienvenue dans la communauté ÉCHEC O CUBE ! Votre carte de membre FEOC vous sera envoyée en priorité. Merci de votre confiance." },
+    { "type": "text", "id": "message_erreur", "label": "Message d'erreur", "default": "Veuillez vérifier les champs et réessayer." },
+    { "type": "text", "id": "prive", "label": "Note de confidentialité", "default": "Vos informations sont confidentielles et ne seront jamais partagées." },
+    { "type": "text", "id": "tags", "label": "Étiquettes client", "default": "newsletter,EOC-communaute-2026,membre-feoc" }
+  ],
+  "presets": [ { "name": "EOC — Rejoindre" } ]
+}
+{% endschema %}
