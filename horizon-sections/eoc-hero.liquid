@@ -1,0 +1,98 @@
+{% comment %}
+  ÉCHEC O CUBE — Section Hero accueil (100% éditable)
+  Droit d'auteur OPIC Canada No. 477714 — Alain Dupont
+{% endcomment %}
+
+{%- liquid
+  assign default_logo = section.settings.logo_filename | default: 'ECHEC_O_CUBE_LOGO_v5_transparent.png'
+  if section.settings.logo_image != blank
+    assign logo_src = section.settings.logo_image | image_url: width: 1200
+  else
+    assign logo_src = default_logo | file_img_url: '1200x'
+  endif
+-%}
+
+<section class="eoc-section eoc-hero" id="accueil-hero">
+  {% if section.settings.image != blank %}
+    <img
+      class="eoc-hero__image"
+      src="{{ section.settings.image | image_url: width: 2400 }}"
+      alt="{{ section.settings.image.alt | escape | default: 'ÉCHEC O CUBE' }}"
+      loading="eager"
+      width="2400"
+      height="1350"
+    >
+  {% endif %}
+
+  <div class="eoc-hero__voile" style="opacity: {{ section.settings.voile | divided_by: 100.0 }}"></div>
+
+  <div class="eoc-hero__contenu" style="text-align: {{ section.settings.alignement }}">
+    {% if section.settings.afficher_logo and logo_src != blank %}
+      <img class="eoc-hero__logo" src="{{ logo_src }}" alt="ÉCHEC O CUBE"
+           style="max-width: {{ section.settings.logo_largeur }}px">
+    {% endif %}
+
+    {% if section.settings.titre != blank %}
+      <h1 class="eoc-hero__titre">{{ section.settings.titre }}</h1>
+    {% endif %}
+
+    {% if section.settings.sous_titre != blank %}
+      <p class="eoc-hero__sous-titre">{{ section.settings.sous_titre }}</p>
+    {% endif %}
+
+    <div class="eoc-hero__boutons">
+      {% if section.settings.bouton1_texte != blank %}
+        <a class="eoc-bouton eoc-bouton--plein" href="{{ section.settings.bouton1_lien | default: '#inscription' }}">{{ section.settings.bouton1_texte }}</a>
+      {% endif %}
+      {% if section.settings.bouton2_texte != blank %}
+        <a class="eoc-bouton eoc-bouton--contour" href="{{ section.settings.bouton2_lien | default: '#regles' }}">{{ section.settings.bouton2_texte }}</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<style>
+  #shopify-section-{{ section.id }} .eoc-hero { position: relative; display: flex; align-items: center; justify-content: center; min-height: {{ section.settings.hauteur }}px; overflow: hidden; text-align: center; }
+  #shopify-section-{{ section.id }} .eoc-hero__image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+  #shopify-section-{{ section.id }} .eoc-hero__voile { position: absolute; inset: 0; background: {{ section.settings.voile_couleur }}; z-index: 1; }
+  #shopify-section-{{ section.id }} .eoc-hero__contenu { position: relative; z-index: 2; max-width: 1000px; padding: 2rem 1.5rem; }
+  #shopify-section-{{ section.id }} .eoc-hero__logo { width: 100%; height: auto; margin: 0 auto 1.5rem; display: block; filter: drop-shadow(0 8px 28px rgba(0,0,0,.6)); }
+  #shopify-section-{{ section.id }} .eoc-hero__titre { color: {{ section.settings.couleur_titre }}; font-size: {{ section.settings.taille_titre }}px; line-height: 1.1; margin: 0 0 1rem; }
+  #shopify-section-{{ section.id }} .eoc-hero__sous-titre { color: {{ section.settings.couleur_texte }}; font-size: 1.25rem; margin: 0 0 2rem; }
+  #shopify-section-{{ section.id }} .eoc-hero__boutons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  @media (max-width: 749px) {
+    #shopify-section-{{ section.id }} .eoc-hero__titre { font-size: {{ section.settings.taille_titre | times: 0.6 | round }}px; }
+    #shopify-section-{{ section.id }} .eoc-hero__boutons { flex-direction: column; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "EOC — Hero accueil",
+  "settings": [
+    { "type": "header", "content": "Image de fond" },
+    { "type": "image_picker", "id": "image", "label": "Image de fond" },
+    { "type": "range", "id": "hauteur", "label": "Hauteur de la section", "min": 400, "max": 1000, "step": 20, "unit": "px", "default": 720 },
+    { "type": "range", "id": "voile", "label": "Assombrissement", "min": 0, "max": 90, "step": 5, "unit": "%", "default": 45 },
+    { "type": "color", "id": "voile_couleur", "label": "Couleur du voile", "default": "#1A1008" },
+    { "type": "header", "content": "Logo" },
+    { "type": "checkbox", "id": "afficher_logo", "label": "Afficher le logo", "default": true },
+    { "type": "image_picker", "id": "logo_image", "label": "Image du logo (optionnel)" },
+    { "type": "text", "id": "logo_filename", "label": "OU nom de fichier du logo (Contenu › Fichiers)", "default": "ECHEC_O_CUBE_LOGO_v5_transparent.png" },
+    { "type": "range", "id": "logo_largeur", "label": "Largeur max du logo", "min": 200, "max": 1000, "step": 20, "unit": "px", "default": 640 },
+    { "type": "header", "content": "Textes" },
+    { "type": "text", "id": "titre", "label": "Titre / Slogan (optionnel)" },
+    { "type": "range", "id": "taille_titre", "label": "Taille du titre", "min": 24, "max": 96, "step": 2, "unit": "px", "default": 56 },
+    { "type": "color", "id": "couleur_titre", "label": "Couleur du titre", "default": "#E8C96A" },
+    { "type": "text", "id": "sous_titre", "label": "Sous-titre (optionnel)" },
+    { "type": "color", "id": "couleur_texte", "label": "Couleur du sous-titre", "default": "#F5ECD7" },
+    { "type": "select", "id": "alignement", "label": "Alignement", "options": [ { "value": "center", "label": "Centre" }, { "value": "left", "label": "Gauche" } ], "default": "center" },
+    { "type": "header", "content": "Boutons" },
+    { "type": "text", "id": "bouton1_texte", "label": "Bouton 1 (plein)", "default": "REJOINDRE LA COMMUNAUTÉ" },
+    { "type": "url", "id": "bouton1_lien", "label": "Lien bouton 1" },
+    { "type": "text", "id": "bouton2_texte", "label": "Bouton 2 (contour)", "default": "DÉCOUVRIR LE JEU" },
+    { "type": "url", "id": "bouton2_lien", "label": "Lien bouton 2" }
+  ],
+  "presets": [ { "name": "EOC — Hero accueil" } ]
+}
+{% endschema %}

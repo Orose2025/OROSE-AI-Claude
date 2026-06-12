@@ -1,0 +1,45 @@
+{% comment %} ÉCHEC O CUBE — Section Règles : cartes éditables (fond sombre) {% endcomment %}
+
+<section class="eoc-section eoc-regles" id="regles">
+  <div class="eoc-conteneur">
+    <h2>{{ section.settings.titre }}</h2>
+    <div class="eoc-regles__grille">
+      {% for block in section.blocks %}
+        <div class="eoc-carte" {{ block.shopify_attributes }}>
+          <h3>{{ block.settings.titre }}</h3>
+          <div>{{ block.settings.texte }}</div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "EOC — Règles cartes",
+  "settings": [
+    { "type": "text", "id": "titre", "label": "Titre de la section", "default": "Trois principes. Aucune exception." }
+  ],
+  "blocks": [
+    {
+      "type": "carte",
+      "name": "Carte",
+      "settings": [
+        { "type": "text", "id": "titre", "label": "Titre de la carte", "default": "Titre" },
+        { "type": "richtext", "id": "texte", "label": "Texte", "default": "<p>Votre texte ici.</p>" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "EOC — Règles cartes",
+      "blocks": [
+        { "type": "carte", "settings": { "titre": "Insérer et toucher", "texte": "<p>Chaque coup consiste à insérer un pion couché dans une rainure du plateau. Quand un pion s'insère dans une rainure et touche un autre pion déjà posé, le coup est valide.</p>" } },
+        { "type": "carte", "settings": { "titre": "L'alternance obligatoire", "texte": "<p>Deux pions de même type ne se touchent jamais. Un pion pâle ne touche jamais un autre pion pâle ; un pion foncé ne touche jamais un autre pion foncé. Pâle et foncé s'ajustent parfaitement, et cette alternance structure toute la partie.</p>" } },
+        { "type": "carte", "settings": { "titre": "Fermer un ÉCHEC O CUBE", "texte": "<p>Quand les quatre murs d'une case sont occupés, un ÉCHEC O CUBE est fermé. C'est le sommet du jeu : chaque ÉCHEC O CUBE peut rapporter 6, 9 et 12 points, et un seul coup bien placé peut en fermer plusieurs à la fois en réaction en chaîne.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

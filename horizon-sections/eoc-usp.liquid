@@ -1,0 +1,33 @@
+{% comment %} ÉCHEC O CUBE — Section USP (fond sombre) — 100% éditable {% endcomment %}
+
+<section class="eoc-section eoc-usp">
+  <div class="eoc-conteneur">
+    <div>
+      <h2>{{ section.settings.titre }}</h2>
+      <div class="eoc-lead">{{ section.settings.texte }}</div>
+    </div>
+    <div>
+      {% if section.settings.image != blank %}
+        <img
+          src="{{ section.settings.image | image_url: width: 1200 }}"
+          alt="{{ section.settings.image.alt | escape | default: 'ÉCHEC O CUBE' }}"
+          loading="lazy"
+          width="1200"
+          height="900"
+        >
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "EOC — USP",
+  "settings": [
+    { "type": "text", "id": "titre", "label": "Titre", "default": "La règle intégrée dans la matière" },
+    { "type": "richtext", "id": "texte", "label": "Texte", "default": "<p>Un jeu de stratégie abstraite. Quand un pion s'insère dans une rainure et touche un autre pion déjà posé, le coup est valide. La physique est la règle.</p>" },
+    { "type": "image_picker", "id": "image", "label": "Image côté droit" }
+  ],
+  "presets": [ { "name": "EOC — USP" } ]
+}
+{% endschema %}

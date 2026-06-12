@@ -1,0 +1,52 @@
+{% comment %}
+  ÉCHEC O CUBE — Section Inscription courriel (fond dégradé brun-or) — 100% éditable
+{% endcomment %}
+
+<section class="eoc-section eoc-inscription" id="inscription">
+  <div class="eoc-conteneur">
+    {% if section.settings.surtitre != blank %}
+      <p class="eoc-surtitre">{{ section.settings.surtitre }}</p>
+    {% endif %}
+    <h2>{{ section.settings.titre }}</h2>
+    <div>{{ section.settings.texte }}</div>
+
+    {% form 'customer', class: 'eoc-inscription__form-wrapper' %}
+      <input type="hidden" name="contact[tags]" value="{{ section.settings.tags }}">
+      <div class="eoc-inscription__form">
+        <input
+          type="email"
+          name="contact[email]"
+          id="EOC-courriel"
+          required
+          autocomplete="email"
+          placeholder="{{ section.settings.placeholder }}"
+          aria-label="{{ section.settings.placeholder }}"
+        >
+        <button type="submit" class="eoc-bouton eoc-bouton--plein">{{ section.settings.bouton_texte }}</button>
+      </div>
+      {% if form.posted_successfully? %}
+        <p class="eoc-inscription__message">{{ section.settings.message_succes }}</p>
+      {% endif %}
+      {% if form.errors %}
+        <p class="eoc-inscription__message">{{ section.settings.message_erreur }}</p>
+      {% endif %}
+    {% endform %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "EOC — Inscription",
+  "settings": [
+    { "type": "text", "id": "surtitre", "label": "Sur-titre", "default": "Printemps 2027 — La Ruche" },
+    { "type": "text", "id": "titre", "label": "Titre", "default": "Soyez parmi les premiers." },
+    { "type": "richtext", "id": "texte", "label": "Texte", "default": "<p>En 2026, nous bâtissons la communauté ÉCHEC O CUBE. Au printemps 2027, nous lançons sur La Ruche. Inscrivez-vous maintenant pour être avisé en premier et bénéficier des conditions fondateurs.</p>" },
+    { "type": "text", "id": "placeholder", "label": "Texte du champ courriel", "default": "Votre adresse courriel" },
+    { "type": "text", "id": "bouton_texte", "label": "Texte du bouton", "default": "Je m'inscris" },
+    { "type": "text", "id": "message_succes", "label": "Message de succès", "default": "Merci. Vous faites maintenant partie des premiers. Nous vous écrirons avant tout le monde." },
+    { "type": "text", "id": "message_erreur", "label": "Message d'erreur", "default": "Veuillez vérifier votre adresse courriel et réessayer." },
+    { "type": "text", "id": "tags", "label": "Étiquettes client (séparées par des virgules)", "default": "newsletter,EOC-communaute-2026" }
+  ],
+  "presets": [ { "name": "EOC — Inscription" } ]
+}
+{% endschema %}
