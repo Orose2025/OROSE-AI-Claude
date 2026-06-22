@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comment jouer a ECHEC O CUBE — Les regles</title>
+<!--
+==========================================================================
+  PAGE REGLES — ECHEC O CUBE
+  GUIDE DE MODIFICATION (aucune competence en code requise) :
+  1. TEXTE  : changez simplement le texte entre les balises (ex: <h1>Mon titre</h1>).
+  2. IMAGES : chaque image est un bloc <div class="ph">...</div> (placeholder).
+              Pour mettre VOTRE image, remplacez le bloc par :
+              <img class="media" src="images/mon-image.jpg" alt="Description de l'image">
+  3. PRIX   : cherchez le mot "PRIX" ci-dessous pour les modifier.
+  4. LIENS  : les boutons utilisent href="/laruche" ou href="/boutique" — adaptez au besoin.
+  5. COULEURS: tout en haut dans :root (--bois, --noir, --dore, --creme).
+  REGLE ABSOLUE : aucun emoji, aucune icone. Texte pur uniquement.
+==========================================================================
+-->
+<style>
+  :root{
+    --bois:#8B6914;
+    --noir:#1a1a1a;
+    --dore:#D4AF37;
+    --creme:#F5F0E8;
+    --blanc:#ffffff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:Georgia,'Times New Roman',serif;color:var(--noir);background:var(--creme);line-height:1.8;font-size:18px;}
+  a{color:var(--bois);}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 20px;}
+  h1,h2,h3{font-family:Georgia,serif;line-height:1.2;}
+  h1{font-size:clamp(30px,5vw,52px);}
+  h2{font-size:clamp(26px,4vw,38px);margin-bottom:18px;}
+  h3{font-size:22px;margin-bottom:10px;}
+  p{margin-bottom:16px;}
+
+  /* Navigation */
+  .nav{background:var(--noir);position:sticky;top:0;z-index:50;}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;flex-wrap:wrap;gap:12px;}
+  .nav .marque{color:var(--dore);font-size:22px;letter-spacing:2px;text-decoration:none;}
+  .nav ul{list-style:none;display:flex;gap:24px;flex-wrap:wrap;}
+  .nav a{color:var(--creme);text-decoration:none;font-size:16px;}
+  .nav a:hover{color:var(--dore);}
+
+  /* Boutons */
+  .btn{display:inline-block;padding:14px 30px;border-radius:4px;text-decoration:none;font-size:17px;border:2px solid var(--dore);cursor:pointer;}
+  .btn-plein{background:var(--dore);color:var(--noir);}
+  .btn-plein:hover{background:#c39e2f;}
+  .btn-contour{background:transparent;color:var(--dore);}
+  .btn-contour:hover{background:var(--dore);color:var(--noir);}
+  .btn-bois{background:var(--bois);color:var(--blanc);border-color:var(--bois);}
+
+  /* Hero */
+  .hero{background:var(--noir);color:var(--creme);text-align:center;padding:80px 20px;}
+  .hero p.sous{font-size:20px;color:var(--dore);margin:18px 0 30px;}
+
+  /* Placeholder image */
+  .ph{background:repeating-linear-gradient(45deg,#e7ddc4,#e7ddc4 14px,#e1d6b8 14px,#e1d6b8 28px);
+      border:1px solid var(--bois);border-radius:6px;min-height:220px;display:flex;align-items:center;justify-content:center;
+      text-align:center;color:#6b5410;padding:20px;font-style:italic;}
+  .media{width:100%;height:auto;border:1px solid var(--bois);border-radius:6px;display:block;}
+
+  section{padding:64px 0;}
+  .section-creme{background:var(--creme);}
+  .section-blanc{background:var(--blanc);}
+  .section-sombre{background:var(--noir);color:var(--creme);}
+  .section-bois{background:var(--bois);color:var(--blanc);}
+  .center{text-align:center;}
+
+  /* Etapes */
+  .etape{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center;margin-bottom:48px;}
+  .etape:nth-child(even) .etape-media{order:2;}
+  .num{display:inline-block;width:54px;height:54px;line-height:50px;text-align:center;border:2px solid var(--dore);
+       border-radius:50%;color:var(--bois);font-size:26px;margin-bottom:14px;}
+
+  /* Cartes */
+  .grille-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .carte{background:var(--blanc);border:1px solid #e1d6b8;border-top:4px solid var(--dore);border-radius:6px;padding:30px;}
+  .section-sombre .carte{background:#222;border-color:#3a3a3a;color:var(--creme);}
+
+  /* Formats / prix */
+  .prix{font-size:34px;color:var(--bois);margin:8px 0 16px;}
+  .section-sombre .prix{color:var(--dore);}
+  .format ul{list-style:none;margin:0 0 20px;}
+  .format li{padding:8px 0;border-bottom:1px solid #e1d6b8;}
+
+  .bande-cta{text-align:center;}
+  .bande-cta .btn{margin:8px;}
+  .pdf{text-align:center;margin-top:20px;}
+
+  footer{background:var(--noir);color:var(--creme);text-align:center;padding:40px 20px;font-size:15px;}
+  footer p{margin-bottom:6px;color:#c9c2b2;}
+
+  @media(max-width:760px){
+    .etape{grid-template-columns:1fr;}
+    .etape:nth-child(even) .etape-media{order:0;}
+    .grille-3{grid-template-columns:1fr;}
+    body{font-size:17px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== NAVIGATION ===================== -->
+<nav class="nav">
+  <div class="wrap">
+    <a class="marque" href="/">ECHEC O CUBE</a>
+    <ul>
+      <li><a href="/">Accueil</a></li>
+      <li><a href="/regles">Les Regles</a></li>
+      <li><a href="/laruche">La Ruche</a></li>
+      <li><a href="/boutique">Boutique</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="wrap">
+    <h1>Comment jouer a ECHEC O CUBE</h1>
+    <p class="sous">Un jeu de strategie ou le plateau lui-meme arbitre la partie.</p>
+    <!-- LIEN VIDEO : remplacez le href par l'adresse de votre video -->
+    <a class="btn btn-plein" href="#video">Voir la video tutorielle (2 min)</a>
+  </div>
+</header>
+
+<!-- ===================== LES 4 ETAPES ===================== -->
+<section class="section-creme" id="etapes">
+  <div class="wrap">
+    <h2 class="center">Apprendre en quatre etapes</h2>
+    <div style="height:24px;"></div>
+
+    <!-- ETAPE 1 -->
+    <div class="etape">
+      <div>
+        <span class="num">1</span>
+        <h3>Inserer un pion</h3>
+        <p>Chaque coup consiste a inserer un pion couche dans une rainure du plateau. Le pion se glisse debout dans la rainure, fermement maintenu par le bois.</p>
+      </div>
+      <div class="etape-media">
+        <!-- IMAGE ETAPE 1 : remplacez ce bloc par <img class="media" src="images/etape-1.jpg" alt="..."> -->
+        <div class="ph">Image a venir : un joueur insere un pion dans une rainure du plateau</div>
+      </div>
+    </div>
+
+    <!-- ETAPE 2 -->
+    <div class="etape">
+      <div>
+        <span class="num">2</span>
+        <h3>Toucher un pion deja pose</h3>
+        <p>Quand un pion s'insere dans une rainure et touche un autre pion deja pose, le coup est valide. Aucune exception, aucune dispute : le plateau decide.</p>
+      </div>
+      <div class="etape-media">
+        <!-- IMAGE ETAPE 2 -->
+        <div class="ph">Image a venir : deux pions qui se touchent dans la rainure</div>
+      </div>
+    </div>
+
+    <!-- ETAPE 3 -->
+    <div class="etape">
+      <div>
+        <span class="num">3</span>
+        <h3>Respecter l'alternance</h3>
+        <p>Deux pions de meme type ne se touchent jamais. Un pion pale ne touche jamais un autre pion pale ; un pion fonce ne touche jamais un autre pion fonce. Cette alternance structure toute la partie.</p>
+      </div>
+      <div class="etape-media">
+        <!-- IMAGE ETAPE 3 -->
+        <div class="ph">Image a venir : alternance pale et fonce sur le plateau</div>
+      </div>
+    </div>
+
+    <!-- ETAPE 4 -->
+    <div class="etape">
+      <div>
+        <span class="num">4</span>
+        <h3>Fermer un ECHEC O CUBE</h3>
+        <p>Quand les quatre murs d'une case sont occupes, un ECHEC O CUBE est ferme. Chaque ECHEC O CUBE rapporte des points, et un seul coup bien place peut en fermer plusieurs a la fois.</p>
+      </div>
+      <div class="etape-media">
+        <!-- IMAGE ETAPE 4 -->
+        <div class="ph">Image a venir : une case fermee par quatre pions</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FONCE SEPARATEUR ===================== -->
+<section class="section-sombre" id="video">
+  <div class="wrap">
+    <h2 class="center">Le Fonce Separateur</h2>
+    <p class="center" style="max-width:760px;margin:0 auto 30px;">Le pion fonce sert aussi de separateur : place avec strategie, il coupe les lignes adverses et protege vos propres fermetures. Le diagramme ci-dessous illustre une position type.</p>
+    <!-- DIAGRAMME : remplacez par <img class="media" src="images/diagramme-fonce.jpg" alt="..."> -->
+    <div class="ph" style="min-height:300px;">Diagramme a venir : exemple de Fonce Separateur sur le plateau 9 par 9</div>
+  </div>
+</section>
+
+<!-- ===================== REGLES AVANCEES ===================== -->
+<section class="section-blanc">
+  <div class="wrap">
+    <h2 class="center">Regles avancees</h2>
+    <div style="height:24px;"></div>
+    <div class="grille-3">
+      <div class="carte">
+        <h3>Le Pion Rouge</h3>
+        <p>Le pion rouge est un marqueur : il ne compte aucun point, mais il marque le territoire et peut bloquer une fermeture adverse au moment decisif.</p>
+      </div>
+      <div class="carte">
+        <h3>Le Vol de points</h3>
+        <p>Une fermeture habile peut reprendre le controle d'une case convoitee par l'adversaire : les points changent de camp lorsque le dernier mur est pose par vous.</p>
+      </div>
+      <div class="carte">
+        <h3>Reactions en chaine</h3>
+        <p>Un coup unique peut fermer plusieurs ECHEC O CUBE d'un seul geste. Anticiper ces reactions en chaine est la marque des grands joueurs.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TROIS FORMATS / PRIX ===================== -->
+<section class="section-creme">
+  <div class="wrap">
+    <h2 class="center">Trois formats pour tous les joueurs</h2>
+    <div style="height:24px;"></div>
+    <div class="grille-3">
+      <div class="carte format">
+        <h3>Amateur</h3>
+        <!-- PRIX AMATEUR -->
+        <div class="prix">89 $</div>
+        <ul>
+          <li>Plateau de bois quebecois</li>
+          <li>Jeu complet de pions</li>
+          <li>Reglement officiel inclus</li>
+        </ul>
+        <a class="btn btn-bois" href="/boutique">Commander</a>
+      </div>
+      <div class="carte format">
+        <h3>Intermediaire</h3>
+        <!-- PRIX INTERMEDIAIRE -->
+        <div class="prix">129 $</div>
+        <ul>
+          <li>Plateau bois superieur</li>
+          <li>Pions finition soignee</li>
+          <li>Livret de strategie</li>
+        </ul>
+        <a class="btn btn-bois" href="/boutique">Commander</a>
+      </div>
+      <div class="carte format">
+        <h3>Competition</h3>
+        <!-- PRIX COMPETITION -->
+        <div class="prix">179 $</div>
+        <ul>
+          <li>Edition tournoi homologuee</li>
+          <li>Pions de precision</li>
+          <li>Etui de transport</li>
+        </ul>
+        <a class="btn btn-bois" href="/boutique">Commander</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BANDE CTA ===================== -->
+<section class="section-bois bande-cta">
+  <div class="wrap">
+    <h2>Pret a entrer dans la partie</h2>
+    <p style="max-width:680px;margin:0 auto 24px;">Rejoignez le programme Fondateurs ou commandez votre jeu des aujourd'hui.</p>
+    <a class="btn btn-plein" href="/laruche">Programme Fondateurs</a>
+    <a class="btn btn-contour" href="/boutique">Visiter la boutique</a>
+
+    <div class="pdf">
+      <!-- PDF : remplacez le href par le lien vers votre fichier PDF -->
+      <p style="margin-top:30px;"><a class="btn btn-contour" href="documents/reglement-officiel-v2.1.pdf" download>Telecharger le reglement officiel (v2.1, PDF)</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PIED DE PAGE ===================== -->
+<footer>
+  <p>ECHEC O CUBE — Invente au Quebec en 1999 — Lance au printemps 2027</p>
+  <p>Droit d'auteur OPIC Canada No. 477714 — Alain Dupont</p>
+  <p>Site officiel : echecocube.ca</p>
+</footer>
+
+</body>
+</html>
