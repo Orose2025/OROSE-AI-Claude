@@ -3,240 +3,205 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Boutique — ECHEC O CUBE</title>
-<!--
-==========================================================================
-  PAGE BOUTIQUE — ECHEC O CUBE
-  GUIDE DE MODIFICATION :
-  1. TEXTE  : changez le texte entre les balises.
-  2. IMAGES : remplacez chaque <div class="ph"> par <img class="media" src="images/produit-1.jpg" alt="...">.
-  3. PRIX   : cherchez "prix-barre" (ancien prix) et "prix-actuel" (prix fondateur).
-  4. OPTIONS: la section "Personnalisation" liste les supplements ; modifiez montants et libelles.
-  REGLE ABSOLUE : aucun emoji, aucune icone. Texte pur uniquement.
-==========================================================================
--->
+<title>Boutique | ECHEC O CUBE -- Jeu de strategie quebecois en bois</title>
+<meta name="description" content="Achetez ECHEC O CUBE. Jeu de strategie quebecois en bois. 3 formats : Amateur 9x9, Intermediaire 11x11, Competition 15x15. Livraison au Canada.">
 <style>
-  :root{--bois:#8B6914;--noir:#1a1a1a;--dore:#D4AF37;--creme:#F5F0E8;--blanc:#ffffff;}
-  *{box-sizing:border-box;margin:0;padding:0;}
-  html{scroll-behavior:smooth;}
-  body{font-family:Georgia,'Times New Roman',serif;color:var(--noir);background:var(--creme);line-height:1.8;font-size:18px;}
-  a{color:var(--bois);}
-  .wrap{max-width:1140px;margin:0 auto;padding:0 20px;}
-  h1{font-size:clamp(30px,5vw,52px);line-height:1.2;}
-  h2{font-size:clamp(26px,4vw,38px);margin-bottom:18px;line-height:1.2;}
-  h3{font-size:22px;margin-bottom:10px;}
-  p{margin-bottom:16px;}
-
-  .nav{background:var(--noir);position:sticky;top:0;z-index:50;}
-  .nav .wrap{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;flex-wrap:wrap;gap:12px;}
-  .nav .marque{color:var(--dore);font-size:22px;letter-spacing:2px;text-decoration:none;}
-  .nav ul{list-style:none;display:flex;gap:24px;flex-wrap:wrap;}
-  .nav a{color:var(--creme);text-decoration:none;font-size:16px;}
-  .nav a:hover{color:var(--dore);}
-
-  .btn{display:inline-block;padding:14px 30px;border-radius:4px;text-decoration:none;font-size:17px;border:2px solid var(--dore);cursor:pointer;}
-  .btn-plein{background:var(--dore);color:var(--noir);}
-  .btn-contour{background:transparent;color:var(--dore);}
-  .btn-contour:hover{background:var(--dore);color:var(--noir);}
-  .btn-bois{background:var(--bois);color:var(--blanc);border-color:var(--bois);width:100%;text-align:center;}
-
-  section{padding:64px 0;}
-  .section-blanc{background:var(--blanc);}
-  .section-sombre{background:var(--noir);color:var(--creme);}
-  .section-bois{background:var(--bois);color:var(--blanc);text-align:center;}
-  .center{text-align:center;}
-
-  .ph{background:repeating-linear-gradient(45deg,#e7ddc4,#e7ddc4 14px,#e1d6b8 14px,#e1d6b8 28px);
-      border:1px solid var(--bois);border-radius:6px;min-height:240px;display:flex;align-items:center;justify-content:center;
-      text-align:center;color:#6b5410;padding:20px;font-style:italic;}
-  .media{width:100%;height:auto;border-radius:6px;display:block;}
-
-  .hero{background:var(--noir);color:var(--creme);text-align:center;padding:70px 20px;}
-
-  /* Produits */
-  .produits{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
-  .produit{background:var(--blanc);border:1px solid #e1d6b8;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;}
-  .produit .corps{padding:24px;display:flex;flex-direction:column;flex:1;}
-  .prix-ligne{margin:10px 0 18px;}
-  .prix-barre{color:#999;text-decoration:line-through;margin-right:10px;font-size:18px;}
-  .prix-actuel{color:var(--bois);font-size:28px;}
-  .etiquette{display:inline-block;background:var(--noir);color:var(--dore);font-size:13px;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;border-radius:20px;margin-bottom:12px;}
-  .produit .btn-bois{margin-top:auto;}
-
-  /* Options personnalisation */
-  .options{max-width:760px;margin:0 auto;background:var(--blanc);border:1px solid #e1d6b8;border-radius:8px;overflow:hidden;}
-  .options .opt{display:flex;justify-content:space-between;align-items:center;padding:16px 22px;border-bottom:1px solid #efe7d4;gap:16px;}
-  .options .opt:last-child{border-bottom:none;}
-  .options .montant{color:var(--bois);white-space:nowrap;}
-
-  /* Garanties */
-  .grille-4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
-  .carte{background:var(--blanc);border:1px solid #e1d6b8;border-top:4px solid var(--dore);border-radius:6px;padding:24px;}
-
-  /* Livraison */
-  table{width:100%;border-collapse:collapse;background:var(--blanc);border:1px solid #e1d6b8;max-width:760px;margin:0 auto;}
-  th,td{padding:14px 18px;border-bottom:1px solid #e1d6b8;text-align:left;}
-  thead th{background:var(--bois);color:var(--blanc);}
-
-  footer{background:var(--noir);color:var(--creme);text-align:center;padding:40px 20px;font-size:15px;}
-  footer p{margin-bottom:6px;color:#c9c2b2;}
-
-  @media(max-width:900px){.produits{grid-template-columns:1fr;}.grille-4{grid-template-columns:1fr 1fr;}}
-  @media(max-width:560px){.grille-4{grid-template-columns:1fr;}body{font-size:17px;}}
+:root{--bois:#8B6914;--bois-clair:#C4A35A;--noir:#1a1a1a;--blanc-casse:#F5F0E8;--dore:#D4AF37;--rouge:#8B0000;--vert:#2E7D32}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Georgia',serif;background:var(--blanc-casse);color:var(--noir);line-height:1.7}
+h1,h2,h3{font-family:'Georgia',serif;color:var(--bois)}
+a{color:var(--bois);text-decoration:none}
+a:hover{color:var(--dore)}
+header{background:var(--noir);padding:15px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+.logo{color:var(--dore);font-size:1.4rem;font-weight:bold;letter-spacing:2px}
+nav a{color:var(--blanc-casse);margin-left:30px;font-size:0.95rem}
+nav a:hover{color:var(--dore)}
+.hero-boutique{background:var(--noir);color:var(--blanc-casse);padding:100px 20px;text-align:center}
+.hero-boutique h1{font-size:3.5rem;color:var(--blanc-casse);margin-bottom:20px}
+.hero-boutique .sous-titre{font-size:1.4rem;color:var(--bois-clair);margin-bottom:30px;font-style:italic}
+.badge-livraison{display:inline-block;background:var(--vert);color:white;padding:12px 30px;border-radius:30px;font-weight:bold;font-size:0.95rem}
+.produits{max-width:1200px;margin:80px auto;padding:0 20px}
+.produits h2{text-align:center;font-size:2.2rem;margin-bottom:15px;color:var(--noir)}
+.produits .intro-prix{text-align:center;color:#666;margin-bottom:50px;font-style:italic}
+.produit{display:flex;gap:50px;margin-bottom:80px;background:white;padding:50px;border-radius:8px;box-shadow:0 3px 15px rgba(0,0,0,0.08)}
+.produit:nth-child(even){flex-direction:row-reverse}
+.galerie{display:flex;gap:20px;flex:1;align-items:flex-start}
+.galerie .placeholder-img{width:220px;height:220px;background:repeating-linear-gradient(45deg,#e8e0d0,#e8e0d0 10px,#ddd5c5 10px,#ddd5c5 20px);border-radius:8px;border:2px solid var(--bois-clair);display:flex;align-items:center;justify-content:center;color:var(--bois);font-style:italic;text-align:center;padding:15px;font-size:0.9rem}
+.infos{flex:1.5}
+.infos h3{font-size:1.7rem;margin-bottom:10px}
+.tagline{color:#666;font-style:italic;margin-bottom:25px;font-size:1.05rem}
+.specs{list-style:none;margin-bottom:25px}
+.specs li{padding:10px 0;border-bottom:1px solid #eee;color:#444}
+.specs li strong{color:var(--bois)}
+.prix{margin-bottom:25px}
+.prix-normal{text-decoration:line-through;color:#999;font-size:1.3rem;margin-right:20px}
+.prix-promo{color:var(--dore);font-size:2.2rem;font-weight:bold}
+.prix-promo small{font-size:0.9rem;color:#666;display:block;margin-top:5px;font-weight:normal}
+.actions{margin-bottom:15px}
+.btn-ajouter{background:var(--dore);color:var(--noir);border:none;padding:16px 40px;font-size:1.1rem;font-weight:bold;border-radius:4px;cursor:pointer;font-family:'Georgia',serif;margin-right:15px;transition:background 0.3s}
+.btn-ajouter:hover{background:var(--bois-clair)}
+.btn-voir-regles{display:inline-block;padding:16px 40px;border:2px solid var(--bois);border-radius:4px;color:var(--bois);font-size:1.05rem;transition:all 0.3s}
+.btn-voir-regles:hover{background:var(--bois);color:white}
+.stock{font-weight:bold;font-size:0.95rem}
+.stock.disponible{color:var(--vert)}
+.stock.precommande{color:var(--rouge)}
+.note-collection{background:var(--blanc-casse);padding:20px;border-radius:4px;margin-top:20px;font-size:0.95rem;color:#555;border-left:3px solid var(--dore);line-height:1.6}
+.produit-star{border:3px solid var(--dore);position:relative}
+.badge-star{position:absolute;top:-15px;right:40px;background:var(--dore);color:var(--noir);padding:8px 25px;font-size:0.75rem;font-weight:bold;border-radius:20px;text-transform:uppercase;letter-spacing:1px}
+.options{max-width:1000px;margin:80px auto;padding:0 20px}
+.options h2{text-align:center;font-size:2.2rem;margin-bottom:15px}
+.options .intro-options{text-align:center;color:#666;margin-bottom:40px}
+.grille-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+.option{background:white;padding:30px;border-radius:8px;text-align:center;border:2px solid var(--bois-clair);transition:transform 0.3s}
+.option:hover{transform:translateY(-3px)}
+.option h3{font-size:1.1rem;margin-bottom:12px}
+.option .prix-option{color:var(--dore);font-weight:bold;font-size:1.3rem;margin-bottom:10px}
+.option p:last-child{color:#666;font-size:0.9rem}
+.garanties{background:var(--noir);color:var(--blanc-casse);padding:80px 20px}
+.garanties h2{text-align:center;color:var(--dore);font-size:2.2rem;margin-bottom:50px}
+.grille-garanties{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:30px}
+.garantie{text-align:center;padding:30px}
+.garantie h3{color:var(--bois-clair);font-size:1.15rem;margin-bottom:15px}
+.garantie p{font-size:0.95rem;color:#bbb;line-height:1.6}
+.livraison{max-width:900px;margin:80px auto;padding:0 20px}
+.livraison h2{text-align:center;font-size:2.2rem;margin-bottom:50px}
+.zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:25px;margin-bottom:40px}
+.zone{background:white;padding:30px;border-radius:8px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,0.08)}
+.zone h3{font-size:1.15rem;margin-bottom:12px}
+.zone p{color:#555}
+.retours{text-align:center;color:#666;font-size:1.05rem}
+.retours strong{color:var(--bois)}
+.cta-final{background:var(--bois);color:var(--blanc-casse);text-align:center;padding:80px 20px}
+.cta-final h2{color:var(--dore);font-size:2.2rem;margin-bottom:20px}
+.cta-final p{font-size:1.2rem;margin-bottom:35px}
+.btn-laruche{display:inline-block;background:var(--dore);color:var(--noir);padding:20px 60px;border-radius:4px;font-size:1.2rem;font-weight:bold;transition:background 0.3s}
+.btn-laruche:hover{background:var(--bois-clair)}
+footer{background:var(--noir);color:#888;text-align:center;padding:40px 20px;font-size:0.9rem}
+footer a{color:var(--bois-clair)}
+@media(max-width:768px){header{flex-direction:column;padding:15px}nav{margin-top:15px}nav a{margin:0 10px}.hero-boutique h1{font-size:2.2rem}.hero-boutique{padding:60px 20px}.produit{flex-direction:column!important;padding:30px}.galerie{justify-content:center;flex-wrap:wrap}}
 </style>
+<base target="_blank">
 </head>
 <body>
+<header><div class="logo">ECHEC O CUBE</div><nav><a href="/">Accueil</a><a href="/regles">Les Regles</a><a href="/laruche">La Ruche</a><a href="/boutique">Boutique</a></nav></header>
 
-<nav class="nav">
-  <div class="wrap">
-    <a class="marque" href="/">ECHEC O CUBE</a>
-    <ul>
-      <li><a href="/">Accueil</a></li>
-      <li><a href="/regles">Les Regles</a></li>
-      <li><a href="/laruche">La Ruche</a></li>
-      <li><a href="/boutique">Boutique</a></li>
-    </ul>
-  </div>
-</nav>
-
-<header class="hero">
-  <div class="wrap">
-    <h1>Boutique ECHEC O CUBE</h1>
-    <p style="color:var(--dore);font-size:20px;margin-top:16px;">Des jeux de bois quebecois, faconnes pour durer toute une vie.</p>
-  </div>
-</header>
-
-<!-- ===================== PRODUITS ===================== -->
-<section class="section-blanc">
-  <div class="wrap">
-    <h2 class="center">Nos editions</h2>
-    <p class="center" style="margin-bottom:30px;">Prix de precommande fondateur, reserve aux membres des debuts.</p>
-    <div class="produits">
-
-      <!-- PRODUIT 1 -->
-      <div class="produit">
-        <!-- IMAGE PRODUIT 1 -->
-        <div class="ph">Image a venir : edition Amateur, plateau et pions de bois</div>
-        <div class="corps">
-          <span class="etiquette">Precommande fondateur</span>
-          <h3>Edition Amateur</h3>
-          <p>Le jeu complet pour decouvrir ECHEC O CUBE : plateau de bois quebecois et jeu de pions.</p>
-          <div class="prix-ligne">
-            <span class="prix-barre">109 $</span>
-            <span class="prix-actuel">89 $</span>
-          </div>
-          <a class="btn btn-bois" href="/laruche">Reserver au tarif fondateur</a>
-        </div>
-      </div>
-
-      <!-- PRODUIT 2 -->
-      <div class="produit">
-        <!-- IMAGE PRODUIT 2 -->
-        <div class="ph">Image a venir : edition Intermediaire, finition soignee</div>
-        <div class="corps">
-          <span class="etiquette">Precommande fondateur</span>
-          <h3>Edition Intermediaire</h3>
-          <p>Bois superieur, pions a finition soignee et livret de strategie pour progresser.</p>
-          <div class="prix-ligne">
-            <span class="prix-barre">159 $</span>
-            <span class="prix-actuel">129 $</span>
-          </div>
-          <a class="btn btn-bois" href="/laruche">Reserver au tarif fondateur</a>
-        </div>
-      </div>
-
-      <!-- PRODUIT 3 -->
-      <div class="produit">
-        <!-- IMAGE PRODUIT 3 -->
-        <div class="ph">Image a venir : edition Competition, etui de transport</div>
-        <div class="corps">
-          <span class="etiquette">Precommande fondateur</span>
-          <h3>Edition Competition</h3>
-          <p>Edition tournoi homologuee, pions de precision et etui de transport pour les joueurs serieux.</p>
-          <div class="prix-ligne">
-            <span class="prix-barre">219 $</span>
-            <span class="prix-actuel">179 $</span>
-          </div>
-          <a class="btn btn-bois" href="/laruche">Reserver au tarif fondateur</a>
-        </div>
-      </div>
-
-    </div>
-  </div>
+<section class="hero-boutique">
+<h1>Boutique ECHEC O CUBE</h1>
+<p class="sous-titre">Des jeux de bois quebecois, faconnes pour durer toute une vie.</p>
+<div class="badge-livraison">Livraison gratuite au Quebec et Ontario</div>
 </section>
 
-<!-- ===================== OPTIONS PERSONNALISATION ===================== -->
-<section>
-  <div class="wrap">
-    <h2 class="center">Personnalisez votre jeu</h2>
-    <p class="center" style="margin-bottom:26px;">Ajoutez des options au moment de la commande.</p>
-    <div class="options">
-      <div class="opt"><span>Emballage cadeau de luxe</span><span class="montant">+ 8 $</span></div>
-      <div class="opt"><span>Livret de strategie illustre</span><span class="montant">+ 15 $</span></div>
-      <div class="opt"><span>Horloge de partie</span><span class="montant">+ 45 $</span></div>
-      <div class="opt"><span>Gabarit de pointage</span><span class="montant">+ 5 $</span></div>
-    </div>
-  </div>
+<section class="produits">
+<h2>Nos editions</h2>
+<p class="intro-prix">Prix de precommande fondateur, reserve aux membres des debuts.</p>
+
+<article class="produit" id="edition-amateur">
+<div class="galerie">
+<div class="placeholder-img">Image a venir : edition Amateur, plateau et pions de bois</div>
+<div class="placeholder-img">Image a venir : detail finition Amateur</div>
+</div>
+<div class="infos">
+<h3>Edition Amateur 9x9</h3>
+<p class="tagline">Parfait pour decouvrir ECHEC O CUBE en famille</p>
+<ul class="specs">
+<li>Plateau 9x9 cases (25 cm x 25 cm)</li>
+<li>132 pales + 52 fonces + 16 rouges = <strong>200 pions</strong></li>
+<li>Duree : 30-60 minutes</li>
+<li>2 a 4 joueurs</li>
+<li>Acrylique coule 10 mm ou Bois franc du Quebec</li>
+</ul>
+<div class="prix"><span class="prix-normal">109 $</span><span class="prix-promo">89 $ <small>precommande fondateur</small></span></div>
+<div class="actions"><button class="btn-ajouter" data-produit="amateur">Ajouter au panier</button><a href="/regles" class="btn-voir-regles">Voir les regles</a></div>
+<p class="stock disponible">En stock -- Expedition sous 48h</p>
+</div>
+</article>
+
+<article class="produit" id="edition-intermediaire">
+<div class="galerie">
+<div class="placeholder-img">Image a venir : edition Intermediaire, finition soignee</div>
+<div class="placeholder-img">Image a venir : detail pieces Intermediaire</div>
+</div>
+<div class="infos">
+<h3>Edition Intermediaire 11x11</h3>
+<p class="tagline">Le juste milieu recreatif</p>
+<ul class="specs">
+<li>Plateau 11x11 cases (31 cm x 31 cm)</li>
+<li>200 pales + 80 fonces + 20 rouges = <strong>300 pions</strong></li>
+<li>Duree : 30-80 minutes</li>
+<li>2 a 4 joueurs</li>
+<li>Bois franc du Quebec -- Collection</li>
+</ul>
+<div class="prix"><span class="prix-normal">149 $</span><span class="prix-promo">129 $ <small>precommande fondateur</small></span></div>
+<div class="actions"><button class="btn-ajouter" data-produit="intermediaire">Ajouter au panier</button><a href="/regles" class="btn-voir-regles">Voir les regles</a></div>
+<p class="stock precommande">Precommande -- Livraison printemps 2027</p>
+</div>
+</article>
+
+<article class="produit produit-star" id="edition-competition">
+<div class="badge-star">Format officiel FEOC</div>
+<div class="galerie">
+<div class="placeholder-img">Image a venir : edition Competition, etui de transport</div>
+<div class="placeholder-img">Image a venir : prototype original 1999</div>
+</div>
+<div class="infos">
+<h3>Edition Competition 15x15</h3>
+<p class="tagline">Le format original de 1999. Pour les competiteurs.</p>
+<ul class="specs">
+<li>Plateau 15x15 cases (38 cm x 38 cm)</li>
+<li>380 pales + 150 fonces + 25 rouges = <strong>555 pions</strong></li>
+<li>Duree : 40-95 minutes</li>
+<li>2 joueurs (mode competition)</li>
+<li>Bois franc du Quebec -- Edition de collection</li>
+<li>Numerote et signe par Alain Dupont</li>
+</ul>
+<div class="prix"><span class="prix-normal">219 $</span><span class="prix-promo">179 $ <small>precommande fondateur</small></span></div>
+<div class="actions"><button class="btn-ajouter" data-produit="competition">Ajouter au panier</button><a href="/regles" class="btn-voir-regles">Voir les regles</a></div>
+<p class="stock precommande">Precommande -- Livraison printemps 2027</p>
+<p class="note-collection">Chaque piece est unique. Le prototype original de 1999 a ete fabrique a la main par Alain Dupont. Cette edition reproduit fidelement les dimensions et les materiaux du prototype.</p>
+</div>
+</article>
 </section>
 
-<!-- ===================== GARANTIES ===================== -->
-<section class="section-blanc">
-  <div class="wrap">
-    <h2 class="center">Nos garanties</h2>
-    <div style="height:24px;"></div>
-    <div class="grille-4">
-      <div class="carte">
-        <h3>Satisfait ou rembourse</h3>
-        <p>Trente jours pour changer d'avis, sans condition.</p>
-      </div>
-      <div class="carte">
-        <h3>Garantie a vie</h3>
-        <p>Le bois et la mecanique sont garantis a vie contre les defauts.</p>
-      </div>
-      <div class="carte">
-        <h3>Bois quebecois</h3>
-        <p>Un materiau local, choisi et travaille au Quebec.</p>
-      </div>
-      <div class="carte">
-        <h3>Livraison assuree</h3>
-        <p>Chaque envoi est assure jusqu'a votre porte.</p>
-      </div>
-    </div>
-  </div>
+<section class="options">
+<h2>Personnalisez votre jeu</h2>
+<p class="intro-options">Ajoutez des options au moment de la commande.</p>
+<div class="grille-options">
+<div class="option"><h3>Emballage cadeau de luxe</h3><div class="prix-option">+ 8 $</div><p>Boite en bois gravee + carte personnalisee</p></div>
+<div class="option"><h3>Livret de strategie illustre</h3><div class="prix-option">+ 15 $</div><p>Guide avance avec ouvertures, tactiques, et puzzles EOC</p></div>
+<div class="option"><h3>Horloge de partie</h3><div class="prix-option">+ 45 $</div><p>Horloge double homologuee pour competitions</p></div>
+<div class="option"><h3>Gabarit de pointage</h3><div class="prix-option">+ 5 $</div><p>Set de 3 gabarits papier pour arbitrage</p></div>
+</div>
 </section>
 
-<!-- ===================== ZONES DE LIVRAISON ===================== -->
-<section>
-  <div class="wrap">
-    <h2 class="center">Zones de livraison</h2>
-    <div style="height:24px;"></div>
-    <table>
-      <thead>
-        <tr><th>Destination</th><th>Frais</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>Quebec et Ontario</td><td>Gratuit</td></tr>
-        <tr><td>Reste du Canada</td><td>12 $</td></tr>
-        <tr><td>International</td><td>25 $</td></tr>
-      </tbody>
-    </table>
-  </div>
+<section class="garanties">
+<h2>Nos garanties</h2>
+<div class="grille-garanties">
+<div class="garantie"><h3>Satisfait ou rembourse</h3><p>30 jours pour tester. Pas convaincu ? On vous rembourse. Pas de questions.</p></div>
+<div class="garantie"><h3>Garantie a vie</h3><p>Piece manquante ou defectueuse ? On la remplace gratuitement, pour toujours.</p></div>
+<div class="garantie"><h3>Bois 100% quebecois</h3><p>Erable, chene et bouleau provenant de forets gerees durablement au Quebec.</p></div>
+<div class="garantie"><h3>Livraison assuree</h3><p>Emballage renforce. Assurance incluse. Suivi en temps reel.</p></div>
+</div>
 </section>
 
-<!-- ===================== CTA LA RUCHE ===================== -->
-<section class="section-bois">
-  <div class="wrap">
-    <h2>Le meilleur prix est reserve aux Fondateurs</h2>
-    <p style="max-width:680px;margin:0 auto 24px;">Rejoignez le programme La Ruche pour bloquer votre tarif fondateur avant le lancement.</p>
-    <a class="btn btn-plein" href="/laruche">Decouvrir le programme Fondateurs</a>
-  </div>
+<section class="livraison">
+<h2>Livraison et retours</h2>
+<div class="zones">
+<div class="zone"><h3>Quebec et Ontario</h3><p>Gratuit | 2-4 jours ouvrables</p></div>
+<div class="zone"><h3>Reste du Canada</h3><p>12 $ | 3-6 jours ouvrables</p></div>
+<div class="zone"><h3>International</h3><p>A partir de 25 $ | 7-14 jours ouvrables</p></div>
+</div>
+<p class="retours"><strong>Retours :</strong> Contactez-nous sous 30 jours. Nous organisons le retour gratuit au Quebec et Ontario.</p>
+</section>
+
+<section class="cta-final">
+<h2>Pas pret a acheter ?</h2>
+<p>Rejoignez La Ruche gratuitement et beneficiez de la precommande fondateur quand vous serez pret.</p>
+<a href="/laruche" class="btn-laruche">Rejoindre La Ruche -- Gratuit</a>
 </section>
 
 <footer>
-  <p>ECHEC O CUBE — Invente au Quebec en 1999 — Lance au printemps 2027</p>
-  <p>Droit d'auteur OPIC Canada No. 477714 — Alain Dupont</p>
-  <p>Site officiel : echecocube.ca</p>
+<p>ECHEC O CUBE -- Invente au Quebec en 1999 par Alain Dupont -- Droit d'auteur OPIC Canada No 477714</p>
+<p><a href="/">Accueil</a> | <a href="/regles">Regles</a> | <a href="/laruche">La Ruche</a> | <a href="/boutique">Boutique</a></p>
 </footer>
-
 </body>
 </html>
