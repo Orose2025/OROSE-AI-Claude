@@ -1,0 +1,55 @@
+{%- comment -%}
+  ÉCHEC O CUBE — Section 7 : COMMUNAUTÉ / COMMUNITY
+  Native Shopify newsletter signup. Submissions create a customer tagged
+  "newsletter" (and "EOC-founder"), feeding Shopify Email / the customer
+  list — no external script required.
+{%- endcomment -%}
+<section class="eoc-section eoc-community" id="eoc-community">
+  <div class="eoc-container eoc-narrow">
+    <div class="eoc-community__frame eoc-reveal">
+      <span class="eoc-kicker">{{ section.settings.kicker }}</span>
+      <h2 class="eoc-community__title">{{ section.settings.title }}</h2>
+      <div class="eoc-community__body">{{ section.settings.body }}</div>
+
+      {%- form 'customer', id: 'eoc-newsletter', class: 'eoc-community__form' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter, EOC-founder">
+        <input type="hidden" name="contact[accepts_marketing]" value="true">
+        <div class="field">
+          <label class="visually-hidden" for="eoc-email">Courriel / Email</label>
+          <input id="eoc-email" type="email" name="contact[email]"
+                 placeholder="{{ section.settings.placeholder }}" required>
+        </div>
+        <button type="submit" class="eoc-btn eoc-btn--solid">{{ section.settings.button_label }}</button>
+
+        {%- if form.posted_successfully? -%}
+          <p class="eoc-form__message" style="flex-basis:100%">{{ section.settings.success_message }}</p>
+        {%- elsif form.errors -%}
+          <p class="eoc-form__message" style="flex-basis:100%;color:var(--eoc-red)">
+            {{ form.errors | default_errors }}
+          </p>
+        {%- endif -%}
+      {%- endform -%}
+
+      {%- if section.settings.social_proof != blank -%}
+        <p class="eoc-community__social">{{ section.settings.social_proof }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "EOC — Communauté / Community",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Sur-titre / Kicker", "default": "LA RUCHE — PRÉ-CAMPAGNE" },
+    { "type": "text", "id": "title", "label": "Titre / Title", "default": "Rejoignez la Communauté EOC / Join the EOC Community" },
+    { "type": "richtext", "id": "body", "label": "Texte / Body", "default": "<p>Soyez notifié(e) au lancement de la campagne La Ruche. Accès prioritaire, tarif fondateur garanti. / Be notified at La Ruche campaign launch. Priority access, guaranteed founder pricing.</p>" },
+    { "type": "text", "id": "placeholder", "label": "Champ courriel / Email placeholder", "default": "votre@courriel.com" },
+    { "type": "text", "id": "button_label", "label": "Bouton / Button", "default": "S'INSCRIRE / SUBSCRIBE" },
+    { "type": "text", "id": "success_message", "label": "Message de succès / Success message", "default": "Merci ! Vous êtes inscrit(e). / Thank you! You're on the list." },
+    { "type": "text", "id": "social_proof", "label": "Preuve sociale / Social proof", "default": "Déjà 250 personnes inscrites / Already 250 people subscribed" }
+  ],
+  "presets": [{ "name": "EOC — Communauté / Community" }]
+}
+{% endschema %}

@@ -1,0 +1,39 @@
+{
+  "sections": {
+    "main": {
+      "type": "eoc-page-regles",
+      "settings": {
+        "hero_titre": "Comment jouer a ECHEC O CUBE",
+        "hero_sous_titre": "Un jeu de strategie ou le plateau lui-meme arbitre la partie.",
+        "video_texte": "Voir la video tutorielle (2 min)",
+        "etapes_titre": "Apprendre en quatre etapes",
+        "fonce_titre": "Le Fonce Separateur -- La cle du jeu",
+        "fonce_image_legende": "Diagramme a venir : exemple de Fonce Separateur sur le plateau 9 par 9",
+        "fonce_texte": "<p>Le <strong>fonce long</strong> fait 3 cm et deborde de 0,5 cm dans les intersections. Le <strong>pale court</strong> fait 2 cm et epouse exactement l'arete.</p><p>Ce debordement permet de fermer des carres enrichis avec seulement <strong>3 pales + 3 fonces = 9 points</strong>, au lieu de 4+4 = 12 points. Cela consomme moins de pions pour un rapport point/pion eleve.</p><p><em>Le fonce prend les coins. Le pale remplit l'arete utile.</em></p>",
+        "avancees_titre": "Regles avancees",
+        "formats_titre": "Trois formats pour tous les joueurs",
+        "cta_titre": "Pret a jouer ?",
+        "cta_texte": "Rejoignez La Ruche et soyez parmi les premiers a posseder un ECHEC O CUBE.",
+        "cta_b1_texte": "S'inscrire a La Ruche",
+        "cta_b2_texte": "Voir la boutique",
+        "pdf_titre": "Reglement officiel complet",
+        "pdf_texte": "<p>Telechargez le Cahier de Reglement Officiel v2.1 (PDF) -- la source unique de verite pour les arbitres et joueurs.</p>",
+        "pdf_bouton": "Telecharger le reglement (PDF)"
+      },
+      "blocks": {
+        "e1": { "type": "etape", "settings": { "titre": "Inserer un pion", "texte": "<p>Le joueur gagnant du pile ou face place un pion n'importe ou sur le plateau. Aucune contrainte de contact : c'est le premier coup. Le pion se glisse couche dans la rainure, fermement maintenu par le bois.</p>", "image_legende": "Image a venir : un joueur insere un pion dans une rainure du plateau" } },
+        "e2": { "type": "etape", "settings": { "titre": "Toucher un pion deja pose", "texte": "<p>Quand un pion s'insere dans une rainure et touche un autre pion deja pose, le coup est valide. Aucune exception, aucune dispute : le plateau decide.</p>", "image_legende": "Image a venir : deux pions qui se touchent dans la rainure" } },
+        "e3": { "type": "etape", "settings": { "titre": "Respecter l'alternance", "texte": "<p>Deux pions de meme type ne se touchent jamais. Un pion pale ne touche jamais un autre pion pale ; un pion fonce ne touche jamais un autre pion fonce. Cette alternance structure toute la partie.</p>", "image_legende": "Image a venir : alternance pale et fonce sur le plateau" } },
+        "e4": { "type": "etape", "settings": { "titre": "Fermer le cube -- ECHEC O CUBE", "texte": "<p>Quand 4 pions alternes forment un carre ferme, vous marquez des points. Carre 1x1 = 6 points, carre enrichi = 9 points, carre 2x2 = 12 points. Criez ECHEC O CUBE immediatement. Chaque cube ferme accorde un tour supplementaire.</p>", "image_legende": "Image a venir : une case fermee par quatre pions" } },
+        "r1": { "type": "regle", "settings": { "titre": "Le Pion Rouge -- Zone morte", "texte": "<p>Quand un espace vide est geometriquement bloque, on y insere un pion rouge debout. Il vaut 0 point. Si un rouge fait partie d'un carre ferme, ce carre est incomplet et vaut 0 point.</p>" } },
+        "r2": { "type": "regle", "settings": { "titre": "Le Vol de points", "texte": "<p>Oubliez d'annoncer ECHEC O CUBE ? Le joueur suivant peut l'annoncer a votre place et vous voler les points du carre. L'attention est une habilete du jeu.</p>" } },
+        "r3": { "type": "regle", "settings": { "titre": "Reactions en chaine", "texte": "<p>Chaque cube ferme = un tour bonus. Le joueur continue de jouer tant qu'il forme des ECHEC O CUBE en occupant l'arete manquante d'un carre adjacent deja a 3 aretes.</p>" } },
+        "f1": { "type": "format", "settings": { "titre": "Edition Amateur 9x9", "details": "<p>81 cases | 200 pions (132 pales + 52 fonces + 16 rouges)<br>Duree : 30-60 minutes<br>2 a 4 joueurs | Familles, decouverte<br>Acrylique coule 10 mm ou Bois franc du Quebec</p>", "prix": "89 $" } },
+        "f2": { "type": "format", "settings": { "titre": "Edition Intermediaire 11x11", "details": "<p>121 cases | 300 pions (200 pales + 80 fonces + 20 rouges)<br>Duree : 30-80 minutes<br>2 a 4 joueurs | Juste milieu recreatif<br>Bois franc du Quebec -- Collection</p>", "prix": "129 $" } },
+        "f3": { "type": "format", "settings": { "titre": "Edition Competition 15x15", "details": "<p>225 cases | 555 pions (380 pales + 150 fonces + 25 rouges)<br>Duree : 40-95 minutes<br>2 joueurs | Mode competition officiel FEOC<br>Bois franc du Quebec -- Edition de collection</p>", "prix": "179 $", "vedette": true } }
+      },
+      "block_order": ["e1","e2","e3","e4","r1","r2","r3","f1","f2","f3"]
+    }
+  },
+  "order": ["main"]
+}

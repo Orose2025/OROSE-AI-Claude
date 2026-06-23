@@ -1,0 +1,64 @@
+{%- comment -%}
+  ÉCHEC O CUBE — Section Vidéo / Video section
+  Lecteur vidéo pleine largeur. Choisissez une vidéo hébergée par Shopify
+  (réglage "Vidéo") ; sinon la vidéo officielle est utilisée par défaut.
+{%- endcomment -%}
+{%- liquid
+  assign vid = section.settings.video
+  assign fallback_url = 'https://cdn.shopify.com/videos/c/vp/edcf8b90ef1346aea84bbdfc746166ce/edcf8b90ef1346aea84bbdfc746166ce.SD-480p-0.9Mbps-85549097.mp4'
+  assign fallback_poster = 'https://cdn.shopify.com/s/files/1/0720/4562/5432/files/preview_images/edcf8b90ef1346aea84bbdfc746166ce.thumbnail.0000000000.jpg'
+  if vid != blank and vid.preview_image != blank
+    assign poster = vid.preview_image | image_url: width: 1400
+  else
+    assign poster = fallback_poster
+  endif
+-%}
+<section class="eoc-section eoc-video" id="eoc-video" style="background: {{ section.settings.bg_color }};">
+  <div class="eoc-container">
+    {%- if section.settings.kicker != blank -%}
+      <span class="eoc-kicker eoc-reveal" style="display:block;text-align:center;">{{ section.settings.kicker }}</span>
+    {%- endif -%}
+    {%- if section.settings.title != blank -%}
+      <h2 class="eoc-section-title eoc-reveal">{{ section.settings.title }}</h2>
+    {%- endif -%}
+
+    <div class="eoc-video__frame eoc-reveal" style="max-width: {{ section.settings.max_width }}px;">
+      <video class="eoc-video__el"
+             playsinline
+             preload="metadata"
+             poster="{{ poster }}"
+             {% if section.settings.show_controls %}controls{% endif %}
+             {% if section.settings.autoplay %}autoplay muted loop{% endif %}>
+        {%- if vid != blank -%}
+          {%- for s in vid.sources -%}
+            <source src="{{ s.url }}" type="{{ s.mime_type }}">
+          {%- endfor -%}
+        {%- else -%}
+          <source src="{{ fallback_url }}" type="video/mp4">
+        {%- endif -%}
+      </video>
+    </div>
+
+    {%- if section.settings.caption != blank -%}
+      <p class="eoc-caption eoc-reveal">{{ section.settings.caption }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "EOC — Vidéo / Video",
+  "tag": "section",
+  "settings": [
+    { "type": "video", "id": "video", "label": "Vidéo (Contenu › Fichiers) / Video", "info": "Laissez vide pour utiliser la vidéo officielle. / Leave empty to use the official video." },
+    { "type": "text", "id": "kicker", "label": "Sur-titre / Kicker", "default": "EN ACTION / IN ACTION" },
+    { "type": "text", "id": "title", "label": "Titre / Title", "default": "UNE PARTIE D'ÉCHEC O CUBE" },
+    { "type": "text", "id": "caption", "label": "Légende / Caption", "default": "Stratégie pure. Placement précis. Réactions en chaîne." },
+    { "type": "color", "id": "bg_color", "label": "Couleur de fond / Background", "default": "#0D0705" },
+    { "type": "range", "id": "max_width", "label": "Largeur max du lecteur / Player max width", "min": 600, "max": 1600, "step": 20, "unit": "px", "default": 1100 },
+    { "type": "checkbox", "id": "show_controls", "label": "Afficher les contrôles / Show controls", "default": true },
+    { "type": "checkbox", "id": "autoplay", "label": "Lecture auto (muet, en boucle) / Autoplay (muted, loop)", "default": false }
+  ],
+  "presets": [{ "name": "EOC — Vidéo / Video" }]
+}
+{% endschema %}

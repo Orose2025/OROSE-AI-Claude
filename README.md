@@ -1,2 +1,159 @@
-# OROSE-AI
-Conseillere OROSE
+# ÉCHEC O CUBE — Site Officiel (Thème Shopify / Shopify Theme)
+
+> Le jeu de stratégie où la physique valide chaque coup.
+> *The strategy game where physics validates every move.*
+
+Thème Shopium premium, bilingue FR/EN, entièrement éditable depuis l'admin
+Shopify — construit sur la base **Dawn**. Aucun code requis après livraison.
+
+---
+
+## 🎨 Palette de marque (modifiable: Réglages › Réglages du thème)
+
+| Rôle | Hex |
+|------|-----|
+| Fond principal | `#1A1008` |
+| Fond secondaire | `#0D0705` |
+| Or bronze (logo ÉCHEC, CTA) | `#C9982F` |
+| Or miel (pâle) | `#E8C96A` |
+| Crème parchemin (texte) | `#F5ECD7` |
+| Rouge crimson (pièce rouge) | `#B22222` |
+| Bois chêne | `#8B6914` |
+| Rainure / bordure | `#2C1F0E` |
+
+Polices Google : **Playfair Display** (titres), **Libre Baskerville** (corps),
+**Cinzel** (étiquettes/UI).
+
+---
+
+## 📁 Structure du thème
+
+```
+layout/theme.liquid          Mise en page : nav fixe, pied de page, polices, variables CSS
+sections/
+  eoc-hero.liquid            Section 1 — Héros plein écran
+  eoc-concept.liquid         Section 2 — Le concept + statistiques animées
+  eoc-game.liquid            Section 3 — Les 3 pièces (PÂLE / FONCÉ / ROUGE)
+  eoc-experience.liquid      Section 4 — L'expérience (lifestyle)
+  eoc-rules.liquid           Section 5 — Comment jouer (3 étapes)
+  eoc-product.liquid         Section 6 — Produit Shopify natif (panier réel)
+  eoc-community.liquid       Section 7 — Capture courriel (liste clients native)
+  eoc-rules-page.liquid      Page /rules — règlement complet bilingue
+  eoc-about.liquid           Page /about — histoire de l'inventeur
+  eoc-collection.liquid      Page /shop — grille de collection
+  eoc-product-page.liquid    Page produit native
+  eoc-cart.liquid            Panier
+  eoc-page.liquid            Page générique
+  eoc-404.liquid             404
+templates/
+  index.json                 Accueil (7 sections dans l'ordre)
+  page.rules.json            Modèle page Règles
+  page.about.json            Modèle page À propos
+  collection.json product.json cart.json page.json 404.json
+assets/
+  eoc-theme.css              Variables de marque, typographie, styles, responsive
+  eoc-animations.js          Reveal au défilement + compteurs + menu mobile (vanilla)
+config/
+  settings_schema.json       Sélecteurs de couleur, polices, nav, pied de page
+  settings_data.json         Valeurs par défaut = palette de marque
+locales/
+  en.default.json  fr.json
+```
+
+---
+
+## 🖼️ Images à téléverser (Admin › Contenu › Fichiers, puis sélectionner dans le Customizer)
+
+Chaque image est un réglage **image_picker** — aucune image n'est codée en dur.
+
+| Réglage | Image source | Section |
+|---------|--------------|---------|
+| **Logo officiel (nav)** | `logo-echecocube.png` | En-tête — *Réglages du thème › Marque & en-tête › Image du logo* |
+| **Logo officiel (héros)** | `logo-echecocube.png` | Héros — *Customizer › section Héros › Image du logo* |
+| Image héros (fond plein écran) | `Pub-Echec_O_Cube.png` | Héros + fond 404 |
+| **Vidéo de partie** | `VIDÉO-PARTI-ÉCHEC O CUBE.mp4` | Section Vidéo (accueil) |
+| Image héros (alternative) | `AffichePub.png` | Héros |
+| Image macro | `IMG_20931.jpg` | Concept |
+| Image plein largeur | `IMG_20861.jpg` | Le Jeu |
+| Image de fond | `PARTI2JOUEURS.png` | Expérience |
+| Diagramme de pointage | `IMG_E21161.jpg` | Comment jouer |
+| Photos produit | `IMG_20801`, `IMG_20861`, `IMG_20931`, série `IMG_19xxx–21xxx` | Produit / galerie |
+
+---
+
+### 🏷️ Insérer le logo officiel (1 seul geste, sans code)
+
+Le logo officiel ÉCHEC O CUBE s'affiche automatiquement dès qu'il est téléversé —
+il remplace le logo texte dans la **barre de navigation** ET au **centre du héros**.
+
+1. **Admin Shopify › Personnaliser** (le thème).
+2. Pour le héros : cliquez la section **Héros**, puis **Image du logo** → *Sélectionner une image* → téléversez le fichier du logo. Ajustez la **largeur max** au goût. Astuce : décochez « Afficher les slogans » si vous gardez ceux déjà inclus dans le logo.
+3. Pour la nav : **Réglages du thème › Marque & en-tête › Image du logo (nav)** → téléversez le même fichier. Ajustez la **hauteur**.
+4. Conseil : utilisez un **PNG à fond transparent** pour un rendu net sur le fond espresso sombre.
+
+> Tant qu'aucune image n'est choisie, un logo texte de secours s'affiche.
+
+## 🧱 Tout modifier sur chaque page (sans code)
+
+Le thème inclut un **constructeur de contenu flexible** (`eoc-flex`) utilisé par
+défaut sur **toutes les pages** (À propos, Contact, Le Jeu, Vision, Tournois,
+Jouer, etc.). Dans **Personnaliser**, vous pouvez **ajouter, glisser-déposer,
+réordonner et supprimer** des blocs :
+
+- **Sur-titre**, **Titre** (taille/couleur/alignement réglables)
+- **Texte riche** (gras, italique, liens, listes)
+- **Texte bilingue FR / EN** côte à côte
+- **Image** (avec légende) et **Image + Texte** (image à gauche ou à droite)
+- **Citation**, **Bouton** (3 styles), **Formulaire de contact**
+- **Contenu de la page** (le texte saisi dans *Admin › Pages*), **Espace**, **Séparateur**
+
+Chaque bloc a sa couleur de fond, sa largeur et ses marges. Aucune ligne de code.
+
+> Les pages d'accueil (7 sections), Règles et 404 ont elles aussi tous leurs
+> textes, images et couleurs éditables dans le personnalisateur.
+
+### Gabarits de pages dédiés / Dedicated page templates
+
+Quatre gabarits prêts à remplir (contenu de départ bilingue, tout modifiable) :
+
+| Page | Gabarit à choisir (Admin › Pages › Modèle de thème) |
+|------|------------------------------------------------------|
+| Le Jeu | `page.le-jeu` |
+| Vision | `page.vision` |
+| Tournois | `page.tournois` |
+| Jouer | `page.jouer` |
+| À propos de nous | `page.about` |
+| Contact | `page.contact` |
+
+**Pour utiliser un gabarit** : Admin › *Boutique en ligne › Pages* › créez/ouvrez la
+page › à droite, **Modèle de thème** › choisissez le gabarit › *Enregistrer*.
+Ensuite, dans *Personnaliser*, modifiez/ajoutez/remplacez tous les blocs et images.
+
+## 🚀 Installation
+
+Ces fichiers constituent une **surcouche éditoriale du thème Dawn**.
+
+1. Boutique Shopify (`echecocube.com`) › **Boutique en ligne › Thèmes**
+2. Ajoutez le thème **Dawn** (dernière version) puis **Modifier le code**.
+3. Téléversez/remplacez les fichiers de ce dépôt (mêmes chemins).
+4. Renommez le thème : **« ÉCHEC O CUBE — Site Officiel »**.
+5. Créez les pages **Règles** (modèle `rules`), **À propos** (modèle `about`).
+6. **Navigation** : créez le menu `main-menu` (Règles, Boutique, Communauté, À propos)
+   et `footer`. Tous les liens sont éditables dans *Navigation*.
+7. **Produit** : créez le produit « ÉCHEC O CUBE — Édition Bois », puis liez-le
+   dans la Section 6 (réglage *Produit lié*). Prix, variantes et panier deviennent réels.
+8. **Liste courriel** : les inscriptions (Section 7) créent un client taggé
+   `newsletter, EOC-founder` → Shopify Email / Klaviyo.
+
+---
+
+## ✅ Conforme au cahier des charges
+
+- Bilingue FR/EN sur chaque bloc · 100 % éditable au Customizer (texte, image, couleur)
+- Section 6 = produit Shopify **natif** (panier/checkout réels)
+- Section 7 = formulaire client **natif** Shopify (aucun script externe)
+- Mobile-first responsive · lazy-loading · `preconnect` Google Fonts · CDN images
+- Animations CSS + ~30 lignes de JS vanilla (Intersection Observer, compteurs)
+- Nav fixe `#0D0705` 90 % + backdrop-blur · sélecteur FR/EN
+
+© 1999–2026 Alain Dupont. Droit d'auteur OPIC Canada No. 477714.

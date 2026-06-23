@@ -1,0 +1,57 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "current": {
+    "color_bg_primary": "#1A1008",
+    "color_bg_secondary": "#0D0705",
+    "color_gold": "#C9982F",
+    "color_gold_light": "#E8C96A",
+    "color_cream": "#F5ECD7",
+    "color_red": "#B22222",
+    "color_wood": "#8B6914",
+    "color_groove": "#2C1F0E",
+    "base_font_size": 18,
+    "header_logo_height": 152,
+    "default_logo_filename": "ECHEC_O_CUBE_LOGO_v5_transparent.png",
+    "brand_logo_word1": "ÉCHEC",
+    "brand_logo_word2": "CUBE",
+    "main_menu": "main-menu",
+    "show_lang_toggle": true,
+    "show_nav_icons": true,
+    "lang_fr_url": "/",
+    "lang_en_url": "/?lang=en",
+    "footer_logo_height": 64,
+    "footer_menu": "footer",
+    "footer_copy": "© 1999–2026 Alain Dupont. Droit d'auteur OPIC Canada No. 477714. Tous droits réservés.",
+    "content_for_index": [],
+    "blocks": {
+      "14060646107696862457": {
+        "type": "shopify://apps/judge-me-reviews/blocks/judgeme_core/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+        "disabled": false,
+        "settings": {}
+      }
+    }
+  },
+  "presets": {
+    "ÉCHEC O CUBE — Site Officiel": {
+      "color_bg_primary": "#1A1008",
+      "color_bg_secondary": "#0D0705",
+      "color_gold": "#C9982F",
+      "color_gold_light": "#E8C96A",
+      "color_cream": "#F5ECD7",
+      "color_red": "#B22222",
+      "color_wood": "#8B6914",
+      "color_groove": "#2C1F0E",
+      "base_font_size": 18,
+      "brand_logo_word1": "ÉCHEC",
+      "brand_logo_word2": "CUBE"
+    }
+  }
+}

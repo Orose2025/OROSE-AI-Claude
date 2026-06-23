@@ -1,0 +1,209 @@
+{% comment %} ÉCHEC O CUBE — Page Règles (Shopify, 100% éditable) {% endcomment %}
+<div class="eoc-regles-page" id="eoc-rp-{{ section.id }}">
+
+  <section class="hero-regles">
+    <h1>{{ section.settings.hero_titre }}</h1>
+    <p class="sous-titre">{{ section.settings.hero_sous_titre }}</p>
+    {% if section.settings.video_texte != blank %}
+      <a class="btn-video" href="{{ section.settings.video_lien | default: '#' }}">{{ section.settings.video_texte }}</a>
+    {% endif %}
+  </section>
+
+  <section class="etapes-rapides">
+    <h2>{{ section.settings.etapes_titre }}</h2>
+    {% assign n = 0 %}
+    {% for block in section.blocks %}{% if block.type == 'etape' %}{% assign n = n | plus: 1 %}
+      <div class="etape" {{ block.shopify_attributes }}>
+        <div class="numero">{{ n }}</div>
+        <div class="etape-content">
+          <h3>{{ block.settings.titre }}</h3>
+          <div>{{ block.settings.texte }}</div>
+          {% if block.settings.image != blank %}
+            <img class="placeholder-img" style="object-fit:cover" src="{{ block.settings.image | image_url: width: 900 }}" alt="{{ block.settings.titre | escape }}" loading="lazy">
+          {% else %}
+            <div class="placeholder-img">{{ block.settings.image_legende }}</div>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}{% endfor %}
+  </section>
+
+  <section class="fonce-separateur">
+    <h2>{{ section.settings.fonce_titre }}</h2>
+    <div class="explication">
+      {% if section.settings.fonce_image != blank %}
+        <img class="placeholder-img" style="width:350px;height:280px;flex-shrink:0;object-fit:cover" src="{{ section.settings.fonce_image | image_url: width: 800 }}" alt="{{ section.settings.fonce_titre | escape }}" loading="lazy">
+      {% else %}
+        <div class="placeholder-img" style="width:350px;height:280px;flex-shrink:0">{{ section.settings.fonce_image_legende }}</div>
+      {% endif %}
+      <div class="texte">{{ section.settings.fonce_texte }}</div>
+    </div>
+  </section>
+
+  <section class="regles-avancees">
+    <h2>{{ section.settings.avancees_titre }}</h2>
+    <div class="grille-regles">
+      {% for block in section.blocks %}{% if block.type == 'regle' %}
+        <div class="regle" {{ block.shopify_attributes }}>
+          <h3>{{ block.settings.titre }}</h3>
+          <div>{{ block.settings.texte }}</div>
+        </div>
+      {% endif %}{% endfor %}
+    </div>
+  </section>
+
+  <section class="formats">
+    <h2>{{ section.settings.formats_titre }}</h2>
+    <div class="grille-formats">
+      {% for block in section.blocks %}{% if block.type == 'format' %}
+        <div class="format {% if block.settings.vedette %}format-competition{% endif %}" {{ block.shopify_attributes }}>
+          <h3>{{ block.settings.titre }}</h3>
+          <div>{{ block.settings.details }}</div>
+          <span class="prix">{{ block.settings.prix }}</span>
+        </div>
+      {% endif %}{% endfor %}
+    </div>
+  </section>
+
+  <section class="cta-final">
+    <h2>{{ section.settings.cta_titre }}</h2>
+    <p>{{ section.settings.cta_texte }}</p>
+    {% if section.settings.cta_b1_texte != blank %}<a href="{{ section.settings.cta_b1_lien | default: '/pages/la-ruche' }}" class="btn-primary">{{ section.settings.cta_b1_texte }}</a>{% endif %}
+    {% if section.settings.cta_b2_texte != blank %}<a href="{{ section.settings.cta_b2_lien | default: '/pages/boutique' }}" class="btn-secondary">{{ section.settings.cta_b2_texte }}</a>{% endif %}
+  </section>
+
+  <section class="telechargement">
+    <h2>{{ section.settings.pdf_titre }}</h2>
+    <p>{{ section.settings.pdf_texte }}</p>
+    {% if section.settings.pdf_bouton != blank %}<a href="{{ section.settings.pdf_lien | default: '#' }}" class="btn-download">{{ section.settings.pdf_bouton }}</a>{% endif %}
+  </section>
+
+</div>
+
+<style>
+  #eoc-rp-{{ section.id }} .hero-regles{background:#1a1a1a;color:#F5F0E8;padding:90px 20px;text-align:center}
+  #eoc-rp-{{ section.id }} .hero-regles h1{font-size:3rem;color:#F5F0E8;margin-bottom:20px;font-family:Georgia,serif}
+  #eoc-rp-{{ section.id }} .sous-titre{font-size:1.4rem;color:#C4A35A;margin-bottom:35px;font-style:italic}
+  #eoc-rp-{{ section.id }} .btn-video{background:#D4AF37;color:#1a1a1a;padding:18px 50px;font-size:1.1rem;border-radius:4px;font-weight:bold;text-decoration:none;display:inline-block}
+  #eoc-rp-{{ section.id }} section{font-family:Georgia,serif}
+  #eoc-rp-{{ section.id }} h2{font-family:Georgia,serif;color:#1a1a1a;text-align:center;font-size:2.2rem;margin-bottom:50px}
+  #eoc-rp-{{ section.id }} p,#eoc-rp-{{ section.id }} li,#eoc-rp-{{ section.id }} div{font-family:Georgia,serif}
+  #eoc-rp-{{ section.id }} .etapes-rapides,#eoc-rp-{{ section.id }} .regles-avancees{max-width:1100px;margin:80px auto;padding:0 20px}
+  #eoc-rp-{{ section.id }} .formats{max-width:1000px;margin:80px auto;padding:0 20px}
+  #eoc-rp-{{ section.id }} .etape{display:flex;gap:50px;margin-bottom:70px;align-items:flex-start}
+  #eoc-rp-{{ section.id }} .etape:nth-child(odd){flex-direction:row-reverse}
+  #eoc-rp-{{ section.id }} .numero{width:70px;height:70px;border:3px solid #D4AF37;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;color:#D4AF37;font-weight:bold;flex-shrink:0}
+  #eoc-rp-{{ section.id }} .etape-content{flex:1}
+  #eoc-rp-{{ section.id }} .etape-content h3{font-size:1.5rem;color:#8B6914;margin-bottom:15px}
+  #eoc-rp-{{ section.id }} .etape-content p{font-size:1.1rem;color:#444;margin-bottom:18px;line-height:1.8}
+  #eoc-rp-{{ section.id }} .placeholder-img{background:repeating-linear-gradient(45deg,#e8e0d0,#e8e0d0 10px,#ddd5c5 10px,#ddd5c5 20px);width:100%;max-width:450px;height:250px;border-radius:8px;border:2px solid #C4A35A;display:flex;align-items:center;justify-content:center;color:#8B6914;font-style:italic;text-align:center;padding:20px}
+  #eoc-rp-{{ section.id }} .fonce-separateur{background:#1a1a1a;color:#F5F0E8;padding:80px 20px;margin:60px 0}
+  #eoc-rp-{{ section.id }} .fonce-separateur h2{color:#D4AF37}
+  #eoc-rp-{{ section.id }} .explication{max-width:1000px;margin:0 auto;display:flex;gap:50px;align-items:center}
+  #eoc-rp-{{ section.id }} .explication .texte p{margin-bottom:20px;font-size:1.15rem;line-height:1.8}
+  #eoc-rp-{{ section.id }} .explication .texte strong{color:#D4AF37}
+  #eoc-rp-{{ section.id }} .explication .texte em{color:#C4A35A;font-style:italic}
+  #eoc-rp-{{ section.id }} .grille-regles{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:25px}
+  #eoc-rp-{{ section.id }} .regle{background:#fff;border-top:4px solid #8B6914;padding:30px;border-radius:0 0 8px 8px;box-shadow:0 3px 12px rgba(0,0,0,0.08)}
+  #eoc-rp-{{ section.id }} .regle h3{color:#8B0000;margin-bottom:15px;font-size:1.3rem}
+  #eoc-rp-{{ section.id }} .regle p{font-size:1.05rem;color:#444}
+  #eoc-rp-{{ section.id }} .grille-formats{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:25px}
+  #eoc-rp-{{ section.id }} .format{background:#fff;padding:35px;border-radius:8px;text-align:center;border:2px solid #C4A35A}
+  #eoc-rp-{{ section.id }} .format h3{font-size:1.4rem;margin-bottom:15px;color:#8B6914}
+  #eoc-rp-{{ section.id }} .format p{margin-bottom:8px;font-size:0.95rem;color:#555}
+  #eoc-rp-{{ section.id }} .format .prix{font-size:1.8rem;color:#D4AF37;font-weight:bold;margin-top:20px;display:block}
+  #eoc-rp-{{ section.id }} .format-competition{border-color:#D4AF37;background:#1a1a1a;color:#F5F0E8}
+  #eoc-rp-{{ section.id }} .format-competition h3{color:#D4AF37}
+  #eoc-rp-{{ section.id }} .format-competition p{color:#ccc}
+  #eoc-rp-{{ section.id }} .cta-final{background:#8B6914;color:#F5F0E8;text-align:center;padding:80px 20px}
+  #eoc-rp-{{ section.id }} .cta-final h2{color:#D4AF37}
+  #eoc-rp-{{ section.id }} .cta-final p{font-size:1.2rem;margin-bottom:35px}
+  #eoc-rp-{{ section.id }} .btn-primary{display:inline-block;background:#D4AF37;color:#1a1a1a;padding:18px 50px;border-radius:4px;font-weight:bold;font-size:1.1rem;margin:0 10px 10px 0;text-decoration:none}
+  #eoc-rp-{{ section.id }} .btn-secondary{display:inline-block;background:transparent;color:#F5F0E8;border:2px solid #F5F0E8;padding:18px 50px;border-radius:4px;font-size:1.1rem;text-decoration:none}
+  #eoc-rp-{{ section.id }} .telechargement{max-width:800px;margin:80px auto;padding:0 20px;text-align:center}
+  #eoc-rp-{{ section.id }} .btn-download{display:inline-block;background:#1a1a1a;color:#D4AF37;padding:18px 50px;border-radius:4px;border:2px solid #D4AF37;font-weight:bold;font-size:1.1rem;text-decoration:none}
+  @media(max-width:768px){#eoc-rp-{{ section.id }} .etape{flex-direction:column!important}#eoc-rp-{{ section.id }} .explication{flex-direction:column}#eoc-rp-{{ section.id }} .grille-regles{grid-template-columns:1fr}}
+</style>
+
+{% schema %}
+{
+  "name": "EOC — Page Regles",
+  "settings": [
+    { "type": "header", "content": "Hero" },
+    { "type": "text", "id": "hero_titre", "label": "Titre", "default": "Comment jouer a ECHEC O CUBE" },
+    { "type": "text", "id": "hero_sous_titre", "label": "Sous-titre", "default": "Un jeu de strategie ou le plateau lui-meme arbitre la partie." },
+    { "type": "text", "id": "video_texte", "label": "Bouton video", "default": "Voir la video tutorielle (2 min)" },
+    { "type": "url", "id": "video_lien", "label": "Lien video" },
+    { "type": "header", "content": "Section etapes" },
+    { "type": "text", "id": "etapes_titre", "label": "Titre", "default": "Apprendre en quatre etapes" },
+    { "type": "header", "content": "Fonce Separateur" },
+    { "type": "text", "id": "fonce_titre", "label": "Titre", "default": "Le Fonce Separateur -- La cle du jeu" },
+    { "type": "image_picker", "id": "fonce_image", "label": "Image / diagramme" },
+    { "type": "text", "id": "fonce_image_legende", "label": "Legende si pas d'image", "default": "Diagramme a venir : exemple de Fonce Separateur" },
+    { "type": "richtext", "id": "fonce_texte", "label": "Texte", "default": "<p>Le <strong>fonce long</strong> fait 3 cm et deborde de 0,5 cm dans les intersections. Le <strong>pale court</strong> fait 2 cm et epouse exactement l'arete.</p><p>Ce debordement permet de fermer des carres enrichis avec seulement <strong>3 pales + 3 fonces = 9 points</strong>, au lieu de 4+4 = 12 points.</p>" },
+    { "type": "header", "content": "Section regles avancees" },
+    { "type": "text", "id": "avancees_titre", "label": "Titre", "default": "Regles avancees" },
+    { "type": "header", "content": "Section formats" },
+    { "type": "text", "id": "formats_titre", "label": "Titre", "default": "Trois formats pour tous les joueurs" },
+    { "type": "header", "content": "Appel a l'action" },
+    { "type": "text", "id": "cta_titre", "label": "Titre", "default": "Pret a jouer ?" },
+    { "type": "text", "id": "cta_texte", "label": "Texte", "default": "Rejoignez La Ruche et soyez parmi les premiers a posseder un ECHEC O CUBE." },
+    { "type": "text", "id": "cta_b1_texte", "label": "Bouton 1", "default": "S'inscrire a La Ruche" },
+    { "type": "url", "id": "cta_b1_lien", "label": "Lien bouton 1" },
+    { "type": "text", "id": "cta_b2_texte", "label": "Bouton 2", "default": "Voir la boutique" },
+    { "type": "url", "id": "cta_b2_lien", "label": "Lien bouton 2" },
+    { "type": "header", "content": "Telechargement PDF" },
+    { "type": "text", "id": "pdf_titre", "label": "Titre", "default": "Reglement officiel complet" },
+    { "type": "richtext", "id": "pdf_texte", "label": "Texte", "default": "<p>Telechargez le Cahier de Reglement Officiel v2.1 (PDF).</p>" },
+    { "type": "text", "id": "pdf_bouton", "label": "Bouton", "default": "Telecharger le reglement (PDF)" },
+    { "type": "url", "id": "pdf_lien", "label": "Lien du PDF" }
+  ],
+  "blocks": [
+    {
+      "type": "etape",
+      "name": "Etape",
+      "settings": [
+        { "type": "text", "id": "titre", "label": "Titre", "default": "Etape" },
+        { "type": "richtext", "id": "texte", "label": "Texte", "default": "<p>Description de l'etape.</p>" },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "image_legende", "label": "Legende si pas d'image", "default": "Image a venir" }
+      ]
+    },
+    {
+      "type": "regle",
+      "name": "Regle avancee",
+      "settings": [
+        { "type": "text", "id": "titre", "label": "Titre", "default": "Regle" },
+        { "type": "richtext", "id": "texte", "label": "Texte", "default": "<p>Description.</p>" }
+      ]
+    },
+    {
+      "type": "format",
+      "name": "Format",
+      "settings": [
+        { "type": "text", "id": "titre", "label": "Titre", "default": "Edition" },
+        { "type": "richtext", "id": "details", "label": "Details", "default": "<p>Details du format.</p>" },
+        { "type": "text", "id": "prix", "label": "Prix", "default": "89 $" },
+        { "type": "checkbox", "id": "vedette", "label": "Format vedette (FEOC)", "default": false }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "EOC — Page Regles",
+      "blocks": [
+        { "type": "etape", "settings": { "titre": "Inserer un pion", "texte": "<p>Le joueur gagnant du pile ou face place un pion n'importe ou sur le plateau. Le pion se glisse couche dans la rainure, fermement maintenu par le bois.</p>", "image_legende": "Image a venir : un joueur insere un pion dans une rainure" } },
+        { "type": "etape", "settings": { "titre": "Toucher un pion deja pose", "texte": "<p>Quand un pion s'insere dans une rainure et touche un autre pion deja pose, le coup est valide. Aucune exception, aucune dispute : le plateau decide.</p>", "image_legende": "Image a venir : deux pions qui se touchent" } },
+        { "type": "etape", "settings": { "titre": "Respecter l'alternance", "texte": "<p>Deux pions de meme type ne se touchent jamais. Un pale ne touche jamais un pale ; un fonce ne touche jamais un fonce. Cette alternance structure toute la partie.</p>", "image_legende": "Image a venir : alternance pale et fonce" } },
+        { "type": "etape", "settings": { "titre": "Fermer le cube -- ECHEC O CUBE", "texte": "<p>Quand 4 pions alternes forment un carre ferme, vous marquez des points. Carre 1x1 = 6 points, carre enrichi = 9 points, carre 2x2 = 12 points. Chaque cube ferme accorde un tour supplementaire.</p>", "image_legende": "Image a venir : une case fermee" } },
+        { "type": "regle", "settings": { "titre": "Le Pion Rouge -- Zone morte", "texte": "<p>Quand un espace vide est geometriquement bloque, on y insere un pion rouge debout. Il vaut 0 point. Si un rouge fait partie d'un carre ferme, ce carre est incomplet et vaut 0 point.</p>" } },
+        { "type": "regle", "settings": { "titre": "Le Vol de points", "texte": "<p>Oubliez d'annoncer ECHEC O CUBE ? Le joueur suivant peut l'annoncer a votre place et vous voler les points du carre.</p>" } },
+        { "type": "regle", "settings": { "titre": "Reactions en chaine", "texte": "<p>Chaque cube ferme = un tour bonus. Le joueur continue tant qu'il forme des ECHEC O CUBE.</p>" } },
+        { "type": "format", "settings": { "titre": "Edition Amateur 9x9", "details": "<p>81 cases | 200 pions<br>Duree : 30-60 minutes<br>2 a 4 joueurs<br>Acrylique 10 mm ou Bois franc du Quebec</p>", "prix": "89 $" } },
+        { "type": "format", "settings": { "titre": "Edition Intermediaire 11x11", "details": "<p>121 cases | 300 pions<br>Duree : 30-80 minutes<br>2 a 4 joueurs<br>Bois franc du Quebec</p>", "prix": "129 $" } },
+        { "type": "format", "settings": { "titre": "Edition Competition 15x15", "details": "<p>225 cases | 555 pions<br>Duree : 40-95 minutes<br>2 joueurs<br>Bois franc du Quebec -- Collection</p>", "prix": "179 $", "vedette": true } }
+      ]
+    }
+  ]
+}
+{% endschema %}

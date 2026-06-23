@@ -1,0 +1,24 @@
+{
+  "sections": {
+    "main": {
+      "type": "eoc-flex",
+      "settings": {
+        "show_page_title": false,
+        "width": "wide",
+        "bg_color": "#1A1008"
+      },
+      "blocks": {
+        "kicker": { "type": "kicker", "settings": { "text": "LE JEU / THE GAME", "center": true } },
+        "title": { "type": "heading", "settings": { "text": "Un jeu de stratégie où la matière dicte la règle", "size": 48, "color": "#E8C96A", "italic": true, "align": "center" } },
+        "intro": { "type": "text", "settings": { "content": "<p>ÉCHEC O CUBE se joue à deux. Chaque joueur place ses pièces dans les rainures du plateau : si le pion entre, le coup est valide. Fermez un carré, criez « ÉCHEC O CUBE » et empochez les points. / ÉCHEC O CUBE is a two-player game. If the piece fits the groove, the move is valid. Close a square, shout “ÉCHEC O CUBE” and pocket the points.</p>", "align": "center", "max_width": 760, "center_box": true } },
+        "div1": { "type": "divider", "settings": {} },
+        "pale": { "type": "image_text", "settings": { "image_position": "left", "heading": "PÂLE — la pièce courte (1 point)", "content": "<p>La pièce pâle vaut 1 point. Idéale pour amorcer un carré ou bloquer l'adversaire. / The pale piece is worth 1 point — perfect to start a square or block your opponent.</p>" } },
+        "fonce": { "type": "image_text", "settings": { "image_position": "right", "heading": "FONCÉ — la pièce longue (2 points)", "content": "<p>La pièce foncée vaut 2 points et occupe plus d'espace dans la rainure. / The dark piece is worth 2 points and fills more of the groove.</p>" } },
+        "rouge": { "type": "image_text", "settings": { "image_position": "left", "heading": "ROUGE — le marqueur mince (zone morte)", "content": "<p>La pièce rouge crée une zone morte qui bloque la fermeture adverse. / The thin red piece creates a dead zone that blocks the opponent's closure.</p>" } },
+        "cta": { "type": "button", "settings": { "label": "VOIR LES RÈGLES COMPLÈTES / SEE FULL RULES", "link": "/pages/rules", "style": "solid", "align": "center" } }
+      },
+      "block_order": ["kicker", "title", "intro", "div1", "pale", "fonce", "rouge", "cta"]
+    }
+  },
+  "order": ["main"]
+}

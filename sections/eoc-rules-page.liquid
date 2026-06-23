@@ -1,0 +1,58 @@
+{%- comment -%} ÉCHEC O CUBE — Page : RÈGLES COMPLÈTES / FULL RULES (bilingue) {%- endcomment -%}
+<section class="eoc-page" id="eoc-rules-page">
+  <div class="eoc-container">
+    <span class="eoc-kicker eoc-center" style="display:block">{{ section.settings.kicker }}</span>
+    <h1 class="eoc-center" style="color:var(--eoc-gold-light);font-style:italic;margin-bottom:3rem">{{ section.settings.title }}</h1>
+
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'rule' -%}
+        <div class="eoc-bi eoc-reveal" style="margin-bottom:2.5rem" {{ block.shopify_attributes }}>
+          <div class="eoc-bi__col eoc-rte">
+            <h3>{{ block.settings.heading_fr }}</h3>
+            {{ block.settings.body_fr }}
+          </div>
+          <div class="eoc-bi__col eoc-rte">
+            <h3>{{ block.settings.heading_en }}</h3>
+            {{ block.settings.body_en }}
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "EOC — Page Règles / Rules page",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Sur-titre / Kicker", "default": "RÈGLEMENT OFFICIEL / OFFICIAL RULES" },
+    { "type": "text", "id": "title", "label": "Titre / Title", "default": "Les règles d'ÉCHEC O CUBE" }
+  ],
+  "blocks": [
+    {
+      "type": "rule",
+      "name": "Règle / Rule (FR + EN)",
+      "settings": [
+        { "type": "text", "id": "heading_fr", "label": "Titre FR", "default": "Les pièces" },
+        { "type": "richtext", "id": "body_fr", "label": "Texte FR", "default": "<p>Trois types de pièces : PÂLE (court, 1 point), FONCÉ (long, 2 points) et ROUGE (mince, zone morte).</p>" },
+        { "type": "text", "id": "heading_en", "label": "Titre EN", "default": "The pieces" },
+        { "type": "richtext", "id": "body_en", "label": "Texte EN", "default": "<p>Three piece types: PALE (short, 1 point), DARK (long, 2 points) and RED (thin, dead zone).</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "EOC — Page Règles / Rules page",
+      "blocks": [
+        { "type": "rule", "settings": { "heading_fr": "Les pièces", "body_fr": "<p>Trois types : <strong>PÂLE</strong> (court, 1 point), <strong>FONCÉ</strong> (long, 2 points), <strong>ROUGE</strong> (mince, zone morte).</p>", "heading_en": "The pieces", "body_en": "<p>Three types: <strong>PALE</strong> (short, 1 pt), <strong>DARK</strong> (long, 2 pts), <strong>RED</strong> (thin, dead zone).</p>" } },
+        { "type": "rule", "settings": { "heading_fr": "Alternance des couleurs", "body_fr": "<p>Chaque nouveau pion doit toucher une couleur contraire à la sienne.</p>", "heading_en": "Color alternation", "body_en": "<p>Each new piece must touch a color opposite to its own.</p>" } },
+        { "type": "rule", "settings": { "heading_fr": "Chaînage", "body_fr": "<p>Les pièces se chaînent en respectant la rainure : si le pion entre, le coup est valide.</p>", "heading_en": "Chaining", "body_en": "<p>Pieces chain along the groove: if the piece fits, the move is valid.</p>" } },
+        { "type": "rule", "settings": { "heading_fr": "Le marqueur rouge", "body_fr": "<p>La pièce ROUGE mince crée une zone morte qui bloque la fermeture adverse.</p>", "heading_en": "The red marker", "body_en": "<p>The thin RED piece creates a dead zone blocking the opponent's closure.</p>" } },
+        { "type": "rule", "settings": { "heading_fr": "Pointage", "body_fr": "<p>Fermez un carré, criez « ÉCHEC O CUBE » et comptez les points des pièces du carré.</p>", "heading_en": "Scoring", "body_en": "<p>Close a square, shout “ÉCHEC O CUBE” and count the points of the pieces in the square.</p>" } },
+        { "type": "rule", "settings": { "heading_fr": "Configurations classiques", "body_fr": "<p>Carrés fermés classiques : 6, 9 ou 12 points selon la composition des pièces.</p>", "heading_en": "Classic configurations", "body_en": "<p>Classic closed squares: 6, 9 or 12 points depending on the piece composition.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

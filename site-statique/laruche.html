@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Ruche | ECHEC O CUBE -- Programme Fondateurs 2027</title>
+<meta name="description" content="Rejoignez La Ruche ECHEC O CUBE. Programme fondateurs 2027. Jeu en bois quebecois, communaute, tournois, avantages exclusifs. Inscrivez-vous maintenant.">
+<style>
+:root{--bois:#8B6914;--bois-clair:#C4A35A;--noir:#1a1a1a;--blanc-casse:#F5F0E8;--dore:#D4AF37;--rouge:#8B0000;--vert:#2E7D32}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Georgia',serif;background:var(--blanc-casse);color:var(--noir);line-height:1.7}
+h1,h2,h3{font-family:'Georgia',serif;color:var(--bois)}
+a{color:var(--bois);text-decoration:none}
+a:hover{color:var(--dore)}
+header{background:var(--noir);padding:15px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+.logo{color:var(--dore);font-size:1.4rem;font-weight:bold;letter-spacing:2px}
+nav a{color:var(--blanc-casse);margin-left:30px;font-size:0.95rem}
+nav a:hover{color:var(--dore)}
+.hero-laruche{background:var(--noir);color:var(--blanc-casse);padding:100px 20px;text-align:center}
+.badge{display:inline-block;background:var(--dore);color:var(--noir);padding:10px 30px;border-radius:30px;font-weight:bold;font-size:0.85rem;text-transform:uppercase;letter-spacing:2px;margin-bottom:30px}
+.hero-laruche h1{font-size:3.5rem;color:var(--blanc-casse);margin-bottom:20px}
+.hero-laruche .slogan{font-size:1.5rem;color:var(--bois-clair);margin-bottom:25px}
+.hero-laruche .intro{max-width:700px;margin:0 auto 40px;font-size:1.1rem;color:#ccc}
+.compteur{margin-bottom:35px}
+.compteur .label{font-size:1rem;color:#aaa;display:block;margin-bottom:10px}
+.compteur .nombre{font-size:3.5rem;font-weight:bold;color:var(--dore)}
+.compteur .sur{font-size:1.2rem;color:#888}
+.barre-progression{width:300px;height:8px;background:#333;border-radius:4px;margin:20px auto;overflow:hidden}
+.barre-progression .remplissage{width:50.6%;height:100%;background:var(--dore);border-radius:4px}
+.btn-cta{display:inline-block;background:var(--dore);color:var(--noir);padding:20px 60px;border-radius:4px;font-size:1.2rem;font-weight:bold;transition:background 0.3s}
+.btn-cta:hover{background:var(--bois-clair)}
+.c-est-quoi{max-width:1100px;margin:80px auto;padding:0 20px}
+.c-est-quoi h2{text-align:center;font-size:2.2rem;margin-bottom:50px;color:var(--noir)}
+.grille-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px}
+.carte{background:white;padding:40px;border-radius:8px;text-align:center;border-top:4px solid var(--bois);box-shadow:0 3px 12px rgba(0,0,0,0.08);transition:transform 0.3s}
+.carte:hover{transform:translateY(-5px)}
+.carte h3{font-size:1.4rem;margin-bottom:15px}
+.carte p{font-size:1rem;color:#555}
+.avantages{max-width:900px;margin:80px auto;padding:0 20px}
+.avantages h2{text-align:center;font-size:2.2rem;margin-bottom:50px;color:var(--noir)}
+.table-avantages{width:100%;border-collapse:collapse;background:white;border-radius:8px;overflow:hidden;box-shadow:0 3px 12px rgba(0,0,0,0.08)}
+.table-avantages .ligne{display:grid;grid-template-columns:2fr 1fr 1fr;padding:18px 25px;border-bottom:1px solid #eee;align-items:center}
+.table-avantages .header{background:var(--noir);color:var(--blanc-casse);font-weight:bold}
+.table-avantages .ligne:nth-child(even){background:#f9f9f9}
+.table-avantages .ligne span{text-align:center;font-weight:500}
+.table-avantages .ligne span:first-child{text-align:left}
+.table-avantages .ligne .oui{color:var(--vert);font-weight:bold}
+.table-avantages .ligne .non{color:#999}
+.note{text-align:center;margin-top:25px;font-style:italic;color:#666;font-size:1.05rem}
+.comment{max-width:800px;margin:80px auto;padding:0 20px}
+.comment h2{text-align:center;font-size:2.2rem;margin-bottom:50px;color:var(--noir)}
+.timeline{position:relative;padding-left:40px}
+.timeline::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:3px;background:var(--bois)}
+.etape{position:relative;padding:0 0 50px 30px}
+.etape::before{content:'';position:absolute;left:-40px;top:5px;width:18px;height:18px;background:var(--dore);border-radius:50%;border:3px solid var(--bois)}
+.etape .date{color:var(--dore);font-weight:bold;font-size:0.85rem;text-transform:uppercase;letter-spacing:2px}
+.etape h3{font-size:1.4rem;margin:8px 0 12px}
+.etape p{color:#555;font-size:1.05rem}
+.temoignages{background:var(--noir);color:var(--blanc-casse);padding:80px 20px}
+.temoignages h2{text-align:center;color:var(--dore);font-size:2.2rem;margin-bottom:50px}
+.grille-temoignages{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px}
+.grille-temoignages blockquote{background:rgba(255,255,255,0.05);padding:30px;border-radius:8px;border-left:3px solid var(--dore)}
+.grille-temoignages blockquote p{font-style:italic;margin-bottom:20px;font-size:1.05rem;line-height:1.7}
+.grille-temoignages blockquote cite{color:var(--bois-clair);font-size:0.9rem}
+.inscription{max-width:600px;margin:80px auto;padding:0 20px}
+.inscription h2{text-align:center;font-size:2.2rem;margin-bottom:10px}
+.urgence{text-align:center;color:var(--rouge);font-weight:bold;margin-bottom:40px;font-size:1.1rem}
+form{background:white;padding:50px;border-radius:8px;box-shadow:0 3px 15px rgba(0,0,0,0.1)}
+.champ{margin-bottom:25px}
+.champ label{display:block;margin-bottom:10px;font-weight:bold;color:var(--bois);font-size:0.95rem}
+.champ input,.champ select{width:100%;padding:14px;border:2px solid #ddd;border-radius:4px;font-family:'Georgia',serif;font-size:1rem;transition:border-color 0.3s}
+.champ input:focus,.champ select:focus{border-color:var(--bois);outline:none}
+.champ.checkbox{display:flex;align-items:flex-start;gap:12px}
+.champ.checkbox input{width:auto;margin-top:5px}
+.champ.checkbox label{margin-bottom:0;font-weight:normal;color:#555}
+.btn-submit{width:100%;background:var(--dore);color:var(--noir);border:none;padding:20px;font-size:1.2rem;font-weight:bold;border-radius:4px;cursor:pointer;font-family:'Georgia',serif;transition:background 0.3s}
+.btn-submit:hover{background:var(--bois-clair)}
+.confidentialite{text-align:center;margin-top:25px;font-size:0.85rem;color:#888}
+.faq{max-width:800px;margin:80px auto;padding:0 20px}
+.faq h2{text-align:center;font-size:2.2rem;margin-bottom:50px;color:var(--noir)}
+details{background:white;margin-bottom:15px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);overflow:hidden}
+summary{padding:22px 30px;font-weight:bold;cursor:pointer;background:var(--blanc-casse);color:var(--bois);font-size:1.05rem;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::after{content:'+';float:right;font-size:1.5rem;color:var(--dore)}
+details[open] summary::after{content:'-'}
+summary:hover{background:#ece5d3}
+details p{padding:25px 30px;color:#555;line-height:1.7}
+details strong{color:var(--bois)}
+footer{background:var(--noir);color:#888;text-align:center;padding:40px 20px;font-size:0.9rem}
+footer a{color:var(--bois-clair)}
+@media(max-width:768px){header{flex-direction:column;padding:15px}nav{margin-top:15px}nav a{margin:0 10px}.hero-laruche h1{font-size:2.2rem}.hero-laruche{padding:60px 20px}.table-avantages .ligne{grid-template-columns:1fr;text-align:left;gap:5px}.timeline{padding-left:25px}.etape::before{left:-35px;width:14px;height:14px}}
+</style>
+<base target="_blank">
+</head>
+<body>
+<header><div class="logo">ECHEC O CUBE</div><nav><a href="/">Accueil</a><a href="/regles">Les Regles</a><a href="/laruche">La Ruche</a><a href="/boutique">Boutique</a></nav></header>
+
+<section class="hero-laruche">
+<div class="badge">Lancement printemps 2027</div>
+<h1>La Ruche -- Programme Fondateurs</h1>
+<p class="slogan">Soyez parmi les 500 premiers a porter le titre de Fondateur.</p>
+<p class="intro">La Ruche est la communaute fondateur d'ECHEC O CUBE. En 2026, nous batissons. En 2027, nous lancons. <strong>Inscrivez-vous maintenant</strong> pour des conditions exclusives de fondateur.</p>
+<div class="compteur">
+<span class="label">Places fondateurs restantes :</span>
+<span class="nombre">247</span>
+<span class="sur"> / 500 places restantes</span>
+</div>
+<div class="barre-progression"><div class="remplissage"></div></div>
+<a href="#inscription" class="btn-cta">Reserver ma place de Fondateur</a>
+</section>
+
+<section class="c-est-quoi">
+<h2>Ce que vous obtenez</h2>
+<div class="grille-3">
+<div class="carte"><h3>Communaute de joueurs</h3><p>Acces au Discord prive, rencontres IRL, parties en ligne, strategies avancees partagees par les membres.</p></div>
+<div class="carte"><h3>Tournois exclusifs</h3><p>Tournois reserves aux membres de La Ruche avec prix speciaux (jeux signes, merch, Cote EOC bonus).</p></div>
+<div class="carte"><h3>Avantages fondateurs</h3><p>Reductions exclusives, acces anticipe aux nouveaux formats, mention dans les annales FEOC.</p></div>
+</div>
+</section>
+
+<section class="avantages">
+<h2>Avantages Fondateurs</h2>
+<div class="table-avantages">
+<div class="ligne header"><span>Avantage</span><span>Membre</span><span>Fondateur</span></div>
+<div class="ligne"><span>Acces Discord communaute</span><span class="oui">OUI</span><span class="oui">OUI</span></div>
+<div class="ligne"><span>Newsletter mensuelle</span><span class="oui">OUI</span><span class="oui">OUI</span></div>
+<div class="ligne"><span>Reduction boutique (10%)</span><span class="non">NON</span><span class="oui">OUI</span></div>
+<div class="ligne"><span>Acces tournois exclusifs</span><span class="non">NON</span><span class="oui">OUI</span></div>
+<div class="ligne"><span>Jeu numerote Collection Vintage</span><span class="non">NON</span><span class="oui">OUI</span></div>
+<div class="ligne"><span>Mention annales FEOC</span><span class="non">NON</span><span class="oui">OUI</span></div>
+<div class="ligne"><span>Invitation lancement officiel 2027</span><span class="non">NON</span><span class="oui">OUI</span></div>
+</div>
+<p class="note"><em>Devenir Fondateur est <strong>gratuit</strong>. Il suffit de s'inscrire avant le lancement printemps 2027.</em></p>
+</section>
+
+<section class="comment">
+<h2>Comment ca marche ?</h2>
+<div class="timeline">
+<div class="etape"><span class="date">Maintenant</span><h3>Inscription gratuite</h3><p>Remplissez le formulaire ci-dessous. Vous recevez immediatement votre numero de membre fondateur.</p></div>
+<div class="etape"><span class="date">Ete 2026</span><h3>Acces beta</h3><p>Les fondateurs testent la version numerique du jeu et donnent leur feedback.</p></div>
+<div class="etape"><span class="date">Automne 2026</span><h3>Precommande exclusive</h3><p>Les fondateurs ont 48h d'avance pour precommander leur jeu avec reduction et numerotation.</p></div>
+<div class="etape"><span class="date">Printemps 2027</span><h3>Lancement officiel</h3><p>Evenement de lancement a Montreal. Les fondateurs sont les premiers a recevoir leur jeu.</p></div>
+</div>
+</section>
+
+<section class="temoignages">
+<h2>Ils ont deja rejoint La Ruche</h2>
+<div class="grille-temoignages">
+<blockquote><p>"J'ai teste le prototype avec Alain. La profondeur strategique est impressionnante. Hate de voir la communaute grandir."</p><cite>-- Marc L., testeur beta, Montreal</cite></blockquote>
+<blockquote><p>"Enfin un jeu de strategie quebecois qui n'a pas a rougir face aux echecs. Le Fonce Separateur est genial."</p><cite>-- Sophie D., membre fondateur numero 042</cite></blockquote>
+<blockquote><p>"Mon grand-pere fabriquait des jeux en bois. ECHEC O CUBE me rappelle pourquoi le tactile compte."</p><cite>-- Jean-Francois B., Trois-Rivieres</cite></blockquote>
+</div>
+</section>
+
+<section class="inscription" id="inscription">
+<h2>Rejoindre La Ruche</h2>
+<p class="urgence">ATTENTION : 247 places fondateurs restantes sur 500</p>
+<form action="/api/inscription-laruche" method="POST">
+<div class="champ"><label for="prenom">Prenom *</label><input type="text" id="prenom" name="prenom" required></div>
+<div class="champ"><label for="nom">Nom *</label><input type="text" id="nom" name="nom" required></div>
+<div class="champ"><label for="email">Courriel *</label><input type="email" id="email" name="email" required></div>
+<div class="champ"><label for="ville">Ville / Region</label><input type="text" id="ville" name="ville" placeholder="Ex : Montreal, Quebec, Trois-Rivieres"></div>
+<div class="champ"><label for="format">Format qui vous interesse</label><select id="format" name="format"><option value="9x9">Edition Amateur 9x9</option><option value="11x11">Edition Intermediaire 11x11</option><option value="15x15">Edition Competition 15x15</option><option value="indifferent">Indifferent</option></select></div>
+<div class="champ checkbox"><input type="checkbox" id="newsletter" name="newsletter" checked><label for="newsletter">Je souhaite recevoir la newsletter mensuelle EOC</label></div>
+<div class="champ checkbox"><input type="checkbox" id="conditions" name="conditions" required><label for="conditions">J'accepte les conditions de La Ruche *</label></div>
+<button type="submit" class="btn-submit">Devenir Fondateur -- Gratuit</button>
+</form>
+<p class="confidentialite">Vos donnees sont protegees. Jamais de spam. Desinscription a tout moment.</p>
+</section>
+
+<section class="faq">
+<h2>Questions frequentes</h2>
+<details><summary>L'inscription est-elle payante ?</summary><p><strong>Non.</strong> L'inscription a La Ruche est 100% gratuite. Les avantages fondateurs (reductions, acces exclusifs) sont offerts sans engagement d'achat.</p></details>
+<details><summary>Quand le jeu sera-t-il disponible ?</summary><p><strong>Printemps 2027.</strong> La date exacte sera communiquee aux membres de La Ruche en premier.</p></details>
+<details><summary>Qu'est-ce que la FEOC ?</summary><p>La <strong>Federation ECHEC O CUBE au Canada</strong> gere les tournois officiels, le classement Cote EOC et les niveaux d'arbitres. Les membres de La Ruche ont un acces privilegie aux evenements FEOC.</p></details>
+<details><summary>Le tarif fondateur est-il vraiment garanti ?</summary><p><strong>Oui.</strong> Tous les fondateurs verrouillent leur tarif de precommande au moment de l'inscription. Ce tarif est garanti jusqu'au lancement, meme si les prix publics augmentent.</p></details>
+<details><summary>Puis-je me desinscrire ?</summary><p><strong>Oui.</strong> Desinscription a tout moment via un lien dans chaque email. Aucune question posee.</p></details>
+</section>
+
+<footer>
+<p>ECHEC O CUBE -- Invente au Quebec en 1999 par Alain Dupont -- Droit d'auteur OPIC Canada No 477714</p>
+<p><a href="/">Accueil</a> | <a href="/regles">Regles</a> | <a href="/laruche">La Ruche</a> | <a href="/boutique">Boutique</a></p>
+</footer>
+</body>
+</html>

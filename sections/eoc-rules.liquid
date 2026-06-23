@@ -1,0 +1,71 @@
+{%- comment -%} ÉCHEC O CUBE — Section 5 : COMMENT JOUER / HOW TO PLAY {%- endcomment -%}
+<section class="eoc-section eoc-rules" id="eoc-rules">
+  <div class="eoc-container">
+    <h2 class="eoc-section-title eoc-reveal">{{ section.settings.title }}</h2>
+
+    <div class="eoc-rules__grid">
+      <div class="eoc-reveal">
+        <ol class="eoc-steps">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'step' -%}
+              <li class="eoc-step" {{ block.shopify_attributes }}>
+                <span class="eoc-step__num">{{ forloop.index }}</span>
+                <div class="eoc-step__text">
+                  {{ block.settings.text_fr }}
+                  <em>{{ block.settings.text_en }}</em>
+                </div>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ol>
+        {%- if section.settings.link_label != blank -%}
+          <a href="{{ section.settings.link_url }}" class="eoc-rules__link">{{ section.settings.link_label }}</a>
+        {%- endif -%}
+      </div>
+
+      <div class="eoc-rules__frame eoc-reveal">
+        {%- if section.settings.diagram != blank -%}
+          <img src="{{ section.settings.diagram | image_url: width: 900 }}"
+               alt="{{ section.settings.diagram.alt | escape | default: 'Diagramme de pointage ÉCHEC O CUBE' }}"
+               width="900" height="675" loading="lazy">
+        {%- else -%}
+          <div style="aspect-ratio:4/3;background:var(--eoc-bg-secondary)"></div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "EOC — Comment jouer / How to play",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Titre / Title", "default": "COMMENT JOUER / HOW TO PLAY" },
+    { "type": "image_picker", "id": "diagram", "label": "Diagramme de pointage (IMG_E21161.jpg)" },
+    { "type": "text", "id": "link_label", "label": "Lien / Link label", "default": "Voir le règlement complet / See full rules →" },
+    { "type": "url", "id": "link_url", "label": "URL du règlement / Rules URL" }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Étape / Step",
+      "settings": [
+        { "type": "text", "id": "text_fr", "label": "Texte FR", "default": "Placez votre premier pion librement" },
+        { "type": "text", "id": "text_en", "label": "Texte EN", "default": "Place your first piece freely" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "EOC — Comment jouer / How to play",
+      "blocks": [
+        { "type": "step", "settings": { "text_fr": "Placez votre premier pion librement", "text_en": "Place your first piece freely" } },
+        { "type": "step", "settings": { "text_fr": "Chaque pion suivant doit toucher une couleur contraire", "text_en": "Each piece must touch an opposite color" } },
+        { "type": "step", "settings": { "text_fr": "Fermez un carré — criez ÉCHEC O CUBE — comptez vos points", "text_en": "Close a square — shout ÉCHEC O CUBE — count your points" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,27 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "eoc-404",
+      "name": "EOC",
+      "settings": {
+        "code": "",
+        "code_size": 48,
+        "message": "Page introuvable. / Page not found.",
+        "button_label": "ACCUEIL / HOME",
+        "button_link": ""
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

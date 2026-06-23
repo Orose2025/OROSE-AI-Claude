@@ -1,0 +1,266 @@
+{%- comment -%}
+  ÉCHEC O CUBE — Constructeur de contenu flexible / Flexible content builder
+  Ajoutez, réordonnez et modifiez librement des blocs sur n'importe quelle page :
+  titre, texte riche, image, image + texte, bouton, citation, etc.
+  Add / reorder / edit blocks freely on any page.
+{%- endcomment -%}
+<section class="eoc-section eoc-flex {% if section.settings.grooves %}eoc-grooves{% endif %}"
+         id="{{ section.id }}"
+         style="background: {{ section.settings.bg_color }};{% if section.settings.padding_top != blank %}padding-top:{{ section.settings.padding_top }}px;{% endif %}{% if section.settings.padding_bottom != blank %}padding-bottom:{{ section.settings.padding_bottom }}px;{% endif %}">
+  <div class="eoc-container {% if section.settings.width == 'narrow' %}eoc-narrow{% endif %}">
+
+    {%- if section.settings.show_page_title and page.title != blank -%}
+      <h1 class="eoc-center eoc-reveal" style="color:var(--eoc-gold-light);font-style:italic;margin-bottom:2rem;">{{ page.title }}</h1>
+    {%- endif -%}
+
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+
+        {%- when 'kicker' -%}
+          <span class="eoc-kicker eoc-reveal" style="{% if block.settings.center %}display:block;text-align:center;{% endif %}" {{ block.shopify_attributes }}>{{ block.settings.text }}</span>
+
+        {%- when 'heading' -%}
+          <h2 class="eoc-reveal" {{ block.shopify_attributes }}
+              style="color:{{ block.settings.color }};font-size:{{ block.settings.size }}px;{% if block.settings.italic %}font-style:italic;{% endif %}text-align:{{ block.settings.align }};margin:0 0 1rem;">
+            {{ block.settings.text }}
+          </h2>
+
+        {%- when 'text' -%}
+          <div class="eoc-rte eoc-reveal" {{ block.shopify_attributes }}
+               style="text-align:{{ block.settings.align }};max-width:{{ block.settings.max_width }}px;{% if block.settings.center_box %}margin-left:auto;margin-right:auto;{% endif %}color:var(--eoc-cream);">
+            {{ block.settings.content }}
+          </div>
+
+        {%- when 'bilingual' -%}
+          <div class="eoc-bi eoc-reveal" style="margin:1.5rem 0;" {{ block.shopify_attributes }}>
+            <div class="eoc-bi__col eoc-rte">
+              {%- if block.settings.heading_fr != blank -%}<h3>{{ block.settings.heading_fr }}</h3>{%- endif -%}
+              {{ block.settings.body_fr }}
+            </div>
+            <div class="eoc-bi__col eoc-rte">
+              {%- if block.settings.heading_en != blank -%}<h3>{{ block.settings.heading_en }}</h3>{%- endif -%}
+              {{ block.settings.body_en }}
+            </div>
+          </div>
+
+        {%- when 'image' -%}
+          <figure class="eoc-reveal" style="margin:1.5rem auto;max-width:{{ block.settings.max_width }}px;" {{ block.shopify_attributes }}>
+            {%- if block.settings.image != blank -%}
+              <img src="{{ block.settings.image | image_url: width: 2000 }}"
+                   alt="{{ block.settings.image.alt | escape | default: block.settings.caption | escape }}"
+                   width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}"
+                   loading="lazy" style="border:1px solid var(--eoc-groove);width:100%;">
+            {%- else -%}
+              <div style="aspect-ratio:16/9;background:var(--eoc-groove)"></div>
+            {%- endif -%}
+            {%- if block.settings.caption != blank -%}<figcaption class="eoc-caption">{{ block.settings.caption }}</figcaption>{%- endif -%}
+          </figure>
+
+        {%- when 'image_text' -%}
+          <div class="eoc-split eoc-reveal" style="margin:2rem 0;" {{ block.shopify_attributes }}>
+            <div class="{% if block.settings.image_position == 'right' %}eoc-order-2{% endif %}">
+              {%- if block.settings.image != blank -%}
+                <img src="{{ block.settings.image | image_url: width: 1200 }}"
+                     alt="{{ block.settings.image.alt | escape }}" loading="lazy"
+                     width="1200" height="900" style="border:1px solid var(--eoc-groove);width:100%;">
+              {%- else -%}
+                <div style="aspect-ratio:4/3;background:var(--eoc-groove)"></div>
+              {%- endif -%}
+            </div>
+            <div class="eoc-rte" style="color:var(--eoc-cream);">
+              {%- if block.settings.heading != blank -%}
+                <h3 style="color:var(--eoc-gold);font-family:var(--eoc-font-display);font-style:italic;">{{ block.settings.heading }}</h3>
+              {%- endif -%}
+              {{ block.settings.content }}
+              {%- if block.settings.button_label != blank -%}
+                <p><a href="{{ block.settings.button_link }}" class="eoc-btn" style="margin-top:1rem;">{{ block.settings.button_label }}</a></p>
+              {%- endif -%}
+            </div>
+          </div>
+
+        {%- when 'quote' -%}
+          <blockquote class="eoc-quote eoc-reveal" style="text-align:{{ block.settings.align }};margin:2rem auto;max-width:900px;" {{ block.shopify_attributes }}>
+            {{ block.settings.text }}
+            {%- if block.settings.author != blank -%}
+              <footer class="eoc-caption" style="margin-top:1rem;">— {{ block.settings.author }}</footer>
+            {%- endif -%}
+          </blockquote>
+
+        {%- when 'button' -%}
+          <p class="eoc-reveal" style="text-align:{{ block.settings.align }};margin:1.5rem 0;" {{ block.shopify_attributes }}>
+            <a href="{{ block.settings.link }}" class="eoc-btn {% if block.settings.style == 'solid' %}eoc-btn--solid{% elsif block.settings.style == 'cream' %}eoc-btn--cream{% endif %}">{{ block.settings.label }}</a>
+          </p>
+
+        {%- when 'page_content' -%}
+          <div class="eoc-rte eoc-reveal" style="color:var(--eoc-cream);" {{ block.shopify_attributes }}>
+            {{ page.content }}
+          </div>
+
+        {%- when 'spacer' -%}
+          <div style="height:{{ block.settings.height }}px" {{ block.shopify_attributes }}></div>
+
+        {%- when 'divider' -%}
+          <hr class="eoc-reveal" style="border:none;border-top:1px solid var(--eoc-groove);margin:2rem 0;" {{ block.shopify_attributes }}>
+
+        {%- when 'contact_form' -%}
+          <div class="eoc-reveal" style="max-width:620px;margin:1.5rem auto;" {{ block.shopify_attributes }}>
+            {%- form 'contact' -%}
+              {%- if form.posted_successfully? -%}
+                <p class="eoc-form__message">{{ block.settings.success_message }}</p>
+              {%- elsif form.errors -%}
+                <p class="eoc-form__message" style="color:var(--eoc-red)">{{ form.errors | default_errors }}</p>
+              {%- endif -%}
+              <input type="text" name="contact[name]" placeholder="{{ block.settings.name_label }}"
+                     style="width:100%;padding:1rem;margin-bottom:.75rem;background:var(--eoc-bg-secondary);border:1px solid var(--eoc-groove);color:var(--eoc-cream);">
+              <input type="email" name="contact[email]" required placeholder="{{ block.settings.email_label }}"
+                     style="width:100%;padding:1rem;margin-bottom:.75rem;background:var(--eoc-bg-secondary);border:1px solid var(--eoc-groove);color:var(--eoc-cream);">
+              <textarea name="contact[body]" rows="5" placeholder="{{ block.settings.message_label }}"
+                     style="width:100%;padding:1rem;margin-bottom:1rem;background:var(--eoc-bg-secondary);border:1px solid var(--eoc-groove);color:var(--eoc-cream);"></textarea>
+              <button type="submit" class="eoc-btn eoc-btn--solid eoc-btn--full">{{ block.settings.button_label }}</button>
+            {%- endform -%}
+          </div>
+
+      {%- endcase -%}
+    {%- else -%}
+      <p class="eoc-center" style="color:var(--eoc-wood)">Ajoutez des blocs de contenu ici → / Add content blocks here →</p>
+    {%- endfor -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "EOC — Contenu flexible",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Mise en page / Layout" },
+    { "type": "checkbox", "id": "show_page_title", "label": "Afficher le titre de la page / Show page title", "default": true },
+    { "type": "select", "id": "width", "label": "Largeur / Width", "options": [ { "value": "narrow", "label": "Étroit / Narrow" }, { "value": "wide", "label": "Large / Wide" } ], "default": "narrow" },
+    { "type": "color", "id": "bg_color", "label": "Couleur de fond / Background", "default": "#1A1008" },
+    { "type": "checkbox", "id": "grooves", "label": "Motif rainures / Groove pattern", "default": false },
+    { "type": "text", "id": "padding_top", "label": "Marge haut (px) / Padding top", "default": "144" },
+    { "type": "text", "id": "padding_bottom", "label": "Marge bas (px) / Padding bottom", "default": "96" }
+  ],
+  "blocks": [
+    {
+      "type": "kicker",
+      "name": "Sur-titre / Kicker",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Texte", "default": "ÉCHEC O CUBE" },
+        { "type": "checkbox", "id": "center", "label": "Centrer / Center", "default": true }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "Titre / Heading",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Texte", "default": "Votre titre ici / Your heading" },
+        { "type": "range", "id": "size", "label": "Taille / Size", "min": 20, "max": 80, "step": 2, "unit": "px", "default": 40 },
+        { "type": "color", "id": "color", "label": "Couleur / Color", "default": "#E8C96A" },
+        { "type": "checkbox", "id": "italic", "label": "Italique / Italic", "default": true },
+        { "type": "select", "id": "align", "label": "Alignement / Align", "options": [ { "value": "left", "label": "Gauche / Left" }, { "value": "center", "label": "Centre / Center" }, { "value": "right", "label": "Droite / Right" } ], "default": "center" }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Texte / Rich text",
+      "settings": [
+        { "type": "richtext", "id": "content", "label": "Contenu / Content", "default": "<p>Écrivez votre texte ici. Vous pouvez le mettre en gras, en italique, ajouter des liens et des listes. / Write your text here.</p>" },
+        { "type": "select", "id": "align", "label": "Alignement / Align", "options": [ { "value": "left", "label": "Gauche / Left" }, { "value": "center", "label": "Centre / Center" } ], "default": "left" },
+        { "type": "range", "id": "max_width", "label": "Largeur max / Max width", "min": 400, "max": 1200, "step": 20, "unit": "px", "default": 760 },
+        { "type": "checkbox", "id": "center_box", "label": "Centrer le bloc / Center block", "default": true }
+      ]
+    },
+    {
+      "type": "bilingual",
+      "name": "Texte bilingue FR / EN",
+      "settings": [
+        { "type": "text", "id": "heading_fr", "label": "Titre FR", "default": "Titre" },
+        { "type": "richtext", "id": "body_fr", "label": "Texte FR", "default": "<p>Votre texte en français.</p>" },
+        { "type": "text", "id": "heading_en", "label": "Titre EN", "default": "Heading" },
+        { "type": "richtext", "id": "body_en", "label": "Texte EN", "default": "<p>Your text in English.</p>" }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "caption", "label": "Légende / Caption" },
+        { "type": "range", "id": "max_width", "label": "Largeur max / Max width", "min": 200, "max": 1200, "step": 20, "unit": "px", "default": 900 }
+      ]
+    },
+    {
+      "type": "image_text",
+      "name": "Image + Texte",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "select", "id": "image_position", "label": "Position de l'image / Image position", "options": [ { "value": "left", "label": "Gauche / Left" }, { "value": "right", "label": "Droite / Right" } ], "default": "left" },
+        { "type": "text", "id": "heading", "label": "Titre / Heading", "default": "Titre" },
+        { "type": "richtext", "id": "content", "label": "Texte / Text", "default": "<p>Décrivez votre image ou racontez votre histoire ici.</p>" },
+        { "type": "text", "id": "button_label", "label": "Bouton (optionnel) / Button" },
+        { "type": "url", "id": "button_link", "label": "Lien du bouton / Button link" }
+      ]
+    },
+    {
+      "type": "quote",
+      "name": "Citation / Quote",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Citation / Quote", "default": "Si le pion rentre, le coup est valide." },
+        { "type": "text", "id": "author", "label": "Auteur / Author" },
+        { "type": "select", "id": "align", "label": "Alignement / Align", "options": [ { "value": "left", "label": "Gauche / Left" }, { "value": "center", "label": "Centre / Center" } ], "default": "center" }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Bouton / Button",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Texte / Label", "default": "EN SAVOIR PLUS / LEARN MORE" },
+        { "type": "url", "id": "link", "label": "Lien / Link" },
+        { "type": "select", "id": "style", "label": "Style", "options": [ { "value": "outline", "label": "Contour or / Gold outline" }, { "value": "solid", "label": "Plein or / Solid gold" }, { "value": "cream", "label": "Contour crème / Cream outline" } ], "default": "solid" },
+        { "type": "select", "id": "align", "label": "Alignement / Align", "options": [ { "value": "left", "label": "Gauche / Left" }, { "value": "center", "label": "Centre / Center" } ], "default": "center" }
+      ]
+    },
+    {
+      "type": "page_content",
+      "name": "Contenu de la page (admin) / Page content",
+      "settings": [
+        { "type": "paragraph", "content": "Affiche le texte saisi dans Admin › Pages › (cette page). / Shows the text typed in Admin › Pages." }
+      ]
+    },
+    {
+      "type": "spacer",
+      "name": "Espace / Spacer",
+      "settings": [
+        { "type": "range", "id": "height", "label": "Hauteur / Height", "min": 8, "max": 160, "step": 4, "unit": "px", "default": 48 }
+      ]
+    },
+    {
+      "type": "divider",
+      "name": "Séparateur / Divider",
+      "settings": []
+    },
+    {
+      "type": "contact_form",
+      "name": "Formulaire de contact / Contact form",
+      "settings": [
+        { "type": "text", "id": "name_label", "label": "Champ nom / Name placeholder", "default": "Nom / Name" },
+        { "type": "text", "id": "email_label", "label": "Champ courriel / Email placeholder", "default": "Courriel / Email" },
+        { "type": "text", "id": "message_label", "label": "Champ message / Message placeholder", "default": "Votre message / Your message" },
+        { "type": "text", "id": "button_label", "label": "Bouton / Button", "default": "ENVOYER / SEND" },
+        { "type": "text", "id": "success_message", "label": "Message de succès / Success message", "default": "Merci ! Votre message a été envoyé. / Thank you! Your message was sent." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "EOC — Contenu flexible",
+      "blocks": [
+        { "type": "kicker" },
+        { "type": "heading" },
+        { "type": "text" }
+      ]
+    }
+  ]
+}
+{% endschema %}

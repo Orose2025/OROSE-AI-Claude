@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regles du jeu | ECHEC O CUBE -- Apprenez en 2 minutes</title>
+    <meta name="description" content="Regles officielles d'ECHEC O CUBE. Jeu de strategie quebecois invente en 1999. Apprenez a placer, alterner, fermer des cubes et marquer des points.">
+    <style>
+        :root{--bois:#8B6914;--bois-clair:#C4A35A;--noir:#1a1a1a;--blanc-casse:#F5F0E8;--dore:#D4AF37;--rouge:#8B0000}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Georgia',serif;background:var(--blanc-casse);color:var(--noir);line-height:1.7}
+        h1,h2,h3{font-family:'Georgia',serif;color:var(--bois)}
+        a{color:var(--bois);text-decoration:none}
+        a:hover{color:var(--dore)}
+        header{background:var(--noir);padding:15px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+        .logo{color:var(--dore);font-size:1.4rem;font-weight:bold;letter-spacing:2px}
+        nav a{color:var(--blanc-casse);margin-left:30px;font-size:0.95rem}
+        nav a:hover{color:var(--dore)}
+        .hero-regles{background:var(--noir);color:var(--blanc-casse);padding:100px 20px;text-align:center}
+        .hero-regles h1{font-size:3.5rem;color:var(--blanc-casse);margin-bottom:20px}
+        .hero-regles .sous-titre{font-size:1.4rem;color:var(--bois-clair);margin-bottom:40px;font-style:italic}
+        .btn-video{background:var(--dore);color:var(--noir);border:none;padding:18px 50px;font-size:1.1rem;cursor:pointer;border-radius:4px;font-family:'Georgia',serif;font-weight:bold}
+        .btn-video:hover{background:var(--bois-clair)}
+        .etapes-rapides{max-width:1100px;margin:80px auto;padding:0 20px}
+        .etapes-rapides h2{text-align:center;font-size:2.5rem;margin-bottom:60px;color:var(--noir)}
+        .etape{display:flex;gap:50px;margin-bottom:80px;align-items:flex-start}
+        .etape:nth-child(even){flex-direction:row-reverse}
+        .numero{width:70px;height:70px;border:3px solid var(--dore);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--dore);font-weight:bold;flex-shrink:0}
+        .etape-content{flex:1}
+        .etape-content h3{font-size:1.6rem;margin-bottom:20px;color:var(--bois)}
+        .etape-content p{font-size:1.1rem;margin-bottom:20px;color:#444}
+        .placeholder-img{background:repeating-linear-gradient(45deg,#e8e0d0,#e8e0d0 10px,#ddd5c5 10px,#ddd5c5 20px);width:100%;max-width:450px;height:250px;border-radius:8px;border:2px solid var(--bois-clair);display:flex;align-items:center;justify-content:center;color:var(--bois);font-style:italic;text-align:center;padding:20px}
+        .points-exemple{display:flex;gap:20px;margin-top:25px;flex-wrap:wrap}
+        .config{background:var(--noir);color:var(--blanc-casse);padding:25px;border-radius:8px;text-align:center;min-width:160px;flex:1}
+        .config span{display:block;font-size:0.9rem;color:var(--bois-clair);text-transform:uppercase;letter-spacing:1px}
+        .config .pts{font-size:2.2rem;color:var(--dore);font-weight:bold;margin:15px 0}
+        .config small{font-size:0.85rem;color:#aaa;display:block}
+        .fonce-separateur{background:var(--noir);color:var(--blanc-casse);padding:80px 20px;margin:60px 0}
+        .fonce-separateur h2{text-align:center;color:var(--dore);font-size:2.2rem;margin-bottom:50px}
+        .explication{max-width:1000px;margin:0 auto;display:flex;gap:50px;align-items:center}
+        .explication .texte p{margin-bottom:20px;font-size:1.15rem;line-height:1.8}
+        .explication .texte strong{color:var(--dore)}
+        .explication .texte em{color:var(--bois-clair);font-style:italic}
+        .regles-avancees{max-width:1100px;margin:80px auto;padding:0 20px}
+        .regles-avancees h2{text-align:center;font-size:2.2rem;margin-bottom:50px;color:var(--noir)}
+        .grille-regles{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:25px}
+        .regle{background:white;border-top:4px solid var(--bois);padding:30px;border-radius:0 0 8px 8px;box-shadow:0 3px 12px rgba(0,0,0,0.08)}
+        .regle h3{color:var(--rouge);margin-bottom:15px;font-size:1.3rem}
+        .regle p{font-size:1.05rem;color:#444;margin-bottom:10px}
+        .regle p:last-child{margin-bottom:0}
+        .regle em{color:var(--bois);font-style:italic}
+        .formats{max-width:1000px;margin:80px auto;padding:0 20px}
+        .formats h2{text-align:center;font-size:2.2rem;margin-bottom:50px;color:var(--noir)}
+        .grille-formats{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:25px}
+        .format{background:white;padding:35px;border-radius:8px;text-align:center;border:2px solid var(--bois-clair);transition:transform 0.3s}
+        .format:hover{transform:translateY(-5px)}
+        .format h3{font-size:1.4rem;margin-bottom:15px}
+        .format p{margin-bottom:8px;font-size:0.95rem;color:#555}
+        .format .prix{font-size:1.8rem;color:var(--dore);font-weight:bold;margin-top:20px}
+        .format-competition{border-color:var(--dore);background:var(--noir);color:var(--blanc-casse);position:relative}
+        .format-competition::before{content:'FORMAT OFFICIEL FEOC';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--dore);color:var(--noir);padding:5px 20px;font-size:0.75rem;font-weight:bold;border-radius:20px}
+        .format-competition h3{color:var(--dore)}
+        .format-competition p{color:#ccc}
+        .cta-final{background:var(--bois);color:var(--blanc-casse);text-align:center;padding:80px 20px}
+        .cta-final h2{color:var(--dore);font-size:2.2rem;margin-bottom:20px}
+        .cta-final p{font-size:1.2rem;margin-bottom:35px}
+        .btn-primary{display:inline-block;background:var(--dore);color:var(--noir);padding:18px 50px;border-radius:4px;font-weight:bold;font-size:1.1rem;margin:0 10px 10px 0;transition:background 0.3s}
+        .btn-primary:hover{background:var(--bois-clair)}
+        .btn-secondary{display:inline-block;background:transparent;color:var(--blanc-casse);border:2px solid var(--blanc-casse);padding:18px 50px;border-radius:4px;font-size:1.1rem;transition:all 0.3s}
+        .btn-secondary:hover{background:var(--blanc-casse);color:var(--noir)}
+        .telechargement{max-width:800px;margin:80px auto;padding:0 20px;text-align:center}
+        .telechargement h2{margin-bottom:20px;font-size:2rem}
+        .telechargement p{color:#555;margin-bottom:30px;font-size:1.1rem}
+        .btn-download{display:inline-block;background:var(--noir);color:var(--dore);padding:18px 50px;border-radius:4px;border:2px solid var(--dore);font-weight:bold;font-size:1.1rem;transition:all 0.3s}
+        .btn-download:hover{background:var(--dore);color:var(--noir)}
+        footer{background:var(--noir);color:#888;text-align:center;padding:40px 20px;font-size:0.9rem}
+        footer a{color:var(--bois-clair)}
+        @media(max-width:768px){header{flex-direction:column;padding:15px}nav{margin-top:15px}nav a{margin:0 10px}.hero-regles h1{font-size:2.2rem}.hero-regles{padding:60px 20px}.etape{flex-direction:column!important}.explication{flex-direction:column}.points-exemple{justify-content:center}.grille-regles{grid-template-columns:1fr}}
+    </style>
+<base target="_blank">
+</head>
+<body>
+<header><div class="logo">ECHEC O CUBE</div><nav><a href="/">Accueil</a><a href="/regles">Les Regles</a><a href="/laruche">La Ruche</a><a href="/boutique">Boutique</a></nav></header>
+
+<section class="hero-regles">
+    <h1>Comment jouer a ECHEC O CUBE</h1>
+    <p class="sous-titre">Un jeu de strategie ou le plateau lui-meme arbitre la partie.</p>
+    <button class="btn-video">Voir la video tutorielle (2 min)</button>
+</section>
+
+<section class="etapes-rapides">
+    <h2>Apprendre en quatre etapes</h2>
+    <div class="etape">
+        <div class="numero">1</div>
+        <div class="etape-content">
+            <h3>Inserer un pion</h3>
+            <p>Le joueur gagnant du pile ou face place un pion <strong>n'importe ou</strong> sur le plateau. Aucune contrainte de contact -- c'est le premier coup. Le pion se glisse couche dans la rainure, fermement maintenu par le bois.</p>
+            <div class="placeholder-img">Image a venir : un joueur insere un pion dans une rainure du plateau</div>
+        </div>
+    </div>
+    <div class="etape">
+        <div class="numero">2</div>
+        <div class="etape-content">
+            <h3>Toucher un pion deja pose</h3>
+            <p>Quand un pion s'insere dans une rainure et touche un autre pion deja pose, le coup est valide. Aucune exception, aucune dispute : le plateau decide.</p>
+            <div class="placeholder-img">Image a venir : deux pions qui se touchent dans la rainure</div>
+        </div>
+    </div>
+    <div class="etape">
+        <div class="numero">3</div>
+        <div class="etape-content">
+            <h3>Respecter l'alternance</h3>
+            <p>Deux pions de meme type ne se touchent jamais. Un pion pale ne touche jamais un autre pion pale ; un pion fonce ne touche jamais un autre pion fonce. Cette alternance structure toute la partie.</p>
+            <div class="placeholder-img">Image a venir : alternance pale et fonce sur le plateau</div>
+        </div>
+    </div>
+    <div class="etape">
+        <div class="numero">4</div>
+        <div class="etape-content">
+            <h3>Fermer le cube -- ECHEC O CUBE</h3>
+            <p>Quand 4 pions alternes forment un carre ferme, vous marquez des points. Criez <strong>"ECHEC O CUBE !"</strong> immediatement. Chaque cube ferme accorde un tour supplementaire.</p>
+            <div class="points-exemple">
+                <div class="config"><span>Carre 1x1</span><span class="pts">6 points</span><small>2 pales (2x1pt) + 2 fonces (2x2pts)</small></div>
+                <div class="config"><span>Carre enrichi</span><span class="pts">9 points</span><small>3 pales + 3 fonces (Fonce Separateur)</small></div>
+                <div class="config"><span>Carre 2x2</span><span class="pts">12 points</span><small>4 pales + 4 fonces</small></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="fonce-separateur">
+    <h2>Le Fonce Separateur -- La cle du jeu</h2>
+    <div class="explication">
+        <div class="placeholder-img" style="width:350px;height:280px;flex-shrink:0">Diagramme a venir : exemple de Fonce Separateur sur le plateau 9 par 9</div>
+        <div class="texte">
+            <p>Le <strong>fonce long</strong> fait 3 cm et deborde de 0,5 cm dans les intersections. Le <strong>pale court</strong> fait 2 cm et epouse exactement l'arete.</p>
+            <p>Ce debordement permet de fermer des carres "enrichis" avec seulement <strong>3 pales + 3 fonces = 9 points</strong>, au lieu de 4+4 = 12 points. Cela consomme moins de pions pour un rapport point/pion eleve.</p>
+            <p><em>Le fonce "prend" les coins. Le pale remplit l'arete utile. Un cube valide peut etre ferme avec 3 fonces + 3 pales, parce que le fonce assure le travail des coins la ou les pales, plus courts, ne se touchent pas directement dans les angles.</em></p>
+        </div>
+    </div>
+</section>
+
+<section class="regles-avancees">
+    <h2>Regles avancees</h2>
+    <div class="grille-regles">
+        <div class="regle">
+            <h3>Le Pion Rouge -- Zone morte</h3>
+            <p>Quand un espace vide est geometriquement bloque (aucun pion ne peut y entrer sans violer l'alternance), on y insere un <strong>pion rouge debout</strong>. Il vaut 0 point et officialise : "ici, aucun point pour le reste de la partie."</p>
+            <p><strong>Attention :</strong> Si un rouge fait partie d'un carre ferme, ce carre est <strong>incomplet</strong> et vaut 0 point.</p>
+        </div>
+        <div class="regle">
+            <h3>Le Vol de points</h3>
+            <p>Oubliez d'annoncer "ECHEC O CUBE" ? Le <strong>joueur suivant</strong> peut l'annoncer a votre place et <strong>vous voler les points</strong> du carre !</p>
+            <p><em>L'attention est une habilete du jeu au meme titre que le placement.</em></p>
+        </div>
+        <div class="regle">
+            <h3>Reactions en chaine</h3>
+            <p>Chaque cube ferme = un <strong>tour bonus</strong>. Le joueur continue de jouer tant qu'il forme des ECHEC O CUBE. Pour enchainer, il faut que le nouveau pion occupe l'arete manquante d'un carre adjacent deja a 3 aretes completes.</p>
+        </div>
+    </div>
+</section>
+
+<section class="formats">
+    <h2>Trois formats pour tous les joueurs</h2>
+    <div class="grille-formats">
+        <div class="format">
+            <h3>Edition Amateur 9x9</h3>
+            <p>81 cases | 200 pions (132 pales + 52 fonces + 16 rouges)</p>
+            <p>Duree : 30-60 minutes</p>
+            <p>2 a 4 joueurs | Familles, decouverte</p>
+            <p>Acrylique coule 10 mm ou Bois franc du Quebec</p>
+            <span class="prix">89 $</span>
+        </div>
+        <div class="format">
+            <h3>Edition Intermediaire 11x11</h3>
+            <p>121 cases | 300 pions (200 pales + 80 fonces + 20 rouges)</p>
+            <p>Duree : 30-80 minutes</p>
+            <p>2 a 4 joueurs | Juste milieu recreatif</p>
+            <p>Bois franc du Quebec -- Collection</p>
+            <span class="prix">129 $</span>
+        </div>
+        <div class="format format-competition">
+            <h3>Edition Competition 15x15</h3>
+            <p>225 cases | 555 pions (380 pales + 150 fonces + 25 rouges)</p>
+            <p>Duree : 40-95 minutes</p>
+            <p>2 joueurs | Mode competition officiel FEOC</p>
+            <p>Bois franc du Quebec -- Edition de collection</p>
+            <span class="prix">179 $</span>
+        </div>
+    </div>
+</section>
+
+<section class="cta-final">
+    <h2>Pret a jouer ?</h2>
+    <p>Rejoignez La Ruche et soyez parmi les premiers a posseder un ECHEC O CUBE.</p>
+    <a href="/laruche" class="btn-primary">S'inscrire a La Ruche</a>
+    <a href="/boutique" class="btn-secondary">Voir la boutique</a>
+</section>
+
+<section class="telechargement">
+    <h2>Reglement officiel complet</h2>
+    <p>Telechargez le Cahier de Reglement Officiel v2.1 (PDF) -- la source unique de verite pour les arbitres et joueurs. Document valide le 22 juin 2026.</p>
+    <a href="/docs/reglement-eoc-v2.1.pdf" class="btn-download" download>Telecharger le reglement (PDF)</a>
+</section>
+
+<footer>
+    <p>ECHEC O CUBE -- Invente au Quebec en 1999 par Alain Dupont -- Droit d'auteur OPIC Canada No 477714</p>
+    <p><a href="/">Accueil</a> | <a href="/regles">Regles</a> | <a href="/laruche">La Ruche</a> | <a href="/boutique">Boutique</a></p>
+</footer>
+</body>
+</html>

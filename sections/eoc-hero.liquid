@@ -1,0 +1,91 @@
+{%- comment -%} ÉCHEC O CUBE — Section 1 : HERO {%- endcomment -%}
+<section class="eoc-hero eoc-grooves" id="eoc-hero">
+  <div class="eoc-hero__bg">
+    {%- if section.settings.hero_image != blank -%}
+      <img src="{{ section.settings.hero_image | image_url: width: 2400 }}"
+           srcset="{{ section.settings.hero_image | image_url: width: 800 }} 800w,
+                   {{ section.settings.hero_image | image_url: width: 1600 }} 1600w,
+                   {{ section.settings.hero_image | image_url: width: 2400 }} 2400w"
+           sizes="100vw"
+           alt="{{ section.settings.hero_image.alt | escape | default: 'ÉCHEC O CUBE' }}"
+           width="2400" height="1350" fetchpriority="high">
+    {%- elsif section.settings.hero_bg_filename != blank -%}
+      <img src="{{ section.settings.hero_bg_filename | file_img_url: '2400x' }}"
+           alt="ÉCHEC O CUBE" width="2400" height="1350" fetchpriority="high">
+    {%- else -%}
+      <div style="width:100%;height:100%;background:var(--eoc-bg-secondary)"></div>
+    {%- endif -%}
+  </div>
+
+  <div class="eoc-hero__overlay" style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }}"></div>
+  <div class="eoc-grain"></div>
+
+  <div class="eoc-hero__content">
+    {%- liquid
+      assign default_logo = section.settings.default_logo_filename | default: 'ECHEC_O_CUBE_LOGO_v5_transparent.png'
+      if section.settings.logo_image != blank
+        assign logo_src = section.settings.logo_image | image_url: width: 1600
+        assign logo_src_sm = section.settings.logo_image | image_url: width: 800
+      else
+        assign logo_src = default_logo | file_img_url: '1600x'
+        assign logo_src_sm = default_logo | file_img_url: '800x'
+      endif
+    -%}
+    {%- if logo_src != blank -%}
+      <h1 class="eoc-hero__logo-wrap eoc-anim-up">
+        <img class="eoc-hero__logo-img"
+             src="{{ logo_src }}"
+             srcset="{{ logo_src_sm }} 800w, {{ logo_src }} 1600w"
+             sizes="(max-width: 900px) 90vw, {{ section.settings.logo_max_width }}px"
+             alt="ÉCHEC O CUBE — {{ section.settings.tagline_fr | escape }}"
+             style="max-width: {{ section.settings.logo_max_width | default: 720 }}px"
+             width="1600" height="900" fetchpriority="high">
+      </h1>
+    {%- else -%}
+      <h1 class="eoc-hero__logo eoc-anim-up">
+        <span class="gold">{{ section.settings.logo_word1 }}</span><span class="dot"></span><span class="cream">{{ section.settings.logo_word2 }}</span>
+      </h1>
+    {%- endif -%}
+    {%- if section.settings.show_taglines -%}
+      <p class="eoc-hero__tag-fr eoc-anim-up eoc-d1">{{ section.settings.tagline_fr }}</p>
+      <p class="eoc-hero__tag-en eoc-anim-up eoc-d1">{{ section.settings.tagline_en }}</p>
+    {%- endif -%}
+    <div class="eoc-hero__ctas eoc-anim-up eoc-d2">
+      <a href="{{ section.settings.cta1_link | default: '#eoc-community' }}" class="eoc-btn eoc-btn--solid">{{ section.settings.cta1_label }}</a>
+      <a href="{{ section.settings.cta2_link | default: '/pages/le-jeu' }}" class="eoc-btn">{{ section.settings.cta2_label }}</a>
+    </div>
+  </div>
+
+  <a href="#eoc-concept" class="eoc-hero__scroll" aria-label="Défiler / Scroll">&#8964;</a>
+</section>
+
+{% schema %}
+{
+  "name": "EOC — Héros / Hero",
+  "tag": "section",
+  "class": "eoc-section-wrap",
+  "settings": [
+    { "type": "header", "content": "Image de fond / Background image" },
+    { "type": "image_picker", "id": "hero_image", "label": "Image héros / Hero image" },
+    { "type": "text", "id": "hero_bg_filename", "label": "OU nom de fichier (Contenu › Fichiers) / OR filename", "info": "Utilisé si aucune image choisie. / Used if no image picked.", "default": "Pub-Echec_O_Cube.png" },
+    { "type": "range", "id": "overlay_opacity", "label": "Opacité du voile sombre / Dark overlay opacity", "min": 0, "max": 90, "step": 5, "unit": "%", "default": 55 },
+    { "type": "header", "content": "Logo officiel / Official logo" },
+    { "type": "image_picker", "id": "logo_image", "label": "Image du logo (héros) / Hero logo image", "info": "Optionnel : remplace le logo par défaut. / Optional: overrides the default logo." },
+    { "type": "text", "id": "default_logo_filename", "label": "Nom du fichier logo par défaut / Default logo filename", "info": "Fichier dans Contenu › Fichiers utilisé si aucune image choisie. / File in Content › Files used when no image is selected.", "default": "ECHEC_O_CUBE_LOGO_v5_transparent.png" },
+    { "type": "range", "id": "logo_max_width", "label": "Largeur max du logo / Logo max width", "min": 320, "max": 1100, "step": 20, "unit": "px", "default": 820 },
+    { "type": "header", "content": "Logo texte (si pas d'image) / Text logo (fallback)" },
+    { "type": "text", "id": "logo_word1", "label": "Mot 1 (or) / Word 1 (gold)", "default": "ÉCHEC" },
+    { "type": "text", "id": "logo_word2", "label": "Mot 2 (crème) / Word 2 (cream)", "default": "CUBE" },
+    { "type": "header", "content": "Slogans / Taglines" },
+    { "type": "checkbox", "id": "show_taglines", "label": "Afficher les slogans sous le logo / Show taglines under logo", "info": "Le logo officiel contient déjà son slogan. / The official logo already includes its tagline.", "default": false },
+    { "type": "text", "id": "tagline_fr", "label": "Slogan FR", "default": "Le jeu de stratégie où la physique valide chaque coup." },
+    { "type": "text", "id": "tagline_en", "label": "Tagline EN", "default": "The strategy game where physics validates every move." },
+    { "type": "header", "content": "Boutons d'action / Call to action" },
+    { "type": "text", "id": "cta1_label", "label": "Bouton 1 (or plein) / Button 1 (solid)", "default": "REJOINDRE LA COMMUNAUTÉ" },
+    { "type": "url", "id": "cta1_link", "label": "Lien bouton 1 / Button 1 link" },
+    { "type": "text", "id": "cta2_label", "label": "Bouton 2 (contour) / Button 2 (outline)", "default": "DÉCOUVRIR LE JEU" },
+    { "type": "url", "id": "cta2_link", "label": "Lien bouton 2 / Button 2 link" }
+  ],
+  "presets": [{ "name": "EOC — Héros / Hero" }]
+}
+{% endschema %}

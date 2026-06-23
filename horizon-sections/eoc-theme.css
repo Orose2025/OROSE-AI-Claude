@@ -1,0 +1,276 @@
+/* ============================================================
+   ÉCHEC O CUBE — eoc-theme.css
+   Site officiel — echecocube.com
+   Droit d'auteur OPIC Canada No. 477714 — Alain Dupont
+   Palette, typographie premium, mises en page des sections EOC
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap');
+
+:root {
+  --eoc-noir: #0d0d0d;
+  --eoc-brun: #1a1208;
+  --eoc-or: #c9952a;
+  --eoc-or-clair: #e8b84b;
+  --eoc-or-pale: #f5d98a;
+  --eoc-creme: #f5f0e8;
+  --eoc-blanc: #ffffff;
+  --eoc-texte: #1a1208;
+
+  --eoc-font-titre: 'Cinzel', Georgia, serif;
+  --eoc-font-corps: 'Libre Baskerville', Georgia, serif;
+  --eoc-font-accent: 'Cormorant Garamond', Georgia, serif;
+}
+
+/* ---------- Typographie globale (Correction 5 : 18px / 21px / 1.85) ---------- */
+.eoc-section,
+.eoc-section p,
+.eoc-section li,
+.eoc-section div {
+  font-family: var(--eoc-font-corps);
+}
+
+.eoc-section p,
+.eoc-section li {
+  font-size: 18px;
+  line-height: 1.85;
+}
+
+.eoc-section .eoc-lead,
+.eoc-section .eoc-lead p {
+  font-size: 21px;
+  line-height: 1.85;
+}
+
+.eoc-section h2 {
+  font-family: var(--eoc-font-titre);
+  font-weight: 700;
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  margin: 0 0 1.5rem;
+}
+
+.eoc-section h3 {
+  font-family: var(--eoc-font-titre);
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1.3;
+  margin: 0 0 1rem;
+}
+
+.eoc-surtitre {
+  font-family: var(--eoc-font-titre);
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  font-size: 14px !important;
+  color: var(--eoc-or);
+  margin: 0 0 1rem;
+}
+
+/* ---------- Conteneur & sections ---------- */
+.eoc-section { padding: 5.5rem 0; }
+.eoc-conteneur {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  width: 100%;
+}
+
+/* ---------- Boutons ---------- */
+.eoc-bouton {
+  display: inline-block;
+  font-family: var(--eoc-font-titre);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 14px;
+  padding: 1rem 2.25rem;
+  border: 2px solid var(--eoc-or);
+  cursor: pointer;
+  transition: background .3s ease, color .3s ease;
+  text-decoration: none;
+}
+.eoc-bouton--plein { background: var(--eoc-or); color: var(--eoc-noir); }
+.eoc-bouton--plein:hover { background: var(--eoc-or-clair); border-color: var(--eoc-or-clair); }
+.eoc-bouton--contour { background: transparent; color: var(--eoc-or); }
+.eoc-bouton--contour:hover { background: var(--eoc-or); color: var(--eoc-noir); }
+
+.eoc-lien-or {
+  color: var(--eoc-or);
+  font-family: var(--eoc-font-titre);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 14px;
+  text-decoration: none;
+  border-bottom: 1px solid var(--eoc-or);
+  padding-bottom: 2px;
+}
+.eoc-lien-or:hover { color: var(--eoc-or-clair); border-color: var(--eoc-or-clair); }
+
+/* ============================================================
+   SECTION 2 — USP (fond sombre, 2 colonnes)
+   ============================================================ */
+.eoc-usp { background: var(--eoc-brun); color: var(--eoc-creme); }
+.eoc-usp h2 { color: var(--eoc-or-clair); }
+.eoc-usp .eoc-conteneur {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3.5rem;
+  align-items: center;
+}
+.eoc-usp img { width: 100%; height: auto; display: block; border: 1px solid rgba(201,149,42,.3); }
+
+/* ============================================================
+   SECTION 3 — RÈGLES (fond sombre, 3 cartes)
+   ============================================================ */
+.eoc-regles { background: var(--eoc-noir); color: var(--eoc-creme); }
+.eoc-regles h2 { color: var(--eoc-or-clair); text-align: center; }
+.eoc-regles__grille {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 3rem;
+}
+.eoc-carte {
+  background: var(--eoc-brun);
+  border: 1px solid rgba(201,149,42,.25);
+  border-top: 3px solid var(--eoc-or);
+  padding: 2.25rem 1.75rem;
+}
+.eoc-carte h3 { color: var(--eoc-or); }
+.eoc-carte p { color: var(--eoc-creme); }
+
+/* ============================================================
+   SECTION 4 — LES TROIS PIONS (fond crème)
+   ============================================================ */
+.eoc-pions { background: var(--eoc-creme); color: var(--eoc-texte); }
+.eoc-pions h2 { color: var(--eoc-texte); text-align: center; }
+.eoc-pions .eoc-lead { color: var(--eoc-brun); }
+
+/* ============================================================
+   SECTION 5 — À PROPOS COURTE (fond blanc, 2 colonnes)
+   ============================================================ */
+.eoc-apropos-court { background: var(--eoc-blanc); color: var(--eoc-texte); }
+.eoc-apropos-court h2 { color: var(--eoc-texte); }
+.eoc-apropos-court .eoc-conteneur {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3.5rem;
+  align-items: center;
+}
+.eoc-apropos-court img { width: 100%; height: auto; display: block; }
+
+/* ============================================================
+   SECTION 6 — INSCRIPTION (dégradé brun-or)
+   ============================================================ */
+.eoc-inscription {
+  background: linear-gradient(135deg, var(--eoc-brun) 0%, #2e1f0a 55%, var(--eoc-or) 320%);
+  color: var(--eoc-creme);
+  text-align: center;
+}
+.eoc-inscription h2 { color: var(--eoc-or-pale); }
+.eoc-inscription .eoc-conteneur { max-width: 720px; }
+.eoc-inscription__form {
+  display: flex;
+  gap: .75rem;
+  max-width: 520px;
+  margin: 2rem auto 0;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.eoc-inscription__form input[type="email"] {
+  flex: 1 1 260px;
+  padding: 1rem 1.1rem;
+  background: rgba(0,0,0,.35);
+  border: 1px solid var(--eoc-or);
+  color: var(--eoc-creme);
+  font-family: var(--eoc-font-corps);
+  font-size: 18px;
+}
+.eoc-inscription__form input::placeholder { color: rgba(245,240,232,.6); }
+.eoc-inscription__message { margin-top: 1.25rem; color: var(--eoc-or-pale); font-style: italic; }
+
+/* ============================================================
+   PAGES (À propos, Niveaux FEOC) — blocs réutilisables
+   ============================================================ */
+.eoc-page-entete { background: var(--eoc-noir); color: var(--eoc-creme); text-align: center; padding: 6rem 1.5rem 4rem; }
+.eoc-page-entete h1 { font-family: var(--eoc-font-titre); color: var(--eoc-or-clair); font-size: clamp(34px, 5vw, 56px); margin: .5rem 0; }
+.eoc-bloc-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 3.5rem; align-items: center; }
+.eoc-niveau {
+  background: var(--eoc-brun);
+  border: 1px solid rgba(201,149,42,.25);
+  border-top: 3px solid var(--eoc-or);
+  padding: 2.5rem 2rem;
+  color: var(--eoc-creme);
+}
+.eoc-niveau h3 { color: var(--eoc-or); font-size: 26px; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 749px) {
+  .eoc-section { padding: 3.5rem 0; }
+  .eoc-usp .eoc-conteneur,
+  .eoc-apropos-court .eoc-conteneur,
+  .eoc-regles__grille,
+  .eoc-bloc-2col { grid-template-columns: 1fr; gap: 2.25rem; }
+  .eoc-section p, .eoc-section li { font-size: 18px; }
+  .eoc-section .eoc-lead, .eoc-section .eoc-lead p { font-size: 19px; }
+  /* image au-dessus du texte sur mobile */
+  .eoc-usp .eoc-conteneur > div:last-child,
+  .eoc-apropos-court .eoc-conteneur > div:last-child { order: -1; }
+}
+
+/* ============================================================
+   PAGES INTERNES — blocs réutilisables (À propos, Niveaux FEOC)
+   ============================================================ */
+.eoc-bloc { padding: 4.5rem 1.5rem; }
+.eoc-bloc--creme { background: var(--eoc-creme); color: var(--eoc-texte); }
+.eoc-bloc--blanc { background: var(--eoc-blanc); color: var(--eoc-texte); }
+.eoc-bloc--sombre { background: var(--eoc-brun); color: var(--eoc-creme); }
+.eoc-bloc--sombre h2 { color: var(--eoc-or-clair); }
+.eoc-bloc h2 { font-family: var(--eoc-font-titre); }
+.eoc-bloc p { font-size: 18px; line-height: 1.85; font-family: var(--eoc-font-corps); }
+.eoc-bloc .eoc-lead { font-size: 21px; }
+.eoc-conteneur--duo {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 3.5rem; align-items: center;
+}
+.eoc-conteneur--duo img { width: 100%; height: auto; display: block; border: 1px solid rgba(201,149,42,.3); }
+.eoc-signature { font-family: var(--eoc-font-accent); font-style: italic; font-size: 21px; line-height: 1.7; }
+.eoc-mention-opic { font-family: var(--eoc-font-titre); text-transform: uppercase; letter-spacing: .14em; font-size: 13px !important; color: var(--eoc-or); }
+
+/* Niveaux FEOC */
+.eoc-niveaux__grille { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 3rem; }
+
+/* Les trois pions — colonnes */
+.eoc-pions__grille { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin: 3rem 0; }
+.eoc-pion-carte { background: var(--eoc-blanc); border: 1px solid rgba(26,18,8,.12); border-top: 3px solid var(--eoc-or); padding: 2rem 1.5rem; text-align: center; }
+.eoc-pion-carte__pion { width: 84px; height: 26px; margin: 0 auto 1.25rem; border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,.25); }
+.eoc-pion-carte h3 { color: var(--eoc-texte); }
+.eoc-pion-carte__valeur { font-family: var(--eoc-font-titre); color: var(--eoc-or); letter-spacing: .12em; text-transform: uppercase; font-size: 15px; margin-bottom: .75rem; }
+
+/* ============================================================
+   PIED DE PAGE — 3 colonnes
+   ============================================================ */
+.eoc-footer { background: var(--eoc-noir); color: var(--eoc-creme); padding: 4.5rem 1.5rem 2.5rem; }
+.eoc-footer__colonnes {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 3rem;
+}
+.eoc-footer__logo { font-family: var(--eoc-font-titre); color: var(--eoc-or); font-size: 22px; letter-spacing: .08em; margin: 0 0 1rem; }
+.eoc-footer .eoc-signature { font-size: 17px; color: var(--eoc-creme); }
+.eoc-footer h4 { font-family: var(--eoc-font-titre); color: var(--eoc-or-clair); text-transform: uppercase; letter-spacing: .16em; font-size: 14px; margin: 0 0 1.25rem; }
+.eoc-footer ul { list-style: none; margin: 0; padding: 0; }
+.eoc-footer li { margin-bottom: .7rem; }
+.eoc-footer a { color: var(--eoc-creme); text-decoration: none; font-family: var(--eoc-font-corps); font-size: 16px; }
+.eoc-footer a:hover { color: var(--eoc-or-clair); }
+.eoc-footer__bas { max-width: 1200px; margin: 3rem auto 0; padding-top: 1.75rem; border-top: 1px solid rgba(201,149,42,.25); text-align: center; }
+.eoc-footer__bas p { font-size: 14px; color: rgba(245,240,232,.75); margin: .3rem 0; }
+
+@media (max-width: 749px) {
+  .eoc-conteneur--duo, .eoc-niveaux__grille, .eoc-pions__grille, .eoc-footer__colonnes { grid-template-columns: 1fr; gap: 2rem; }
+  .eoc-conteneur--duo > div:last-child { order: -1; }
+}

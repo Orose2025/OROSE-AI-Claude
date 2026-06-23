@@ -1,0 +1,27 @@
+{
+  "sections": {
+    "main": {
+      "type": "eoc-flex",
+      "settings": {
+        "show_page_title": false,
+        "width": "narrow",
+        "bg_color": "#0D0705",
+        "grooves": true
+      },
+      "blocks": {
+        "kicker": { "type": "kicker", "settings": { "text": "NOTRE VISION / OUR VISION", "center": true } },
+        "title": { "type": "heading", "settings": { "text": "Un chef-d'œuvre québécois, pensé pour durer", "size": 46, "color": "#C9982F", "italic": true, "align": "center" } },
+        "quote": { "type": "quote", "settings": { "text": "Si le pion rentre, le coup est valide.", "author": "Alain Dupont, inventeur", "align": "center" } },
+        "vision": { "type": "bilingual", "settings": {
+          "heading_fr": "La vision",
+          "body_fr": "<p>Depuis 1999, ÉCHEC O CUBE poursuit une idée simple et exigeante : un jeu de stratégie pure où la physique elle-même valide chaque coup. Pas d'arbitre, pas d'ambiguïté — la matière tranche.</p><p>Notre vision : faire connaître ce jeu artisanal québécois au monde entier, une partie à la fois.</p>",
+          "heading_en": "The vision",
+          "body_en": "<p>Since 1999, ÉCHEC O CUBE has pursued one demanding idea: pure strategy where physics itself validates every move. No referee, no ambiguity — the material decides.</p><p>Our vision: bring this handcrafted Quebec game to the world, one match at a time.</p>"
+        } },
+        "img": { "type": "image", "settings": { "caption": "ÉCHEC O CUBE — édition bois artisanale", "max_width": 900 } }
+      },
+      "block_order": ["kicker", "title", "quote", "vision", "img"]
+    }
+  },
+  "order": ["main"]
+}

@@ -1,0 +1,4 @@
+{
+  "sections": { "main": { "type": "eoc-collection" } },
+  "order": ["main"]
+}

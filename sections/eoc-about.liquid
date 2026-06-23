@@ -1,0 +1,42 @@
+{%- comment -%} ÉCHEC O CUBE — Page : À PROPOS / ABOUT — l'histoire de l'inventeur {%- endcomment -%}
+<section class="eoc-page" id="eoc-about">
+  <div class="eoc-container eoc-narrow">
+    <span class="eoc-kicker eoc-center" style="display:block">{{ section.settings.kicker }}</span>
+    <h1 class="eoc-center" style="color:var(--eoc-gold-light);font-style:italic;margin-bottom:1rem">{{ section.settings.title }}</h1>
+
+    {%- if section.settings.portrait != blank -%}
+      <img src="{{ section.settings.portrait | image_url: width: 1000 }}"
+           alt="{{ section.settings.portrait.alt | escape | default: 'Alain Dupont' }}"
+           width="1000" height="667" loading="lazy"
+           style="margin:2.5rem auto;border:1px solid var(--eoc-groove)">
+    {%- endif -%}
+
+    <div class="eoc-bi eoc-reveal">
+      <div class="eoc-bi__col eoc-rte">
+        <h3>{{ section.settings.heading_fr }}</h3>
+        {{ section.settings.body_fr }}
+      </div>
+      <div class="eoc-bi__col eoc-rte">
+        <h3>{{ section.settings.heading_en }}</h3>
+        {{ section.settings.body_en }}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "EOC — À propos / About",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Sur-titre / Kicker", "default": "L'INVENTEUR / THE INVENTOR" },
+    { "type": "text", "id": "title", "label": "Titre / Title", "default": "Alain Dupont — Québec, 1999" },
+    { "type": "image_picker", "id": "portrait", "label": "Portrait / photo" },
+    { "type": "text", "id": "heading_fr", "label": "Titre FR", "default": "L'histoire" },
+    { "type": "richtext", "id": "body_fr", "label": "Texte FR", "default": "<p>À Notre-Dame-du-Mont-Carmel, au Québec, en 1999, Alain Dupont imagine un jeu où la règle vit dans la matière. Vingt-sept ans de raffinement ont mené à ÉCHEC O CUBE : un jeu de stratégie abstraite où la physique valide chaque coup. Droit d'auteur OPIC Canada No. 477714.</p>" },
+    { "type": "text", "id": "heading_en", "label": "Titre EN", "default": "The story" },
+    { "type": "richtext", "id": "body_en", "label": "Texte EN", "default": "<p>In Notre-Dame-du-Mont-Carmel, Quebec, in 1999, Alain Dupont imagined a game where the rule lives in the material. Twenty-seven years of refinement led to ÉCHEC O CUBE: an abstract strategy game where physics validates every move. OPIC Canada Copyright No. 477714.</p>" }
+  ],
+  "presets": [{ "name": "EOC — À propos / About" }]
+}
+{% endschema %}
