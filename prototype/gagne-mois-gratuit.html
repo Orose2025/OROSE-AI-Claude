@@ -3,167 +3,206 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Échec O Cube — Gagne un mois gratuit (prototype)</title>
+<meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<title>Échec O Cube — Récompenses</title>
 <style>
   :root{
-    --bg:#161235; --bg2:#0d0b1a; --ink:#f4f1ff; --muted:#b6afd6; --muted2:#9a92c4;
-    --card:#221a4d; --line:#362c6e; --gold:#ffd23f; --pink:#ff4d8d; --orange:#ff8a3d;
-    --ok:#39d98a;
+    --bg:#f2f2f7; --card:#ffffff; --ink:#1c1c1e; --muted:#8a8a8e; --faint:#aeaeb2;
+    --sep:rgba(60,60,67,.13); --accent:#e8890c; --accent-ink:#ffffff;
+    --tint-bg:#fff4e6; --tint-ink:#8a4b00; --ok:#34c759;
+    --radius:14px;
   }
-  *{box-sizing:border-box}
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#000000; --card:#1c1c1e; --ink:#ffffff; --muted:#98989f; --faint:#6a6a70;
+      --sep:rgba(84,84,88,.5); --accent:#ff9f0a; --accent-ink:#1a1200;
+      --tint-bg:#2a1d05; --tint-ink:#ffcf87;
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#f2f2f7;--card:#ffffff;--ink:#1c1c1e;--muted:#8a8a8e;--faint:#aeaeb2;
+    --sep:rgba(60,60,67,.13);--accent:#e8890c;--accent-ink:#ffffff;--tint-bg:#fff4e6;--tint-ink:#8a4b00;
+  }
+  :root[data-theme="dark"]{
+    --bg:#000000;--card:#1c1c1e;--ink:#ffffff;--muted:#98989f;--faint:#6a6a70;
+    --sep:rgba(84,84,88,.5);--accent:#ff9f0a;--accent-ink:#1a1200;--tint-bg:#2a1d05;--tint-ink:#ffcf87;
+  }
+
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;height:100%}
   body{
-    background:radial-gradient(1200px 700px at 50% -10%,#241a52,var(--bg2));
-    color:var(--ink);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
-    display:flex;justify-content:center;align-items:center;
-    padding:24px;min-height:100%;
+    background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    display:flex;justify-content:center;
   }
+  .app{width:100%;max-width:430px;min-height:100%;display:flex;flex-direction:column}
 
-  /* phone frame (disparaît sur petit écran → plein cadre) */
-  .phone{width:390px;max-width:100%;border-radius:40px;padding:12px;background:#0a0817;
-    box-shadow:0 40px 80px -30px rgba(20,10,60,.75)}
-  .screen{background:var(--bg);border-radius:30px;overflow:hidden;display:flex;flex-direction:column;
-    height:800px;max-height:calc(100vh - 60px)}
-  @media (max-width:440px){
-    body{padding:0}
-    .phone{width:100%;height:100vh;border-radius:0;padding:0}
-    .screen{border-radius:0;height:100vh;max-height:none}
-  }
+  /* barre de statut simulée */
+  .status{display:flex;justify-content:space-between;align-items:center;padding:14px 22px 0;
+    font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink)}
 
-  .statusbar{display:flex;justify-content:space-between;align-items:center;padding:16px 22px 0;
-    font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;flex:0 0 auto}
-  .scroll{flex:1 1 auto;overflow-y:auto;padding:18px 20px 24px}
-  .scroll::-webkit-scrollbar{width:0}
+  .scroll{flex:1;overflow-y:auto;padding:8px 0 40px}
+  .nav{padding:8px 20px 4px}
+  .nav .kicker{font-size:13px;font-weight:600;letter-spacing:.02em;color:var(--accent);text-transform:uppercase}
+  .nav h1{font-size:34px;line-height:1.05;margin:6px 0 6px;font-weight:800;letter-spacing:-.022em}
+  .nav p{margin:0;font-size:15px;line-height:1.45;color:var(--muted);max-width:34ch}
 
-  .brand{font-size:12px;letter-spacing:.24em;text-transform:uppercase;font-weight:800;color:var(--gold)}
-  h1{font-size:32px;line-height:1;margin:14px 0 5px;font-weight:900;letter-spacing:-.03em;text-transform:uppercase}
-  h1 em{font-style:normal;color:var(--pink)}
-  .lede{margin:0 0 18px;font-size:13px;line-height:1.5;color:var(--muted)}
+  .group{margin:22px 16px 0}
+  .group > .hdr{font-size:13px;font-weight:600;letter-spacing:.02em;text-transform:uppercase;
+    color:var(--muted);margin:0 8px 8px}
+  .card{background:var(--card);border-radius:var(--radius);overflow:hidden}
+  .row{padding:16px 16px;display:flex;flex-direction:column;gap:4px}
+  .row + .row{border-top:.5px solid var(--sep)}
+  .row .title{font-size:17px;font-weight:600;letter-spacing:-.01em}
+  .row .desc{font-size:14px;line-height:1.45;color:var(--muted)}
 
-  .section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:14px}
-  .section .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:var(--gold)}
-  .section.pink .k{color:var(--pink)}
-  .section h2{font-size:18px;font-weight:900;margin:8px 0 4px;letter-spacing:-.01em}
-  .section .d{font-size:12.5px;line-height:1.5;color:var(--muted);margin:0}
+  /* progression parrainage */
+  .stat{display:flex;align-items:baseline;gap:8px;margin-top:2px}
+  .stat .big{font-size:28px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .stat .of{font-size:15px;color:var(--muted)}
+  .bar{height:8px;border-radius:99px;background:var(--sep);overflow:hidden;margin-top:12px}
+  .bar span{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .4s ease}
 
-  /* progress parrainage */
-  .steps{display:flex;gap:8px;margin:14px 0 10px}
-  .step{flex:1;height:8px;border-radius:99px;background:#2f2664;overflow:hidden}
-  .step.done{background:var(--gold)}
-  .countline{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);
-    font-variant-numeric:tabular-nums;margin-bottom:14px}
-  .countline b{color:var(--ink)}
+  /* rangée lien de parrainage */
+  .linkrow{display:flex;align-items:center;gap:12px;padding:14px 16px;border-top:.5px solid var(--sep)}
+  .code{flex:1;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;color:var(--ink);
+    letter-spacing:.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .link-btn{background:none;border:0;color:var(--accent);font:inherit;font-weight:600;font-size:15px;
+    cursor:pointer;padding:6px 2px}
+  .link-btn:active{opacity:.5}
 
-  .linkrow{display:flex;gap:8px;align-items:stretch;margin-top:6px}
-  .linkbox{flex:1;background:#170f3a;border:1px solid var(--line);border-radius:12px;
-    padding:11px 12px;font-size:12.5px;color:var(--muted2);font-family:ui-monospace,Menlo,Consolas,monospace;
-    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center}
+  /* boutons */
+  .btn{display:block;width:100%;border:0;cursor:pointer;font-family:inherit;font-weight:600;
+    font-size:17px;letter-spacing:-.01em;border-radius:var(--radius);padding:15px;
+    transition:opacity .15s ease, transform .05s ease}
+  .btn:active{transform:scale(.985)}
+  .btn:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+  .btn.fill{background:var(--accent);color:var(--accent-ink)}
+  .btn.tinted{background:var(--tint-bg);color:var(--tint-ink)}
+  .btn.plain{background:var(--card);color:var(--accent)}
+  .cta-wrap{margin:26px 16px 0}
+  .cta-note{text-align:center;font-size:13px;color:var(--muted);margin:12px 8px 0;line-height:1.4}
 
-  .btn{border:0;cursor:pointer;font-family:inherit;font-weight:900;letter-spacing:.02em;border-radius:12px;
-    padding:13px 16px;font-size:14px;transition:transform .06s ease, filter .15s ease}
-  .btn:active{transform:translateY(1px)}
-  .btn:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-  .btn.gold{background:var(--gold);color:#20112a}
-  .btn.pink{background:var(--pink);color:#fff}
-  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
-  .btn.block{width:100%;text-transform:uppercase;padding:16px;font-size:15px}
-  .btn.sm{padding:11px 14px;font-size:13px}
+  /* formulaire photo */
+  .photoform{display:none;padding:0 16px 16px;flex-direction:column;gap:0;border-top:.5px solid var(--sep)}
+  .photoform.open{display:flex}
+  .flabel{font-size:13px;color:var(--muted);margin:16px 4px 8px;font-weight:500}
+  input[type=url]{width:100%;background:var(--bg);border:.5px solid var(--sep);color:var(--ink);
+    border-radius:10px;padding:13px;font-size:16px;font-family:inherit}
+  input[type=url]:focus{outline:none;border-color:var(--accent)}
+  .segwrap{display:flex;background:var(--bg);border-radius:10px;padding:3px;margin-top:2px;gap:3px}
+  .seg{flex:1;text-align:center;padding:9px 4px;border-radius:8px;font-size:14px;font-weight:600;
+    color:var(--ink);cursor:pointer;user-select:none;border:0;background:none;font-family:inherit}
+  .seg[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}
 
-  /* photo form */
-  .photoform{margin-top:14px;display:none}
-  .photoform.open{display:block}
-  .label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:0 0 7px}
-  input[type=url]{width:100%;background:#170f3a;border:1px solid var(--line);color:var(--ink);
-    border-radius:12px;padding:12px;font-size:13px;font-family:inherit}
-  input[type=url]:focus{outline:none;border-color:var(--pink)}
-  .nets{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 14px}
-  .net{cursor:pointer;user-select:none;border:1px solid var(--line);border-radius:99px;
-    padding:9px 14px;font-size:12.5px;font-weight:700;color:var(--muted);background:#170f3a}
-  .net[aria-pressed=true]{background:var(--pink);color:#fff;border-color:var(--pink)}
+  /* carte tirage (accentuée) */
+  .prize .card{background:linear-gradient(160deg,var(--accent),#ff7a1a)}
+  .prize .row{color:#fff}
+  .prize .title{color:#fff}
+  .prize .desc{color:rgba(255,255,255,.85)}
+  .prize .chip{align-self:flex-start;margin-top:10px;background:rgba(255,255,255,.22);color:#fff;
+    border-radius:99px;padding:7px 13px;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
 
-  .prize{margin:2px 0 14px;border-radius:16px;padding:15px;background:linear-gradient(100deg,var(--pink),var(--orange));color:#20112a}
-  .prize .k{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900}
-  .prize .v{font-size:15px;font-weight:800;margin-top:4px;line-height:1.25}
-  .prize .chances{margin-top:10px;font-size:12.5px;font-weight:800;background:rgba(32,17,42,.18);
-    border-radius:10px;padding:8px 10px;font-variant-numeric:tabular-nums}
+  .footnote{margin:10px 24px 0;font-size:13px;line-height:1.5;color:var(--muted)}
+  .footnote b{color:var(--ink);font-weight:600}
 
-  .guard{font-size:11.5px;line-height:1.5;color:var(--muted);margin:2px 0 4px}
-  .guard b{color:var(--gold);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:10.5px}
+  .demo{margin:30px 16px 0}
+  .demo .hdr{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--faint);margin:0 8px 8px;font-weight:600}
+  .demo .card{padding:8px}
+  .demo .btn{background:none;color:var(--accent);font-size:16px;padding:12px;border-radius:10px}
+  .demo .btn + .btn{border-top:.5px solid var(--sep)}
 
-  /* toast */
-  .toast{position:fixed;left:50%;bottom:34px;transform:translate(-50%,20px);
-    background:#0a0817;color:#fff;border:1px solid var(--line);border-radius:14px;
-    padding:13px 18px;font-size:13.5px;font-weight:700;opacity:0;pointer-events:none;
-    transition:opacity .25s ease, transform .25s ease;max-width:88%;text-align:center}
+  .toast{position:fixed;left:50%;bottom:32px;transform:translate(-50%,16px);
+    background:rgba(30,30,32,.96);color:#fff;border-radius:14px;padding:13px 20px;font-size:15px;
+    font-weight:500;opacity:0;pointer-events:none;transition:opacity .22s ease,transform .22s ease;
+    max-width:88%;text-align:center;box-shadow:0 12px 40px -12px rgba(0,0,0,.5);z-index:9}
   .toast.show{opacity:1;transform:translate(-50%,0)}
-
-  /* demo strip */
-  .demo{margin-top:6px;border-top:1px dashed var(--line);padding-top:12px}
-  .demo p{margin:0 0 9px;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);font-weight:700}
-  .demo .btn{margin-right:8px;margin-bottom:8px}
-  @media (prefers-reduced-motion:reduce){.btn,.toast{transition:none}}
+  @media (prefers-reduced-motion:reduce){.btn,.toast,.bar span{transition:none}}
 </style>
 </head>
 <body>
-  <div class="phone">
-    <div class="screen">
-      <div class="statusbar"><span>9:41</span><span>ÉCHEC O CUBE</span></div>
-      <div class="scroll">
-        <span class="brand">Défi joueurs</span>
-        <h1>Un mois <em>gratuit</em></h1>
-        <p class="lede">Joue, partage, gagne. Deux façons d'y arriver — choisis la tienne.</p>
+  <div class="app">
+    <div class="status"><span>9:41</span><span>Échec O Cube</span></div>
+    <div class="scroll">
 
-        <!-- PARRAINAGE -->
-        <div class="section">
-          <span class="k">Parrainage · 3 amis</span>
-          <h2>Invite 3 amis</h2>
-          <p class="d">Ils installent Échec O Cube et jouent un mois : tu gagnes ton mois gratuit.</p>
-          <div class="steps" id="steps">
-            <div class="step"></div><div class="step"></div><div class="step"></div>
+      <header class="nav">
+        <div class="kicker">Récompenses</div>
+        <h1>Gagne un mois gratuit</h1>
+        <p>Deux façons simples d'y arriver. Choisis la tienne.</p>
+      </header>
+
+      <!-- PARRAINAGE -->
+      <section class="group">
+        <p class="hdr">Parrainage</p>
+        <div class="card">
+          <div class="row">
+            <span class="title">Invite 3 amis</span>
+            <span class="desc">Ils installent Échec O Cube et jouent un mois : ton mois est offert.</span>
+            <div class="stat"><span class="big" id="fcount">0</span><span class="of">/ 3 amis actifs</span></div>
+            <div class="bar"><span id="fbar"></span></div>
           </div>
-          <div class="countline"><span><b id="fcount">0</b> ami actif sur 3</span><span id="fpct">0 %</span></div>
           <div class="linkrow">
-            <div class="linkbox" id="reflink">echecocube.app/i/CUBE-7Q4K</div>
-            <button class="btn gold sm" id="copybtn" type="button">Copier</button>
+            <span class="code" id="reflink">echecocube.ca/i/CUBE-7Q4K</span>
+            <button class="link-btn" id="copybtn" type="button">Copier</button>
           </div>
         </div>
+      </section>
 
-        <!-- PHOTO -->
-        <div class="section pink">
-          <span class="k">Photo · concours</span>
-          <h2>Publie 1 photo</h2>
-          <p class="d">Une photo de ta partie avec le mot-clic <b>#EchecOCube</b>. Une semaine offerte. Chaque réseau en plus : une chance de plus au tirage.</p>
-          <button class="btn pink sm" id="photobtn" type="button" aria-expanded="false">J'ai publié ma photo</button>
+      <!-- PHOTO -->
+      <section class="group">
+        <p class="hdr">Photo</p>
+        <div class="card">
+          <div class="row">
+            <span class="title">Publie 1 photo</span>
+            <span class="desc">Une photo de ta partie avec le mot-clic #EchecOCube. Une semaine offerte. Chaque réseau en plus : une chance de plus au tirage.</span>
+          </div>
+          <div style="padding:0 16px 16px">
+            <button class="btn tinted" id="photobtn" type="button" aria-expanded="false">J’ai publié ma photo</button>
+          </div>
           <div class="photoform" id="photoform">
-            <p class="label" style="margin-top:14px">Lien de ta publication</p>
-            <input type="url" id="photourl" placeholder="colle le lien de ton post ici" inputmode="url">
-            <p class="label" style="margin-top:14px">Où l'as-tu publiée ?</p>
-            <div class="nets" id="nets">
-              <span class="net" role="button" tabindex="0" aria-pressed="false" data-net="Instagram">Instagram</span>
-              <span class="net" role="button" tabindex="0" aria-pressed="false" data-net="Facebook">Facebook</span>
-              <span class="net" role="button" tabindex="0" aria-pressed="false" data-net="TikTok">TikTok</span>
+            <p class="flabel">Lien de ta publication</p>
+            <input type="url" id="photourl" placeholder="Colle le lien de ton post" inputmode="url">
+            <p class="flabel">Où l’as-tu publiée ?</p>
+            <div class="segwrap" id="nets">
+              <button class="seg" type="button" aria-pressed="false" data-net="Instagram">Instagram</button>
+              <button class="seg" type="button" aria-pressed="false" data-net="Facebook">Facebook</button>
+              <button class="seg" type="button" aria-pressed="false" data-net="TikTok">TikTok</button>
             </div>
-            <button class="btn pink block" id="submitphoto" type="button">Envoyer pour vérification</button>
+            <div style="margin-top:16px">
+              <button class="btn fill" id="submitphoto" type="button">Envoyer pour vérification</button>
+            </div>
           </div>
         </div>
+      </section>
 
-        <!-- TIRAGE -->
-        <div class="prize">
-          <div class="k">Tirage du mois — 1 gagnant pigé au sort</div>
-          <div class="v">Une année gratuite plus le jeu physique</div>
-          <div class="chances">Tes chances ce mois-ci : <span id="chances">0</span> billet(s)</div>
+      <!-- TIRAGE -->
+      <section class="group prize">
+        <p class="hdr">Tirage du mois</p>
+        <div class="card">
+          <div class="row">
+            <span class="title">Une année gratuite + le jeu physique</span>
+            <span class="desc">Chaque photo valide te donne un billet. En fin de mois, un seul gagnant est pigé au hasard.</span>
+            <span class="chip">Tes chances : <span id="chances">0</span> billet(s)</span>
+          </div>
         </div>
+      </section>
 
-        <p class="guard"><b>Anti-triche</b> — chaque récompense est créditée seulement après vérification. Faux comptes et fausses photos rejetés automatiquement.</p>
-
-        <!-- bandeau démo (juste pour tester le prototype) -->
-        <div class="demo">
-          <p>Mode démo — pour tester l'écran</p>
-          <button class="btn ghost sm" id="simfriend" type="button">Simuler un ami actif</button>
-          <button class="btn ghost sm" id="reset" type="button">Réinitialiser</button>
-        </div>
+      <div class="cta-wrap">
+        <button class="btn fill" id="mainlink" type="button">Obtenir mon lien de parrainage</button>
+        <p class="cta-note">Chaque récompense est créditée seulement après vérification. Faux comptes et fausses photos refusés.</p>
       </div>
+
+      <!-- démo -->
+      <section class="demo">
+        <p class="hdr">Mode démo — pour tester l’écran</p>
+        <div class="card">
+          <button class="btn" id="simfriend" type="button">Simuler un ami actif</button>
+          <button class="btn" id="reset" type="button">Réinitialiser</button>
+        </div>
+      </section>
+
     </div>
   </div>
 
@@ -171,82 +210,68 @@
 
 <script>
 (function(){
-  var friends=0, chances=0, photoSent=false;
-  var maxNets=3;
-  var stepsEl=document.getElementById('steps').children;
-  var fcount=document.getElementById('fcount'), fpct=document.getElementById('fpct');
+  var friends=0, chances=0, photoSent=false, maxNets=3;
+  var fcount=document.getElementById('fcount'), fbar=document.getElementById('fbar');
   var chancesEl=document.getElementById('chances');
   var toast=document.getElementById('toast'), tTimer;
 
-  function say(msg){
-    toast.textContent=msg; toast.classList.add('show');
-    clearTimeout(tTimer); tTimer=setTimeout(function(){toast.classList.remove('show');},2200);
-  }
+  function say(m){ toast.textContent=m; toast.classList.add('show');
+    clearTimeout(tTimer); tTimer=setTimeout(function(){toast.classList.remove('show');},2300); }
   function renderFriends(){
-    for(var i=0;i<stepsEl.length;i++){ stepsEl[i].classList.toggle('done', i<friends); }
-    var n=Math.min(friends,3);
-    fcount.textContent=n;
-    fpct.textContent=Math.round(n/3*100)+' %';
-    if(friends>=3){ say('Bravo ! 3 amis actifs — ton mois gratuit est débloqué.'); }
+    var n=Math.min(friends,3); fcount.textContent=n; fbar.style.width=(n/3*100)+'%';
+    if(friends>=3) say('Bravo ! 3 amis actifs — ton mois gratuit est débloqué.');
   }
   function renderChances(){ chancesEl.textContent=chances; }
 
-  // Copier le lien
-  document.getElementById('copybtn').addEventListener('click',function(){
+  function copyLink(){
     var txt=document.getElementById('reflink').textContent.trim();
     if(navigator.clipboard&&navigator.clipboard.writeText){
       navigator.clipboard.writeText(txt).then(function(){say('Lien copié — partage-le à tes amis.');},
-        function(){say('Lien : '+txt);});
-    } else { say('Lien : '+txt); }
-  });
+        function(){say('Ton lien : '+txt);});
+    } else { say('Ton lien : '+txt); }
+  }
+  document.getElementById('copybtn').addEventListener('click',copyLink);
+  document.getElementById('mainlink').addEventListener('click',copyLink);
 
-  // Ouvrir le formulaire photo
   var pf=document.getElementById('photoform'), pb=document.getElementById('photobtn');
   pb.addEventListener('click',function(){
     var open=pf.classList.toggle('open');
-    pb.setAttribute('aria-expanded', open?'true':'false');
-    pb.textContent = open ? 'Masquer' : 'J’ai publié ma photo';
+    pb.setAttribute('aria-expanded',open?'true':'false');
+    pb.textContent=open?'Masquer':'J’ai publié ma photo';
   });
 
-  // Réseaux (pills)
   var selected={};
   function toggleNet(el){
-    var net=el.getAttribute('data-net');
-    var on=el.getAttribute('aria-pressed')==='true';
-    el.setAttribute('aria-pressed', on?'false':'true');
-    if(on){ delete selected[net]; } else { selected[net]=true; }
+    var net=el.getAttribute('data-net'); var on=el.getAttribute('aria-pressed')==='true';
+    el.setAttribute('aria-pressed',on?'false':'true');
+    if(on){delete selected[net];}else{selected[net]=true;}
   }
-  Array.prototype.forEach.call(document.querySelectorAll('.net'),function(el){
+  Array.prototype.forEach.call(document.querySelectorAll('.seg'),function(el){
     el.addEventListener('click',function(){toggleNet(el);});
-    el.addEventListener('keydown',function(e){ if(e.key===' '||e.key==='Enter'){e.preventDefault();toggleNet(el);} });
   });
 
-  // Envoyer la photo
   document.getElementById('submitphoto').addEventListener('click',function(){
-    var url=document.getElementById('photourl').value.trim();
-    var nets=Object.keys(selected);
+    var url=document.getElementById('photourl').value.trim(); var nets=Object.keys(selected);
     if(!url){ say('Ajoute le lien de ta publication.'); return; }
     if(nets.length===0){ say('Choisis au moins un réseau.'); return; }
     if(photoSent){ say('Tu as déjà envoyé ta photo ce mois-ci.'); return; }
     photoSent=true;
-    var billets=Math.min(nets.length,maxNets); // 1 photo = billets selon nb de réseaux
+    var billets=Math.min(nets.length,maxNets);
     chances+=billets; renderChances();
-    say('Photo envoyée — en vérification. +'+billets+' billet(s) au tirage. Semaine gratuite à confirmer.');
-    pf.classList.remove('open'); pb.setAttribute('aria-expanded','false'); pb.textContent='Photo envoyée';
-    pb.disabled=true; pb.classList.add('ghost'); pb.classList.remove('pink');
+    say('Photo envoyée, en vérification. +'+billets+' billet(s). Semaine gratuite à confirmer.');
+    pf.classList.remove('open'); pb.setAttribute('aria-expanded','false');
+    pb.textContent='Photo envoyée'; pb.disabled=true; pb.style.opacity='.55';
   });
 
-  // Démo
   document.getElementById('simfriend').addEventListener('click',function(){
     if(friends<3){ friends++; renderFriends(); if(friends<3) say('Un ami de plus est actif : '+friends+'/3.'); }
-    else { say('Déjà 3 amis actifs.'); }
+    else say('Déjà 3 amis actifs.');
   });
   document.getElementById('reset').addEventListener('click',function(){
-    friends=0; chances=0; photoSent=false; selected={};
-    renderFriends(); renderChances();
-    Array.prototype.forEach.call(document.querySelectorAll('.net'),function(el){el.setAttribute('aria-pressed','false');});
+    friends=0; chances=0; photoSent=false; selected={}; renderFriends(); renderChances();
+    Array.prototype.forEach.call(document.querySelectorAll('.seg'),function(el){el.setAttribute('aria-pressed','false');});
     document.getElementById('photourl').value='';
-    pb.disabled=false; pb.classList.add('pink'); pb.classList.remove('ghost'); pb.textContent='J’ai publié ma photo';
+    pb.disabled=false; pb.style.opacity='1'; pb.textContent='J’ai publié ma photo';
     say('Écran réinitialisé.');
   });
 
