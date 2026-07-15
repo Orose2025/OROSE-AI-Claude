@@ -38,7 +38,7 @@ posts** par **une action ciblée à forte valeur**.
 |---|---|
 | Action | Inviter des amis via un **code / lien de parrainage** unique |
 | Condition | Le filleul **installe l'app et crée un compte** (validation réelle) |
-| Récompense parrain | **3 amis inscrits → 1 mois gratuit** |
+| Récompense parrain | **3 amis inscrits → 1 mois gratuit** (crédité après **1 mois de jeu** des filleuls) |
 | Récompense filleul | **1 semaine gratuite** à l'inscription (incite à finir l'installation) |
 | Pourquoi | Mesurable, difficile à frauder, amène de vrais utilisateurs actifs |
 
@@ -61,13 +61,13 @@ posts** par **une action ciblée à forte valeur**.
 
 | Récompense | Seuil | Plafond |
 |---|---|---|
-| Mois gratuit (parrainage) | 3 filleuls inscrits | Illimité tant que filleuls **actifs 7 j+** |
+| Mois gratuit (parrainage) | 3 filleuls inscrits | Illimité tant que filleuls **actifs 1 mois+** |
 | Semaine gratuite (filleul) | À l'inscription validée | 1 / compte |
 | Semaine gratuite (concours) | 1 photo validée | 1 / mois / personne |
 | Gros lot | Tirage | 1 gagnant / mois |
 
 **Règle de sécurité :** on ne débloque le mois gratuit du parrain que si le filleul
-reste **actif au moins 7 jours** — évite les inscriptions jetables.
+reste **actif au moins 1 mois** — évite les inscriptions jetables.
 
 ---
 
@@ -76,7 +76,7 @@ reste **actif au moins 7 jours** — évite les inscriptions jetables.
 Sans garde-fous, les gens créent de faux comptes / faux posts. Mesures minimales :
 
 1. **Filleul = compte réel** : validation e-mail + appareil unique ; le crédit tombe
-   après 7 jours d'activité, pas à l'inscription.
+   après **1 mois d'activité**, pas à l'inscription.
 2. **Photo concours validée** : modération manuelle au lancement (photo réelle,
    hashtag présent), puis semi-automatique quand le volume monte.
 3. **1 récompense de concours / mois / personne** : bloque le spam.
@@ -131,7 +131,7 @@ gros lot sans se mettre en danger.
 ## 9. Étapes de mise en œuvre (MVP → v1)
 
 1. **MVP parrainage** : code/lien unique, suivi des inscriptions, déblocage du mois
-   gratuit après 7 j d'activité du filleul.
+   gratuit après 1 mois d'activité du filleul.
 2. **Écran « Gagne un mois gratuit »** dans l'app : explication, code à partager,
    compteur de filleuls.
 3. **Concours photo v1** : hashtag officiel + formulaire de participation +
