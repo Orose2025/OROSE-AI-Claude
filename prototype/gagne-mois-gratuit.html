@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Échec O Cube — Gagne un mois gratuit (prototype)</title>
+<style>
+  :root{
+    --bg:#161235; --bg2:#0d0b1a; --ink:#f4f1ff; --muted:#b6afd6; --muted2:#9a92c4;
+    --card:#221a4d; --line:#362c6e; --gold:#ffd23f; --pink:#ff4d8d; --orange:#ff8a3d;
+    --ok:#39d98a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:radial-gradient(1200px 700px at 50% -10%,#241a52,var(--bg2));
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    display:flex;justify-content:center;align-items:center;
+    padding:24px;min-height:100%;
+  }
+
+  /* phone frame (disparaît sur petit écran → plein cadre) */
+  .phone{width:390px;max-width:100%;border-radius:40px;padding:12px;background:#0a0817;
+    box-shadow:0 40px 80px -30px rgba(20,10,60,.75)}
+  .screen{background:var(--bg);border-radius:30px;overflow:hidden;display:flex;flex-direction:column;
+    height:800px;max-height:calc(100vh - 60px)}
+  @media (max-width:440px){
+    body{padding:0}
+    .phone{width:100%;height:100vh;border-radius:0;padding:0}
+    .screen{border-radius:0;height:100vh;max-height:none}
+  }
+
+  .statusbar{display:flex;justify-content:space-between;align-items:center;padding:16px 22px 0;
+    font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;flex:0 0 auto}
+  .scroll{flex:1 1 auto;overflow-y:auto;padding:18px 20px 24px}
+  .scroll::-webkit-scrollbar{width:0}
+
+  .brand{font-size:12px;letter-spacing:.24em;text-transform:uppercase;font-weight:800;color:var(--gold)}
+  h1{font-size:32px;line-height:1;margin:14px 0 5px;font-weight:900;letter-spacing:-.03em;text-transform:uppercase}
+  h1 em{font-style:normal;color:var(--pink)}
+  .lede{margin:0 0 18px;font-size:13px;line-height:1.5;color:var(--muted)}
+
+  .section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:14px}
+  .section .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:var(--gold)}
+  .section.pink .k{color:var(--pink)}
+  .section h2{font-size:18px;font-weight:900;margin:8px 0 4px;letter-spacing:-.01em}
+  .section .d{font-size:12.5px;line-height:1.5;color:var(--muted);margin:0}
+
+  /* progress parrainage */
+  .steps{display:flex;gap:8px;margin:14px 0 10px}
+  .step{flex:1;height:8px;border-radius:99px;background:#2f2664;overflow:hidden}
+  .step.done{background:var(--gold)}
+  .countline{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);
+    font-variant-numeric:tabular-nums;margin-bottom:14px}
+  .countline b{color:var(--ink)}
+
+  .linkrow{display:flex;gap:8px;align-items:stretch;margin-top:6px}
+  .linkbox{flex:1;background:#170f3a;border:1px solid var(--line);border-radius:12px;
+    padding:11px 12px;font-size:12.5px;color:var(--muted2);font-family:ui-monospace,Menlo,Consolas,monospace;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center}
+
+  .btn{border:0;cursor:pointer;font-family:inherit;font-weight:900;letter-spacing:.02em;border-radius:12px;
+    padding:13px 16px;font-size:14px;transition:transform .06s ease, filter .15s ease}
+  .btn:active{transform:translateY(1px)}
+  .btn:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  .btn.gold{background:var(--gold);color:#20112a}
+  .btn.pink{background:var(--pink);color:#fff}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .btn.block{width:100%;text-transform:uppercase;padding:16px;font-size:15px}
+  .btn.sm{padding:11px 14px;font-size:13px}
+
+  /* photo form */
+  .photoform{margin-top:14px;display:none}
+  .photoform.open{display:block}
+  .label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:0 0 7px}
+  input[type=url]{width:100%;background:#170f3a;border:1px solid var(--line);color:var(--ink);
+    border-radius:12px;padding:12px;font-size:13px;font-family:inherit}
+  input[type=url]:focus{outline:none;border-color:var(--pink)}
+  .nets{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 14px}
+  .net{cursor:pointer;user-select:none;border:1px solid var(--line);border-radius:99px;
+    padding:9px 14px;font-size:12.5px;font-weight:700;color:var(--muted);background:#170f3a}
+  .net[aria-pressed=true]{background:var(--pink);color:#fff;border-color:var(--pink)}
+
+  .prize{margin:2px 0 14px;border-radius:16px;padding:15px;background:linear-gradient(100deg,var(--pink),var(--orange));color:#20112a}
+  .prize .k{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:900}
+  .prize .v{font-size:15px;font-weight:800;margin-top:4px;line-height:1.25}
+  .prize .chances{margin-top:10px;font-size:12.5px;font-weight:800;background:rgba(32,17,42,.18);
+    border-radius:10px;padding:8px 10px;font-variant-numeric:tabular-nums}
+
+  .guard{font-size:11.5px;line-height:1.5;color:var(--muted);margin:2px 0 4px}
+  .guard b{color:var(--gold);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:10.5px}
+
+  /* toast */
+  .toast{position:fixed;left:50%;bottom:34px;transform:translate(-50%,20px);
+    background:#0a0817;color:#fff;border:1px solid var(--line);border-radius:14px;
+    padding:13px 18px;font-size:13.5px;font-weight:700;opacity:0;pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease;max-width:88%;text-align:center}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  /* demo strip */
+  .demo{margin-top:6px;border-top:1px dashed var(--line);padding-top:12px}
+  .demo p{margin:0 0 9px;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);font-weight:700}
+  .demo .btn{margin-right:8px;margin-bottom:8px}
+  @media (prefers-reduced-motion:reduce){.btn,.toast{transition:none}}
+</style>
+</head>
+<body>
+  <div class="phone">
+    <div class="screen">
+      <div class="statusbar"><span>9:41</span><span>ÉCHEC O CUBE</span></div>
+      <div class="scroll">
+        <span class="brand">Défi joueurs</span>
+        <h1>Un mois <em>gratuit</em></h1>
+        <p class="lede">Joue, partage, gagne. Deux façons d'y arriver — choisis la tienne.</p>
+
+        <!-- PARRAINAGE -->
+        <div class="section">
+          <span class="k">Parrainage · 3 amis</span>
+          <h2>Invite 3 amis</h2>
+          <p class="d">Ils installent Échec O Cube et jouent un mois : tu gagnes ton mois gratuit.</p>
+          <div class="steps" id="steps">
+            <div class="step"></div><div class="step"></div><div class="step"></div>
+          </div>
+          <div class="countline"><span><b id="fcount">0</b> ami actif sur 3</span><span id="fpct">0 %</span></div>
+          <div class="linkrow">
+            <div class="linkbox" id="reflink">echecocube.app/i/CUBE-7Q4K</div>
+            <button class="btn gold sm" id="copybtn" type="button">Copier</button>
+          </div>
+        </div>
+
+        <!-- PHOTO -->
+        <div class="section pink">
+          <span class="k">Photo · concours</span>
+          <h2>Publie 1 photo</h2>
+          <p class="d">Une photo de ta partie avec le mot-clic <b>#EchecOCube</b>. Une semaine offerte. Chaque réseau en plus : une chance de plus au tirage.</p>
+          <button class="btn pink sm" id="photobtn" type="button" aria-expanded="false">J'ai publié ma photo</button>
+          <div class="photoform" id="photoform">
+            <p class="label" style="margin-top:14px">Lien de ta publication</p>
+            <input type="url" id="photourl" placeholder="colle le lien de ton post ici" inputmode="url">
+            <p class="label" style="margin-top:14px">Où l'as-tu publiée ?</p>
+            <div class="nets" id="nets">
+              <span class="net" role="button" tabindex="0" aria-pressed="false" data-net="Instagram">Instagram</span>
+              <span class="net" role="button" tabindex="0" aria-pressed="false" data-net="Facebook">Facebook</span>
+              <span class="net" role="button" tabindex="0" aria-pressed="false" data-net="TikTok">TikTok</span>
+            </div>
+            <button class="btn pink block" id="submitphoto" type="button">Envoyer pour vérification</button>
+          </div>
+        </div>
+
+        <!-- TIRAGE -->
+        <div class="prize">
+          <div class="k">Tirage du mois — 1 gagnant pigé au sort</div>
+          <div class="v">Une année gratuite plus le jeu physique</div>
+          <div class="chances">Tes chances ce mois-ci : <span id="chances">0</span> billet(s)</div>
+        </div>
+
+        <p class="guard"><b>Anti-triche</b> — chaque récompense est créditée seulement après vérification. Faux comptes et fausses photos rejetés automatiquement.</p>
+
+        <!-- bandeau démo (juste pour tester le prototype) -->
+        <div class="demo">
+          <p>Mode démo — pour tester l'écran</p>
+          <button class="btn ghost sm" id="simfriend" type="button">Simuler un ami actif</button>
+          <button class="btn ghost sm" id="reset" type="button">Réinitialiser</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  var friends=0, chances=0, photoSent=false;
+  var maxNets=3;
+  var stepsEl=document.getElementById('steps').children;
+  var fcount=document.getElementById('fcount'), fpct=document.getElementById('fpct');
+  var chancesEl=document.getElementById('chances');
+  var toast=document.getElementById('toast'), tTimer;
+
+  function say(msg){
+    toast.textContent=msg; toast.classList.add('show');
+    clearTimeout(tTimer); tTimer=setTimeout(function(){toast.classList.remove('show');},2200);
+  }
+  function renderFriends(){
+    for(var i=0;i<stepsEl.length;i++){ stepsEl[i].classList.toggle('done', i<friends); }
+    var n=Math.min(friends,3);
+    fcount.textContent=n;
+    fpct.textContent=Math.round(n/3*100)+' %';
+    if(friends>=3){ say('Bravo ! 3 amis actifs — ton mois gratuit est débloqué.'); }
+  }
+  function renderChances(){ chancesEl.textContent=chances; }
+
+  // Copier le lien
+  document.getElementById('copybtn').addEventListener('click',function(){
+    var txt=document.getElementById('reflink').textContent.trim();
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(function(){say('Lien copié — partage-le à tes amis.');},
+        function(){say('Lien : '+txt);});
+    } else { say('Lien : '+txt); }
+  });
+
+  // Ouvrir le formulaire photo
+  var pf=document.getElementById('photoform'), pb=document.getElementById('photobtn');
+  pb.addEventListener('click',function(){
+    var open=pf.classList.toggle('open');
+    pb.setAttribute('aria-expanded', open?'true':'false');
+    pb.textContent = open ? 'Masquer' : 'J’ai publié ma photo';
+  });
+
+  // Réseaux (pills)
+  var selected={};
+  function toggleNet(el){
+    var net=el.getAttribute('data-net');
+    var on=el.getAttribute('aria-pressed')==='true';
+    el.setAttribute('aria-pressed', on?'false':'true');
+    if(on){ delete selected[net]; } else { selected[net]=true; }
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.net'),function(el){
+    el.addEventListener('click',function(){toggleNet(el);});
+    el.addEventListener('keydown',function(e){ if(e.key===' '||e.key==='Enter'){e.preventDefault();toggleNet(el);} });
+  });
+
+  // Envoyer la photo
+  document.getElementById('submitphoto').addEventListener('click',function(){
+    var url=document.getElementById('photourl').value.trim();
+    var nets=Object.keys(selected);
+    if(!url){ say('Ajoute le lien de ta publication.'); return; }
+    if(nets.length===0){ say('Choisis au moins un réseau.'); return; }
+    if(photoSent){ say('Tu as déjà envoyé ta photo ce mois-ci.'); return; }
+    photoSent=true;
+    var billets=Math.min(nets.length,maxNets); // 1 photo = billets selon nb de réseaux
+    chances+=billets; renderChances();
+    say('Photo envoyée — en vérification. +'+billets+' billet(s) au tirage. Semaine gratuite à confirmer.');
+    pf.classList.remove('open'); pb.setAttribute('aria-expanded','false'); pb.textContent='Photo envoyée';
+    pb.disabled=true; pb.classList.add('ghost'); pb.classList.remove('pink');
+  });
+
+  // Démo
+  document.getElementById('simfriend').addEventListener('click',function(){
+    if(friends<3){ friends++; renderFriends(); if(friends<3) say('Un ami de plus est actif : '+friends+'/3.'); }
+    else { say('Déjà 3 amis actifs.'); }
+  });
+  document.getElementById('reset').addEventListener('click',function(){
+    friends=0; chances=0; photoSent=false; selected={};
+    renderFriends(); renderChances();
+    Array.prototype.forEach.call(document.querySelectorAll('.net'),function(el){el.setAttribute('aria-pressed','false');});
+    document.getElementById('photourl').value='';
+    pb.disabled=false; pb.classList.add('pink'); pb.classList.remove('ghost'); pb.textContent='J’ai publié ma photo';
+    say('Écran réinitialisé.');
+  });
+
+  renderFriends(); renderChances();
+})();
+</script>
+</body>
+</html>
