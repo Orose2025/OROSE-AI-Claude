@@ -1,4 +1,4 @@
-# Stratégie de récompense sociale — Application EOC
+# Stratégie de récompense sociale — Échec O Cube (EOC)
 
 > Programme « Partage & Gagne » : transformer les joueurs en ambassadeurs pour faire
 > connaître **les 2 jeux** (application EOC + jeu physique) grâce au contenu publié
@@ -48,8 +48,17 @@ posts** par **une action ciblée à forte valeur**.
 |---|---|
 | Action | Publier **1 photo** en train de jouer (app **ou** jeu physique) avec le hashtag officiel |
 | Récompense garantie | **1 semaine gratuite** par participation validée (max 1 / mois / personne) |
+| Bonus multi-réseaux | **1 photo suffit** pour la semaine ; chaque **réseau supplémentaire** où la photo est publiée = **1 chance de plus** au tirage (récompensé, jamais exigé) |
 | Gros lot | **Tirage mensuel** : ex. 1 an gratuit + jeu physique offert |
 | Pourquoi | La photo « vraie vie » du jeu physique est bien plus virale qu'un screenshot ; le tirage crée l'excitation sans exiger de volume |
+
+**Comment fonctionne le tirage (loterie mensuelle) :** chaque photo valide donne
+**1 billet**. À la fin du mois, on **pige au hasard un seul gagnant** qui remporte le
+gros lot. Tous les autres gardent leur récompense garantie (la semaine gratuite).
+Avantage : **un seul gros lot à financer par mois**, peu importe le nombre de
+participants — c'est le moteur de viralité sans exploser le budget. Publier sur
+plusieurs réseaux ajoute des billets (plus de chances), sans bloquer ceux qui n'ont
+qu'un seul réseau.
 
 > **Angle clé — les 2 jeux :** la photo du jeu physique ramène vers l'app, et l'app
 > fait connaître le jeu physique. On centre la communication visuelle sur ce
@@ -64,6 +73,7 @@ posts** par **une action ciblée à forte valeur**.
 | Mois gratuit (parrainage) | 3 filleuls inscrits | Illimité tant que filleuls **actifs 1 mois+** |
 | Semaine gratuite (filleul) | À l'inscription validée | 1 / compte |
 | Semaine gratuite (concours) | 1 photo validée | 1 / mois / personne |
+| Chances bonus au tirage | 1 réseau supplémentaire = 1 billet | Plafonner (ex. 3 réseaux max) |
 | Gros lot | Tirage | 1 gagnant / mois |
 
 **Règle de sécurité :** on ne débloque le mois gratuit du parrain que si le filleul
