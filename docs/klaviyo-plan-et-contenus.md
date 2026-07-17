@@ -96,7 +96,54 @@ L'équipe Échec O Cube
 
 ---
 
-## 5. Ce que je ferai dès l'autorisation
+## 5. Courriel de relance — inscrit qui n'a pas encore joué
+
+**Objet :** Ta partie t'attend sur Échec O Cube
+**Aperçu :** 2 minutes pour apprendre, une profondeur infinie.
+
+```
+Bonjour,
+
+Tu t'es inscrit, mais on ne t'a pas encore vu jouer — et c'est dommage, parce
+qu'Échec O Cube s'apprend en 2 minutes.
+
+Place, relie, observe, ferme le cube. Des règles simples, une stratégie sans fin.
+
+Fais ta première partie maintenant, c'est gratuit : jeu.echecocube.ca
+
+Et si tu invites 3 amis qui jouent un mois, ton mois devient gratuit.
+
+À bientôt sur le plateau,
+L'équipe Échec O Cube
+```
+
+---
+
+## 6. Courriel de remerciement — après une action (parrainage / photo / partage)
+
+**Objet :** Merci — tu fais grandir Échec O Cube
+**Aperçu :** Un petit geste qui compte beaucoup pour nous.
+
+```
+Bonjour,
+
+Merci ! Ton geste — que ce soit un parrainage, une photo de ta partie ou un
+partage — aide un jeu de chez nous à se faire connaître.
+
+Voici où en est ta récompense :
+- Parrainage : ton mois gratuit se débloque dès que 3 amis jouent un mois.
+- Photo : ta semaine gratuite est en vérification, et chaque réseau te donne une
+  chance de plus au tirage du mois (une année gratuite + le jeu en bois).
+
+On revient vers toi dès que c'est confirmé. Merci de faire partie de l'aventure.
+
+L'équipe Échec O Cube
+jeu.echecocube.ca
+```
+
+---
+
+## 7. Ce que je ferai dès l'autorisation
 
 1. Créer les 3 listes ci-dessus.
 2. Créer les 3 modèles de courriel (bienvenue, récompense, La Ruche) prêts à envoyer.
