@@ -39,6 +39,9 @@
   .price{display:flex;align-items:baseline;gap:10px;margin-bottom:18px}
   .price .amt{font-size:34px;font-weight:800;letter-spacing:-.01em}
   .price .cur{font-size:15px;color:var(--muted);font-weight:600}
+  .soon{display:inline-block;background:#241c10;color:#f6efe1;font-weight:800;font-size:15px;
+    letter-spacing:.02em;padding:11px 18px;border-radius:11px;margin-bottom:18px}
+  .soon b{color:var(--gold)}
   .combo{background:#fff6e6;border:1px solid #f0dcae;border-radius:12px;padding:13px 15px;margin-bottom:20px}
   .combo b{color:var(--gold-d)}
   .combo .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-d);font-weight:800;display:block;margin-bottom:4px}
@@ -92,12 +95,12 @@
         <div class="eyebrow">Jeu de stratégie · Inventé au Québec 1999</div>
         <h1 class="serif">Échec O Cube — Édition bois</h1>
         <p class="sub">Le vrai jeu, en bois massif : place, relie, observe, ferme le cube.</p>
-        <div class="price"><span class="amt">— $</span><span class="cur">CAD · prix à confirmer</span></div>
+        <div class="soon">Bientôt · Lancement au <b>printemps 2027</b></div>
         <div class="combo">
           <span class="k">Offre app + jeu</span>
-          <b>Ton achat inclut 3 mois de Premium offerts</b> sur l'application Échec O Cube.
+          <b>À la sortie, ta commande inclura 3 mois de Premium offerts</b> sur l'application Échec O Cube.
         </div>
-        <button class="buybtn" id="buy" type="button">Ajouter au panier</button>
+        <button class="buybtn" id="buy" type="button">Rejoindre la liste d'attente</button>
         <div class="trust">
           <span><b>Paiement sécurisé</b></span>
           <span><b>Livraison</b> au Québec et au Canada</span>
@@ -107,9 +110,10 @@
     </div>
 
     <div class="note">
-      <b>Maquette :</b> il reste à brancher le paiement réel (Shopify). Pour la mettre en
-      ligne, il me faut : ta <b>photo du jeu en bois</b>, le <b>prix</b>, et ton
-      <b>autorisation Shopify</b>. Les textes et le design, eux, sont prêts.
+      <b>Maquette — stratégie liste d'attente :</b> le jeu en bois sort au printemps 2027.
+      Cette page sert à <b>capter dès maintenant les gens intéressés</b> (courriel), pour
+      lancer en force en 2027. Pour la publier sur ta boutique Shopify, il me faut : ta
+      <b>photo du jeu en bois</b> et ton <b>autorisation Shopify</b>. Design et textes prêts.
     </div>
 
     <section class="block">
@@ -133,7 +137,7 @@
   </div>
 
   <footer>Échec O Cube · jeu.echecocube.ca</footer>
-  <div class="toast" id="toast">Démo — le paiement réel sera branché avec Shopify.</div>
+  <div class="toast" id="toast">Démo — ici on enregistrera ton courriel pour la liste d'attente.</div>
 
 <script>
   var t=document.getElementById('toast');
