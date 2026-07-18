@@ -1,0 +1,229 @@
+<!doctype html><html lang="fr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Échec O Cube — Plateau, coordonnées et cadran</title>
+<style>
+  :root{
+    --bg:#efe7d7; --ink:#241c10; --muted:#7c7263; --line:#e0d5bf;
+    --gold:#c8971f; --gold-d:#9c7410; --red:#b8321f; --ok:#2f8f4e;
+    --wood0:#e7d3ab; --wood1:#d9bd8c; --wood2:#b8965f; --groove:#7a5c33;
+    --z:1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{background:linear-gradient(160deg,#f4ecdd,#e5dac4);min-height:100vh;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;color:var(--ink);
+    display:flex;flex-direction:column}
+
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:13px 20px;
+    border-bottom:1px solid var(--line);background:#fffdf8;gap:12px;flex-wrap:wrap}
+  .topbar .brand{font-size:14px;letter-spacing:.22em;text-transform:uppercase;font-weight:800;color:var(--gold-d)}
+  .topbar .code{font-size:14px;font-weight:800;background:#f3e7cd;border:1px solid #eadcbd;border-radius:10px;
+    padding:8px 14px;font-variant-numeric:tabular-nums}
+  .topbar .code b{color:var(--gold-d);font-family:ui-monospace,Menlo,Consolas,monospace}
+
+  .arena{flex:1;display:flex;align-items:stretch;gap:14px;padding:16px;min-height:0}
+  @media (max-width:860px){.arena{flex-direction:column}}
+
+  .side{flex:0 0 210px;background:#fffdf8;border:1px solid var(--line);border-radius:16px;padding:16px;
+    display:flex;flex-direction:column;gap:14px}
+  @media (max-width:860px){.side{flex:0 0 auto}}
+  .side .who{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:var(--muted)}
+  .side .name{font-size:19px;font-weight:800;letter-spacing:-.01em}
+
+  /* cadran numérique */
+  .clock{border:2px solid var(--line);border-radius:14px;padding:12px 14px;background:#1a1408;cursor:pointer;
+    transition:border-color .15s ease, box-shadow .15s ease}
+  .clock .lab{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:#8a7f5f}
+  .clock .t{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:46px;font-weight:800;line-height:1;
+    color:#ffd35a;font-variant-numeric:tabular-nums;margin-top:6px}
+  .clock.active{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,151,31,.25)}
+  .clock.low .t{color:#ff7a5a}
+  .clock .tap{font-size:11px;color:#8a7f5f;margin-top:6px;font-weight:700}
+
+  .score{display:flex;align-items:baseline;gap:8px}
+  .score .n{font-size:36px;font-weight:900;line-height:1;font-variant-numeric:tabular-nums}
+  .score .u{font-size:13px;color:var(--muted);font-weight:700}
+  .reserve .rlab{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:6px}
+  .dotrow{display:flex;gap:6px;flex-wrap:wrap}
+  .dotrow .d{width:18px;height:18px;border-radius:50%}
+  .side.pale .dotrow .d{background:radial-gradient(circle at 35% 30%,#fff,#e7d9bf);box-shadow:inset 0 0 4px rgba(120,90,40,.4)}
+  .side.fonce .dotrow .d{background:radial-gradient(circle at 35% 30%,#4a3a20,#241708)}
+
+  .stage{flex:1;min-width:0;background:#fffdf8;border:1px solid var(--line);border-radius:16px;
+    overflow:auto;display:flex;align-items:center;justify-content:center;padding:22px}
+  .boardwrap{transform:scale(var(--z));transform-origin:center;transition:transform .18s ease}
+
+  /* coordonnées + plateau */
+  .coltop{display:grid;grid-template-columns:repeat(9,1fr);width:540px;margin-left:26px;margin-bottom:4px}
+  .coltop span{text-align:center;font-size:14px;font-weight:800;color:var(--gold-d);font-family:ui-monospace,Menlo,monospace}
+  .brow{display:flex;align-items:stretch}
+  .rowleft{display:grid;grid-template-rows:repeat(9,1fr);width:26px;height:540px}
+  .rowleft span{display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--gold-d);font-family:ui-monospace,Menlo,monospace}
+  .board{width:540px;height:540px;border-radius:12px;padding:14px;
+    background:linear-gradient(150deg,var(--wood1),var(--wood2));
+    box-shadow:0 20px 44px -22px rgba(90,60,20,.6), inset 0 0 0 3px rgba(122,92,51,.4);
+    display:grid;grid-template-columns:repeat(9,1fr);grid-template-rows:repeat(9,1fr);gap:5px}
+  .cell{background:var(--wood0);border-radius:5px;position:relative;cursor:pointer;
+    box-shadow:inset 0 0 0 1px rgba(122,92,51,.35), inset 2px 2px 5px rgba(122,92,51,.25)}
+  .cell.sel{box-shadow:inset 0 0 0 3px var(--gold)}
+  .cell .p{position:absolute;inset:16%;border-radius:50%}
+  .cell .pale{background:radial-gradient(circle at 34% 30%,#fff,#ecdcbd);box-shadow:0 2px 4px rgba(80,50,10,.35),inset 0 0 5px rgba(120,90,40,.35)}
+  .cell .fonce{background:radial-gradient(circle at 34% 30%,#4a3a20,#201507);box-shadow:0 2px 5px rgba(0,0,0,.4)}
+  .cell .rouge{position:absolute;inset:30%;border-radius:4px;background:var(--red);box-shadow:0 0 8px rgba(184,50,31,.7)}
+
+  /* barres de contrôle */
+  .bar{display:flex;align-items:center;justify-content:center;gap:12px;padding:12px 16px;
+    background:#fffdf8;border-top:1px solid var(--line);flex-wrap:wrap}
+  .btn{min-height:48px;border:1px solid var(--line);background:#fff;border-radius:12px;font:inherit;
+    font-size:15px;font-weight:800;color:var(--ink);cursor:pointer;padding:0 18px}
+  .btn:active{transform:translateY(1px)}
+  .btn.go{background:var(--gold);border-color:var(--gold);color:#2a1c00}
+  .btn.z{min-width:54px;font-size:24px;padding:0}
+  .zval{min-width:82px;text-align:center;font-size:20px;font-weight:900;font-variant-numeric:tabular-nums}
+  .slider{width:200px;max-width:44vw;accent-color:var(--gold)}
+  .barlab{width:100%;text-align:center;font-size:12px;color:var(--muted);margin-top:2px}
+  .chip{min-height:40px;border:1px solid var(--line);background:#fff;border-radius:99px;padding:0 14px;font:inherit;font-weight:800;font-size:13px;cursor:pointer}
+  .chip[aria-pressed=true]{background:var(--gold);border-color:var(--gold);color:#2a1c00}
+</style></head>
+<body>
+  <div class="topbar">
+    <span class="brand">Échec O Cube · Cadran</span>
+    <span class="code">Case : <b id="codeout">—</b></span>
+    <span class="brand" style="color:var(--muted)">Plateau 9 × 9</span>
+  </div>
+
+  <div class="arena">
+    <!-- côté gauche : Pâles -->
+    <aside class="side pale">
+      <div><div class="who">Joueur</div><div class="name">Pâles</div></div>
+      <div class="clock" id="clockP" data-p="pale">
+        <div class="lab">Cadran EOC</div>
+        <div class="t" id="tP">10:00</div>
+        <div class="tap">Touche pour passer le tour</div>
+      </div>
+      <div class="score"><span class="n">12</span><span class="u">points</span></div>
+      <div class="reserve"><div class="rlab">En réserve</div>
+        <div class="dotrow"><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span></div></div>
+    </aside>
+
+    <!-- plateau -->
+    <div class="stage" id="stage">
+      <div class="boardwrap" id="boardwrap">
+        <div class="coltop" id="coltop"></div>
+        <div class="brow">
+          <div class="rowleft" id="rowleft"></div>
+          <div class="board" id="board"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- côté droit : Foncés -->
+    <aside class="side fonce">
+      <div><div class="who">Joueur</div><div class="name">Foncés</div></div>
+      <div class="clock" id="clockF" data-p="fonce">
+        <div class="lab">Cadran EOC</div>
+        <div class="t" id="tF">10:00</div>
+        <div class="tap">Touche pour passer le tour</div>
+      </div>
+      <div class="score"><span class="n">10</span><span class="u">points</span></div>
+      <div class="reserve"><div class="rlab">En réserve</div>
+        <div class="dotrow"><span class="d"></span><span class="d"></span><span class="d"></span><span class="d"></span></div></div>
+    </aside>
+  </div>
+
+  <!-- contrôles du cadran -->
+  <div class="bar">
+    <button class="btn go" id="start" type="button">Démarrer</button>
+    <button class="btn" id="pause" type="button">Pause</button>
+    <button class="btn" id="resetClock" type="button">Réinitialiser</button>
+    <span style="width:14px"></span>
+    <button class="chip" data-min="5" type="button" aria-pressed="false">5 min</button>
+    <button class="chip" data-min="10" type="button" aria-pressed="true">10 min</button>
+    <button class="chip" data-min="15" type="button" aria-pressed="false">15 min</button>
+    <div class="barlab">Cadran numérique EOC — jouez au temps à deux : touche ton cadran après ton coup pour lancer celui de l'adversaire.</div>
+  </div>
+
+  <!-- zoom -->
+  <div class="bar">
+    <button class="btn" id="fit" type="button">Tout voir · 50%</button>
+    <button class="btn" id="reset" type="button">100%</button>
+    <button class="btn z" id="minus" type="button" aria-label="Réduire">−</button>
+    <div class="zval" id="zval">100%</div>
+    <button class="btn z" id="plus" type="button" aria-label="Agrandir">+</button>
+    <input class="slider" id="slider" type="range" min="50" max="150" step="5" value="100" aria-label="Zoom">
+    <div class="barlab">Baisse le zoom pour voir tout le plateau · monte-le pour agrandir les pièces</div>
+  </div>
+
+<script>
+  // ---- plateau + coordonnées ----
+  var LET="ABCDEFGHI".split("");
+  var coltop=document.getElementById("coltop"), rowleft=document.getElementById("rowleft");
+  LET.forEach(function(l){var s=document.createElement("span");s.textContent=l;coltop.appendChild(s);});
+  for(var r=1;r<=9;r++){var s=document.createElement("span");s.textContent=r;rowleft.appendChild(s);}
+
+  var g=[
+    0,0,2,0,0,2,0,0,2, 0,2,0,0,2,0,0,2,0, 2,0,0,2,0,0,2,0,0,
+    0,0,3,0,0,0,3,0,0, 0,0,0,1,0,2,0,0,0, 0,0,3,0,0,0,3,0,0,
+    0,0,1,0,0,1,0,0,1, 0,1,0,0,1,0,0,1,0, 1,0,0,1,0,0,1,0,0
+  ];
+  var board=document.getElementById("board"), codeout=document.getElementById("codeout"), sel=null;
+  for(var i=0;i<81;i++){
+    var c=document.createElement("div");c.className="cell";
+    var col=i%9, row=Math.floor(i/9)+1; c.dataset.code=LET[col]+row;
+    var v=g[i];
+    if(v===1){var p=document.createElement("div");p.className="p pale";c.appendChild(p);}
+    else if(v===2){var p2=document.createElement("div");p2.className="p fonce";c.appendChild(p2);}
+    else if(v===3){var rr=document.createElement("div");rr.className="rouge";c.appendChild(rr);}
+    c.addEventListener("click",function(){
+      if(sel)sel.classList.remove("sel"); this.classList.add("sel"); sel=this;
+      codeout.textContent=this.dataset.code;
+    });
+    board.appendChild(c);
+  }
+
+  // ---- cadran ----
+  var timeP=600, timeF=600, active=null, iv=null;
+  var elP=document.getElementById("tP"), elF=document.getElementById("tF");
+  var boxP=document.getElementById("clockP"), boxF=document.getElementById("clockF");
+  function fmt(s){var m=Math.floor(s/60),ss=s%60;return m+":"+(ss<10?"0":"")+ss;}
+  function paint(){
+    elP.textContent=fmt(timeP); elF.textContent=fmt(timeF);
+    boxP.classList.toggle("active",active==="pale"); boxF.classList.toggle("active",active==="fonce");
+    boxP.classList.toggle("low",timeP<=30); boxF.classList.toggle("low",timeF<=30);
+  }
+  function tick(){
+    if(active==="pale"){timeP=Math.max(0,timeP-1); if(timeP===0)stop();}
+    else if(active==="fonce"){timeF=Math.max(0,timeF-1); if(timeF===0)stop();}
+    paint();
+  }
+  function run(){ if(iv)return; iv=setInterval(tick,1000); }
+  function stop(){ if(iv){clearInterval(iv);iv=null;} }
+  function startGame(){ if(!active)active="pale"; run(); paint(); }
+  function pass(p){ active=(p==="pale")?"fonce":"pale"; run(); paint(); }  // touche ton cadran = lance l'autre
+  boxP.addEventListener("click",function(){pass("pale");});
+  boxF.addEventListener("click",function(){pass("fonce");});
+  document.getElementById("start").addEventListener("click",startGame);
+  document.getElementById("pause").addEventListener("click",stop);
+  document.getElementById("resetClock").addEventListener("click",function(){
+    stop(); active=null; var m=curMin(); timeP=m*60; timeF=m*60; paint();
+  });
+  var curMin=function(){var a=document.querySelector('.chip[aria-pressed=true]');return a?parseInt(a.dataset.min,10):10;};
+  document.querySelectorAll(".chip").forEach(function(ch){
+    ch.addEventListener("click",function(){
+      document.querySelectorAll(".chip").forEach(function(x){x.setAttribute("aria-pressed","false");});
+      ch.setAttribute("aria-pressed","true");
+      stop(); active=null; var m=parseInt(ch.dataset.min,10); timeP=m*60; timeF=m*60; paint();
+    });
+  });
+  paint();
+
+  // ---- zoom ----
+  var z=100, root=document.documentElement, zval=document.getElementById("zval"), slider=document.getElementById("slider");
+  function az(){z=Math.max(50,Math.min(150,z));root.style.setProperty("--z",(z/100).toString());zval.textContent=z+"%";slider.value=z;}
+  document.getElementById("minus").addEventListener("click",function(){z-=10;az();});
+  document.getElementById("plus").addEventListener("click",function(){z+=10;az();});
+  document.getElementById("reset").addEventListener("click",function(){z=100;az();});
+  document.getElementById("fit").addEventListener("click",function(){z=50;az();});
+  slider.addEventListener("input",function(){z=parseInt(slider.value,10);az();});
+  az();
+</script>
+</body></html>

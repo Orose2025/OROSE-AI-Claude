@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Abonnements ÉCHEC O CUBE. Jeu de base 3,99 $/mois (ou 39,99 $/an). Tout inclus - La Ruche 7,99 $/mois (ou 79,99 $/an) : jeu en ligne, Chat Blogue EOC, communauté. Devenez Membre fondateur EOC 2027.">
+<meta name="theme-color" content="#a26967">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Abonnements - Membre fondateur EOC 2027 - ÉCHEC O CUBE</title>
+<script>if (location.hostname === 'alaindupont-projet.web.app') location.replace('https://jeu.echecocube.ca' + location.pathname + location.search);</script>
+<style>
+/* Palette officielle choisie par Alain dans l'Atelier (14 juillet 2026) */
+:root{--fond:#a26967;--carte:#1e2843;--carte2:#1e2539;--bordure:#708cc7;--texte:#eff2f9;--texte2:#9fabc6;
+  --accent:#b6382f;--accent2:#f6da9e;--accent-doux:#d7928d;--accent2-doux:#faebca}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(ellipse at 50% 0%, #a87270 0%, var(--fond) 65%);color:var(--texte);
+  font-family:'Segoe UI',Inter,system-ui,Arial,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:14px 10px 40px}
+#logo{display:block;margin:4px auto 0;width:min(88vw,400px);height:auto;padding:8px 14px;
+  filter:drop-shadow(0 0 1.5px rgba(255,246,224,.9)) drop-shadow(0 0 12px rgba(246,218,158,.5)) drop-shadow(0 3px 8px rgba(0,0,0,.6))}
+h1{color:var(--accent);letter-spacing:2px;font-size:clamp(20px,5vw,30px);text-align:center;margin-top:14px;text-transform:uppercase;font-weight:800}
+.affiche{max-width:560px;width:100%;margin-top:16px;padding:24px 22px;text-align:center;
+  background:var(--carte2);border:1.5px solid var(--accent);border-radius:0;
+  box-shadow:0 12px 40px rgba(0,0,0,.6),inset 0 0 40px rgba(182,56,47,.06)}
+.affiche .surtitre{font-size:12.5px;letter-spacing:3px;color:var(--texte2)}
+.affiche h2{color:var(--accent-doux);font-size:clamp(19px,4.6vw,26px);letter-spacing:1px;margin:6px 0 4px;font-weight:800}
+.badge-fondateur{display:inline-block;margin:12px 0 6px;padding:10px 18px;border-radius:0;
+  background:var(--accent2);color:#101418;border:2px solid var(--accent2-doux);
+  box-shadow:0 0 20px rgba(246,218,158,.5)}
+.badge-fondateur .l1{font-weight:800;font-size:16px;letter-spacing:2px}
+.badge-fondateur .l2{font-size:11.5px;letter-spacing:1px;margin-top:2px}
+.affiche p{font-size:14px;line-height:1.6;color:#c6cad4;margin-top:12px}
+.trois{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px}
+.trois .item{flex:1;min-width:150px;background:rgba(0,0,0,.28);border:1px solid var(--bordure);border-radius:0;padding:12px 12px}
+.trois .item h3{color:var(--accent);font-size:12.5px;letter-spacing:1.5px;margin-bottom:5px}
+.trois .item p{font-size:12.5px;line-height:1.5;color:var(--texte2);margin-top:0}
+.carte{background:var(--carte);border:1px solid var(--bordure);border-top:3px solid var(--accent);border-radius:0;
+  max-width:520px;width:100%;padding:26px 22px;margin-top:16px;box-shadow:0 10px 34px rgba(0,0,0,.6);text-align:center}
+.etiquette{display:inline-block;background:var(--accent);color:#ffffff;font-weight:800;
+  font-size:12.5px;letter-spacing:1.5px;padding:5px 14px;border-radius:0;margin-bottom:12px;text-transform:uppercase}
+.prix{font-size:52px;color:var(--accent);line-height:1;font-weight:800}
+.prix small{font-size:18px;color:var(--texte2)}
+.annuel{font-size:15px;color:var(--accent-doux);margin-top:8px}
+.annuel small{color:var(--texte2);font-size:12.5px}
+.note-prix{font-size:13px;color:var(--texte2);margin-top:8px;font-style:italic}
+ul{list-style:none;text-align:left;margin:20px auto 4px;max-width:400px}
+li{font-size:14.5px;line-height:1.5;padding:7px 0 7px 26px;position:relative;color:#c6cad4;border-bottom:1px solid rgba(182,56,47,.18)}
+li:last-child{border-bottom:none}
+li::before{content:"";position:absolute;left:2px;top:14px;width:12px;height:12px;border:2px solid var(--accent);border-radius:0}
+li.plus::before{background:rgba(246,218,158,.6);border-color:var(--accent2)}
+.cta{display:inline-block;margin-top:20px;background:var(--accent);color:#ffffff;
+  font-weight:800;font-size:17px;letter-spacing:1px;padding:15px 26px;border-radius:0;text-decoration:none;text-transform:uppercase;
+  border:2px solid var(--accent-doux);box-shadow:0 0 18px rgba(182,56,47,.45)}
+.cta:hover{box-shadow:0 0 28px rgba(182,56,47,.75)}
+.honnete{font-size:12.5px;color:var(--texte2);line-height:1.6;margin-top:16px}
+.retour{display:inline-block;margin-top:22px;color:var(--accent-doux);font-size:14px;text-decoration:none;
+  border:1px solid var(--bordure);padding:9px 16px;border-radius:0}
+.retour:hover{border-color:var(--accent)}
+.credit{font-size:10.5px;color:#6b7690;text-align:center;margin-top:22px;line-height:1.6;max-width:520px}
+</style>
+</head>
+<body>
+<img id="logo" src="logo-eoc.png" alt="ÉCHEC O CUBE">
+<h1>ABONNEMENTS ÉCHEC O CUBE</h1>
+
+<div class="carte" style="border-top:3px solid #f6da9e;background:#233052;text-align:center">
+  <span class="etiquette" style="background:#f6da9e">🎮 C'EST GRATUIT MAINTENANT</span>
+  <p style="text-align:center;font-size:16px;color:#eff2f9;margin-top:4px"><b>Le jeu est entièrement GRATUIT jusqu'au 1ᵉʳ janvier 2027.</b> Rien à payer, rien à entrer : ouvrez le jeu et jouez tout de suite.</p>
+  <a class="cta" href="/" style="margin-top:14px">▶ JOUER GRATUITEMENT</a>
+  <p class="note-prix" style="margin-top:12px">Les abonnements ci-dessous ouvriront le 1ᵉʳ janvier 2027. Vous pouvez déjà voir les prix — mais il n'y a rien à payer aujourd'hui.</p>
+</div>
+
+<div class="affiche">
+  <div class="surtitre">ÉDITION DE LANCEMENT · PREMIÈRE HEURE</div>
+  <h2>Devenez Membre fondateur</h2>
+  <div class="badge-fondateur">
+    <div class="l1">MEMBRE FONDATEUR</div>
+    <div class="l2">EOC 2027 · LA RUCHE</div>
+  </div>
+  <p>ÉCHEC O CUBE est un jeu de stratégie inventé au Québec en 1999. Votre abonnement débloque tout le jeu, vous ouvre la communauté, et soutient directement son lancement officiel prévu en 2027.</p>
+  <div class="trois">
+    <div class="item"><h3>OÙ</h3><p>Dans le jeu, sur jeu.echecocube.ca, et dans la communauté sur echecocube.ca.</p></div>
+    <div class="item"><h3>À QUOI ÇA SERT</h3><p>Débloque tous les modes et niveaux, et finance le lancement d'un jeu d'ici.</p></div>
+    <div class="item"><h3>CE QUE VOUS RECEVEZ</h3><p>Un code personnel valide un an et votre titre de Membre fondateur EOC 2027.</p></div>
+  </div>
+</div>
+
+<div class="carte" style="border-top:3px solid #f6da9e;background:#233052">
+  <span class="etiquette" style="background:#f6da9e">🐝 OFFRE FONDATEUR — PAYEZ D'AVANCE</span>
+  <p style="text-align:center;font-size:16px;color:#eff2f9;margin-top:4px"><b>Le jeu est gratuit jusqu'au 1ᵉʳ janvier 2027 — mais les fondateurs peuvent réserver leur année MAINTENANT.</b></p>
+  <p style="text-align:center">Vous payez une seule fois aujourd'hui, vous recevez votre code membre immédiatement, et vous l'activez le 1ᵉʳ janvier : <b>votre année complète commence à l'activation</b> — pas une journée perdue. Votre achat compte pour la campagne La Ruche et votre titre de Membre fondateur EOC 2027 est réservé.</p>
+  <div class="paiement" data-forfait="fondateurBase" style="display:none;margin-top:14px">
+    <a class="cta" href="#" data-lien="fondateurBase" style="background:#1e2539;color:#eff2f9;border-color:#708cc7">🎯 FONDATEUR Jeu de base - 39,99 $ l'année</a>
+  </div>
+  <div class="paiement" data-forfait="fondateurTout" style="display:none;margin-top:10px">
+    <a class="cta" href="#" data-lien="fondateurTout">👑 FONDATEUR TOUT INCLUS - 79,99 $ l'année</a>
+  </div>
+  <p class="note-prix" id="noteFondateur">L'offre Fondateur ouvre très bientôt — inscrivez-vous dans le jeu pour être avisé en premier.</p>
+</div>
+
+<div class="carte">
+  <span class="etiquette">JEU DE BASE</span>
+  <div class="prix">3,99 $ <small>/ mois</small></div>
+  <div class="annuel">ou 39,99 $ <small>/ année (deux mois offerts)</small></div>
+  <div class="note-prix">Après paiement, EOC vous envoie votre code personnel valide un an.</div>
+  <ul>
+    <li>Jouer contre l'ordinateur : les quatre niveaux, de Débutant à Difficile</li>
+    <li>Deux joueurs sur le même appareil, autour de la table</li>
+    <li>Mémoire des parties, journal des coups en notation officielle</li>
+    <li>Blogue et communauté ÉCHEC O CUBE</li>
+  </ul>
+  <div class="paiement" data-forfait="baseMois" style="display:none;margin-top:16px">
+    <a class="cta" href="#" data-lien="baseMois">S'abonner - 3,99 $/mois</a>
+  </div>
+  <div class="paiement" data-forfait="baseAn" style="display:none;margin-top:10px">
+    <a class="cta" href="#" data-lien="baseAn" style="font-size:14px;padding:11px 18px">Ou 39,99 $/année (2 mois offerts)</a>
+  </div>
+</div>
+
+<div class="carte">
+  <span class="etiquette">TOUT INCLUS · LA RUCHE</span>
+  <div class="prix">7,99 $ <small>/ mois</small></div>
+  <div class="annuel">ou 79,99 $ <small>/ année - La Ruche (deux mois offerts)</small></div>
+  <div class="note-prix">Toutes les options. Après paiement, EOC vous envoie votre code personnel valide un an et votre titre de Membre fondateur EOC 2027.</div>
+  <ul>
+    <li>Tout le jeu de base inclus (ordinateur, deux joueurs sur le même appareil)</li>
+    <li>Jeu en ligne entre appareils, partout dans le monde, par code de partie</li>
+    <li>Chat Blogue EOC : salons publics et groupes privés entre joueurs</li>
+    <li>Blogue et chat de la communauté ÉCHEC O CUBE</li>
+    <li class="plus">À venir avec la communauté : tournois officiels FEOC, classement des joueurs et plateaux 9x9 et 11x11</li>
+    <li class="plus">Vous soutenez directement le lancement d'un jeu inventé au Québec en 1999</li>
+  </ul>
+  <div class="paiement" data-forfait="completMois" style="display:none;margin-top:16px">
+    <a class="cta" href="#" data-lien="completMois">S'abonner TOUT INCLUS - 7,99 $/mois</a>
+  </div>
+  <div class="paiement" data-forfait="completAn" style="display:none;margin-top:10px">
+    <a class="cta" href="#" data-lien="completAn" style="font-size:14px;padding:11px 18px">Ou 79,99 $/année - La Ruche (2 mois offerts)</a>
+  </div>
+  <a href="https://echecocube.ca/blogs/communaute-echec-o-cube" id="ctaCommunaute" style="display:inline-block;margin-top:16px;background:var(--carte2);color:var(--texte);font-weight:600;font-size:14px;padding:11px 18px;border:1px solid var(--bordure);border-radius:0;text-decoration:none">💬 Lire le blogue et la communauté (facultatif)</a>
+  <p class="honnete" id="noteCaisse">Le jeu est GRATUIT jusqu'au 1ᵉʳ janvier 2027 — la caisse ouvre à cette date. En joignant la communauté dès maintenant, vous êtes avisé en premier et votre tarif de Membre fondateur est réservé. Chaque code est personnel et valide un an; le renouvellement sera toujours annoncé clairement d'avance et l'annulation sera simple, conformément à la Loi sur la protection du consommateur du Québec.</p>
+</div>
+
+<script>
+/* ===== CAISSE STRIPE (16 juillet 2026) =====
+   Les 4 Liens de paiement Stripe créés dans le compte ÉCHEC O CUBE.
+   MODE TEST actuellement (test_...) : les boutons ne s'affichent au public
+   qu'avec des liens RÉELS. Pour tester : ajouter ?caisse=test à l'adresse.
+   Au passage en mode réel (avant le 1er janvier 2027), remplacer les 4
+   adresses par les liens live (sans test_) : les boutons apparaîtront seuls.
+   Chaque lien redirige vers merci.html?session_id={CHECKOUT_SESSION_ID}. */
+var LIENS_STRIPE = {
+  baseMois: "https://buy.stripe.com/test_14A3cw7Ra2YS9yzgov6oo00",     /* Jeu de base 3,99 $/mois  */
+  baseAn: "https://buy.stripe.com/test_14AaEY0oI8jc1237RZ6oo01",       /* Jeu de base 39,99 $/an   */
+  completMois: "https://buy.stripe.com/test_bJeeVe8Ve5703abc8f6oo02",  /* Tout inclus 7,99 $/mois  */
+  completAn: "https://buy.stripe.com/test_3cI14ofjCdDw5ij5JR6oo03",    /* Tout inclus 79,99 $/an   */
+  /* OFFRE FONDATEUR : paiement UNIQUE d'une année, code immédiat,
+     année qui commence à l'ACTIVATION du code (conseillé : 1er janvier 2027) */
+  fondateurBase: "https://buy.stripe.com/test_14A3cw7Ra2YS9yzgov6oo00",   /* PLACEHOLDER TEST (bouton caché au public). AVANT ACTIVATION : créer un VRAI lien LIVE paiement unique 39,99 $ et le coller ici. Ne jamais enlever test_ pour "faire" un lien live. */
+  fondateurTout: "https://buy.stripe.com/test_14AaEY0oI8jc1237RZ6oo01"    /* PLACEHOLDER TEST (bouton caché au public). AVANT ACTIVATION : créer un VRAI lien LIVE paiement unique 79,99 $ et le coller ici. */
+};
+var modeTestCaisse = false;
+try { modeTestCaisse = new URLSearchParams(location.search).get('caisse') === 'test'; } catch(e){}
+var caisseVisible = false;
+document.querySelectorAll('.paiement').forEach(function(z){
+  var f = z.getAttribute('data-forfait');
+  var lien = LIENS_STRIPE[f] || '';
+  if (!lien) return;
+  var estTest = lien.indexOf('/test_') !== -1;
+  if (estTest && !modeTestCaisse) return; /* liens test invisibles au public */
+  z.style.display = '';
+  z.querySelector('a').href = lien;
+  caisseVisible = true;
+});
+if (caisseVisible) {
+  var n = document.getElementById('noteCaisse');
+  if (n) n.textContent = (modeTestCaisse ? "MODE TEST (aucun vrai paiement - carte 4242 4242 4242 4242). " : "") +
+    "Paiement sécurisé par Stripe (carte de crédit ou débit). Votre code membre s'affiche immédiatement après le paiement et un reçu vous est envoyé par courriel. Renouvellement toujours annoncé d'avance, annulation simple, conformément à la Loi sur la protection du consommateur du Québec.";
+}
+/* Note de l'offre Fondateur quand ses boutons sont visibles */
+(function(){
+  var fb = document.querySelector('[data-forfait="fondateurBase"]');
+  var ft = document.querySelector('[data-forfait="fondateurTout"]');
+  if ((fb && fb.style.display !== 'none') || (ft && ft.style.display !== 'none')) {
+    var nf = document.getElementById('noteFondateur');
+    if (nf) nf.textContent = (modeTestCaisse ? "MODE TEST. " : "") +
+      "Paiement unique sécurisé par Stripe. Votre code membre s'affiche immédiatement à l'écran — activez-le le 1ᵉʳ janvier 2027 et profitez d'une année complète, jusqu'au 1ᵉʳ janvier 2028.";
+  }
+})();
+</script>
+
+<a class='retour' href='/'>Retour au jeu</a>
+
+<div class="credit">ÉCHEC O CUBE - Inventé par Alain Dupont, Québec, 1999 - Droit d'auteur OPIC Canada No 477714<br>
+Boutique officielle : echecocube.ca - Lancement public : 2027 avec La Ruche</div>
+</body>
+</html>

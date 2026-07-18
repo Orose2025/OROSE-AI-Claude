@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="description" content="Merci pour votre abonnement ÉCHEC O CUBE.">
+<meta name="theme-color" content="#a26967">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Merci - ÉCHEC O CUBE</title>
+<script>if (location.hostname === 'alaindupont-projet.web.app') location.replace('https://jeu.echecocube.ca' + location.pathname + location.search);</script>
+<style>
+/* Palette officielle d'Alain (14 juillet 2026) */
+:root{--fond:#a26967;--carte:#1e2843;--carte2:#1e2539;--bordure:#708cc7;--texte:#eff2f9;--texte2:#9fabc6;
+  --accent:#b6382f;--accent2:#f6da9e;--accent-doux:#d7928d;--accent2-doux:#faebca}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(ellipse at 50% 0%, #a87270 0%, var(--fond) 65%);color:var(--texte);
+  font-family:'Segoe UI',Inter,system-ui,Arial,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:14px 10px 40px}
+#logo{display:block;margin:4px auto 0;width:min(88vw,400px);height:auto;padding:8px 14px;
+  filter:drop-shadow(0 0 1.5px rgba(255,246,224,.9)) drop-shadow(0 3px 8px rgba(0,0,0,.6))}
+h1{color:var(--accent2);letter-spacing:2px;font-size:clamp(20px,5vw,30px);text-align:center;margin-top:14px;text-transform:uppercase;font-weight:800;text-shadow:0 2px 6px rgba(0,0,0,.4)}
+.carte{background:var(--carte);border:1px solid var(--bordure);border-top:3px solid var(--accent2);border-radius:0;
+  max-width:520px;width:100%;padding:26px 22px;margin-top:16px;box-shadow:0 10px 34px rgba(0,0,0,.6);text-align:center}
+.etiquette{display:inline-block;background:var(--accent2);color:#101418;font-weight:800;
+  font-size:12.5px;letter-spacing:1.5px;padding:5px 14px;border-radius:0;margin-bottom:12px;text-transform:uppercase}
+p{font-size:15px;line-height:1.7;color:#c6cad4;margin-top:12px;text-align:left}
+#zoneCode{margin:18px 0 6px}
+#leCode{font-size:clamp(26px,7vw,38px);font-weight:800;letter-spacing:3px;color:var(--accent2);
+  background:rgba(0,0,0,.3);border:2px dashed var(--accent2);padding:16px 10px;user-select:all}
+#etat{min-height:22px;font-size:14px;color:var(--accent-doux);text-align:center;margin-top:8px}
+.cta{display:inline-block;margin-top:20px;background:var(--accent);color:#ffffff;
+  font-weight:800;font-size:17px;letter-spacing:1px;padding:15px 26px;border-radius:0;text-decoration:none;text-transform:uppercase;
+  border:2px solid var(--accent-doux);box-shadow:0 0 18px rgba(182,56,47,.4)}
+.btn2{display:inline-block;margin-top:12px;background:var(--carte2);color:var(--texte);font-weight:600;font-size:14px;
+  padding:10px 18px;border:1px solid var(--bordure);border-radius:0;text-decoration:none;cursor:pointer}
+.honnete{font-size:12.5px;color:var(--texte2);line-height:1.6;margin-top:16px;text-align:center}
+.credit{font-size:10.5px;color:#6b7690;text-align:center;margin-top:22px;line-height:1.6;max-width:520px}
+ol{text-align:left;font-size:14.5px;line-height:1.7;color:#c6cad4;margin:10px 0 0 22px}
+</style>
+</head>
+<body>
+<img id="logo" src="logo-eoc.png" alt="ÉCHEC O CUBE">
+<h1>MERCI, MEMBRE ÉCHEC O CUBE !</h1>
+
+<div class="carte">
+  <span class="etiquette">PAIEMENT REÇU</span>
+  <p style="text-align:center">Votre abonnement ÉCHEC O CUBE est confirmé. Bienvenue parmi les membres !</p>
+  <div id="zoneCode" style="display:none">
+    <p style="text-align:center;margin-bottom:8px"><b>Voici votre code membre personnel :</b></p>
+    <div id="leCode">EOC-....-....</div>
+    <button class="btn2" id="btnCopier">📋 Copier le code</button>
+    <p style="text-align:center;font-size:13px;color:#9fabc6;margin-top:10px">
+      Gardez cette page dans vos favoris : votre code y sera toujours affiché.
+      Un reçu Stripe vous est aussi envoyé par courriel.</p>
+    <p><b>Pour activer :</b></p>
+    <ol>
+      <li>Ouvrez le jeu (bouton ci-dessous)</li>
+      <li>Menu → <b>Abonnements et codes</b></li>
+      <li>Entrez votre code et touchez <b>Activer</b> — valide un an !</li>
+    </ol>
+  </div>
+  <div id="etat">Vérification de votre paiement...</div>
+  <a class="cta" href="/">Ouvrir le jeu et activer mon code</a>
+  <p class="honnete">Question ou problème ? Écrivez à contact@echecocube.ca — réponse rapide, promis.</p>
+</div>
+
+<div class="credit">ÉCHEC O CUBE - Inventé par Alain Dupont, Québec, 1999 - Droit d'auteur OPIC Canada No 477714<br>
+Boutique officielle : echecocube.ca - Campagne La Ruche : printemps 2027</div>
+
+<script>
+(function(){
+  var etat = document.getElementById('etat');
+  var sid = new URLSearchParams(location.search).get('session_id');
+  if (!sid) {
+    etat.textContent = "Cette page confirme les paiements. Si vous venez de payer et ne voyez pas votre code, écrivez à contact@echecocube.ca.";
+    return;
+  }
+  fetch('/api/code?session_id=' + encodeURIComponent(sid))
+    .then(function(r){ return r.json().then(function(j){ return {ok: r.ok, j: j}; }); })
+    .then(function(x){
+      if (x.ok && x.j.code) {
+        document.getElementById('leCode').textContent = x.j.code;
+        document.getElementById('zoneCode').style.display = '';
+        etat.textContent = x.j.type === 'base'
+          ? 'Forfait JEU DE BASE confirmé.' : 'Forfait TOUT INCLUS confirmé — bienvenue dans la communauté !';
+        document.getElementById('btnCopier').addEventListener('click', function(){
+          var c = document.getElementById('leCode').textContent;
+          if (navigator.clipboard) navigator.clipboard.writeText(c).then(function(){ etat.textContent = '📋 Code copié !'; });
+        });
+      } else {
+        etat.textContent = x.j.erreur || 'Vérification impossible pour le moment.';
+      }
+    })
+    .catch(function(){
+      /* Caisse automatique pas encore branchée : promesse manuelle */
+      etat.textContent = "Votre code membre (EOC-XXXX-XXXX) vous sera envoyé par courriel à l'adresse du paiement, en moins de 24 heures.";
+    });
+})();
+</script>
+</body>
+</html>

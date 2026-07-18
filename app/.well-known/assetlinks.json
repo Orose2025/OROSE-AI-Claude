@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "ca.echecocube.jeu.twa",
+        "sha256_cert_fingerprints": ["C2:0E:34:58:F6:9F:E3:16:67:0A:56:18:67:9B:5F:3F:63:38:FF:96:3D:95:20:4A:C8:05:AC:62:B2:30:61:1B"]
+      }
+    }]
