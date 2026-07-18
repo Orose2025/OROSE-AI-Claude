@@ -1,7 +1,7 @@
 ﻿/* ECHEC O CUBE - service worker v33 (palette officielle Alain + Atelier textes + adresse unique)
    Page du jeu : RESEAU D'ABORD (les mises a jour arrivent tout de suite), cache de secours hors ligne.
    Images et fichiers fixes : cache d'abord (rapide), mis a jour en arriere-plan. */
-const CACHE = 'eoc-v42';
+const CACHE = 'eoc-v43';
 const FICHIERS = ['./', './index.html', './logo-eoc.png', './icon-192.png', './icon-512.png', './manifest.json'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FICHIERS)).then(() => self.skipWaiting()));

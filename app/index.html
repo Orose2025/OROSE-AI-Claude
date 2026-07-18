@@ -101,6 +101,11 @@ table.decompte th{color:var(--accent-doux)}
 .cadran-duree{font-family:inherit;cursor:pointer;border:1px solid var(--bordure);background:var(--carte);color:var(--texte);font-size:12px;font-weight:700;padding:4px 8px;border-radius:0}
 .cadran-duree.sel-duree{border-color:var(--accent);color:var(--accent)}
 .cadran-min{font-size:10px;color:var(--texte2)}
+/* ===== Arene EOC : tableaux des joueurs de chaque cote du plateau (ecran large) ===== */
+#areneEOC{display:flex;align-items:center;justify-content:center;gap:14px;width:100%;max-width:1100px}
+#areneEOC .carte{flex:0 0 190px;max-width:190px;text-align:center;padding:14px 10px}
+#areneEOC .carte .pts{font-size:34px}
+#areneEOC svg{flex:0 1 auto;min-width:0}
 .zone-rouge-note.on{display:block}
 .banniere-gratuit{display:block;margin:0 auto 6px;padding:8px 14px;border-radius:0;text-align:center;
   background:var(--accent2);color:#101418;font-weight:800;letter-spacing:1px;text-transform:uppercase;
@@ -235,6 +240,7 @@ button.avert{border-color:var(--accent);box-shadow:0 0 10px rgba(182,56,47,.6)}
   <button id="btnAnnuler" class="mini" title="Annuler le dernier coup joué">Annuler le coup</button>
   <button id="btnChat" class="mini" style="display:none">Clavardage</button>
   <button id="btnCadran" class="mini" title="Jouer au temps : un chrono par joueur">Cadran</button>
+  <button id="btnSon" class="mini" title="Son des pions : trois bruits de bois au choix, ou muet">Son : Bois 1</button>
   <button id="btnTailleMoins2" class="mini" title="Réduire la taille">A−</button>
   <span id="lblTaille2">100%</span>
   <button id="btnTaillePlus2" class="mini" title="Grossir l'écran">A+</button>
@@ -2299,6 +2305,106 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
     if (on) remet(); else { marche=false; stop(); }
   });
   peint();
+})();
+</script>
+
+<script>
+/* ===== SON DES PIONS - version 1 =====
+   Trois bruits de bois au choix + Muet, memorise. Le son joue a chaque coup
+   note au journal (pose d'un pion ou d'un rouge, par les deux joueurs). */
+(function(){
+  var MODES = [
+    {cle:'bois1', nom:'Bois 1'},
+    {cle:'bois2', nom:'Bois 2'},
+    {cle:'bois3', nom:'Bois 3'},
+    {cle:'muet',  nom:'Muet'}
+  ];
+  var idx = 0;
+  try { var m = localStorage.getItem('eocSonMode'); MODES.forEach(function(x,i){ if(x.cle===m) idx=i; }); } catch(e){}
+  var ctx = null, dernier = 0;
+  function contexte(){
+    if (!ctx) { try { ctx = new (window.AudioContext||window.webkitAudioContext)(); } catch(e){ return null; } }
+    if (ctx && ctx.state === 'suspended') { try { ctx.resume(); } catch(e){} }
+    return ctx;
+  }
+  /* petit "toc" de bois synthetise : oscillateur amorti + souffle bref */
+  function toc(freq, duree, gainMax, souffle){
+    var c = contexte(); if (!c) return;
+    var t = c.currentTime;
+    var o = c.createOscillator(), g = c.createGain();
+    o.type = 'sine'; o.frequency.setValueAtTime(freq, t);
+    o.frequency.exponentialRampToValueAtTime(Math.max(60, freq*0.55), t+duree);
+    g.gain.setValueAtTime(gainMax, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t+duree);
+    o.connect(g); g.connect(c.destination);
+    o.start(t); o.stop(t+duree+0.02);
+    if (souffle){
+      var n = c.createBufferSource(), b = c.createBuffer(1, c.sampleRate*0.03, c.sampleRate);
+      var d = b.getChannelData(0);
+      for (var i=0;i<d.length;i++) d[i] = (Math.random()*2-1) * (1 - i/d.length);
+      var f = c.createBiquadFilter(); f.type='bandpass'; f.frequency.value = freq*2.2; f.Q.value = 1.2;
+      var g2 = c.createGain(); g2.gain.setValueAtTime(gainMax*0.5, t);
+      g2.gain.exponentialRampToValueAtTime(0.0001, t+0.03);
+      n.buffer = b; n.connect(f); f.connect(g2); g2.connect(c.destination); n.start(t);
+    }
+  }
+  function joue(){
+    var mode = MODES[idx].cle;
+    if (mode === 'muet') return;
+    var t = Date.now(); if (t - dernier < 120) return; dernier = t;  /* anti-rafale */
+    if (mode === 'bois1') toc(1050, 0.09, 0.5, true);        /* bois sec, net */
+    else if (mode === 'bois2') toc(480, 0.16, 0.6, true);    /* bois creux, grave */
+    else if (mode === 'bois3') toc(1900, 0.05, 0.28, false); /* clic doux, discret */
+  }
+  /* branche le son sur chaque coup note au journal */
+  if (typeof ajouteJournal === 'function'){
+    var _aj = ajouteJournal;
+    ajouteJournal = function(texte){ _aj(texte); joue(); };
+  }
+  var b = document.getElementById('btnSon');
+  function etiquette(){ if (b) b.textContent = 'Son : ' + MODES[idx].nom; }
+  if (b) b.addEventListener('click', function(){
+    idx = (idx + 1) % MODES.length;
+    try { localStorage.setItem('eocSonMode', MODES[idx].cle); } catch(e){}
+    etiquette();
+    dernier = 0; joue();  /* apercu immediat du son choisi */
+  });
+  etiquette();
+})();
+</script>
+
+<script>
+/* ===== ARENE EOC - version 1 =====
+   Sur ecran large, place le tableau de chaque joueur DE CHAQUE COTE du plateau
+   (Joueur 1 a gauche, Joueur 2 a droite), bien visibles. Sur petit ecran,
+   les tableaux restent au-dessus comme avant. */
+(function(){
+  var bandeau = null, arene = null;
+  function large(){ return window.innerWidth >= 900; }
+  function applique(){
+    var c1 = document.getElementById('carte1'), c2 = document.getElementById('carte2');
+    var pv = document.getElementById('plateau');
+    if (!c1 || !c2 || !pv) return;
+    if (!bandeau) bandeau = c1.parentElement;
+    if (large()){
+      if (!arene){
+        arene = document.createElement('div');
+        arene.id = 'areneEOC';
+        pv.parentElement.insertBefore(arene, pv);
+      }
+      if (pv.parentElement !== arene){
+        arene.appendChild(c1); arene.appendChild(pv); arene.appendChild(c2);
+        if (bandeau) bandeau.style.display = 'none';
+      }
+    } else if (arene && bandeau && arene.contains(pv)){
+      bandeau.style.display = '';
+      bandeau.appendChild(c1); bandeau.appendChild(c2);
+      arene.parentElement.insertBefore(pv, arene);
+      arene.remove(); arene = null;
+    }
+  }
+  window.addEventListener('resize', applique);
+  applique();
 })();
 </script>
 
