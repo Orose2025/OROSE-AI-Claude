@@ -101,6 +101,13 @@ table.decompte th{color:var(--accent-doux)}
 .cadran-duree{font-family:inherit;cursor:pointer;border:1px solid var(--bordure);background:var(--carte);color:var(--texte);font-size:12px;font-weight:700;padding:4px 8px;border-radius:0}
 .cadran-duree.sel-duree{border-color:var(--accent);color:var(--accent)}
 .cadran-min{font-size:10px;color:var(--texte2)}
+/* ===== Revoir la partie (film des coups) ===== */
+#filmBar{display:none;width:100%;max-width:520px;margin:6px 0 2px;background:rgba(0,0,0,.45);
+  border:2px solid var(--accent-doux);padding:8px 10px;flex-direction:column;gap:6px}
+#filmBar.on{display:flex}
+.film-rangee{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;align-items:center}
+.film-info{text-align:center;font-size:13px;color:var(--accent-doux);font-weight:700;min-height:18px}
+#filmBar .mini{padding:8px 12px}
 /* ===== Arene EOC : tableaux des joueurs de chaque cote du plateau (ecran large) ===== */
 #areneEOC{display:flex;align-items:center;justify-content:center;gap:14px;width:100%;max-width:1100px}
 #areneEOC .carte{flex:0 0 190px;max-width:190px;text-align:center;padding:14px 10px}
@@ -241,9 +248,26 @@ button.avert{border-color:var(--accent);box-shadow:0 0 10px rgba(182,56,47,.6)}
   <button id="btnChat" class="mini" style="display:none">Clavardage</button>
   <button id="btnCadran" class="mini" title="Jouer au temps : un chrono par joueur">Cadran</button>
   <button id="btnSon" class="mini" title="Son des pions : trois bruits de bois au choix, ou muet">Son : Bois 1</button>
+  <button id="btnFilm" class="mini" title="Revoir la partie coup par coup pour étudier">Revoir</button>
   <button id="btnTailleMoins2" class="mini" title="Réduire la taille">A−</button>
   <span id="lblTaille2">100%</span>
   <button id="btnTaillePlus2" class="mini" title="Grossir l'écran">A+</button>
+</div>
+
+<!-- ===== FILM DE LA PARTIE : barre de relecture ===== -->
+<div id="filmBar" aria-label="Revoir la partie">
+  <div class="film-info" id="filmInfo">Film de la partie</div>
+  <div class="film-rangee">
+    <button id="filmDebut" class="mini" type="button">Début</button>
+    <button id="filmPrec" class="mini" type="button">Précédent</button>
+    <button id="filmLecture" class="mini" type="button">Lecture</button>
+    <button id="filmSuiv" class="mini" type="button">Suivant</button>
+    <button id="filmFin" class="mini" type="button">Fin</button>
+  </div>
+  <div class="film-rangee">
+    <button id="filmTelecharger" class="mini" type="button">Télécharger la partie</button>
+    <button id="filmFermer" class="mini" type="button">Fermer</button>
+  </div>
 </div>
 
 <div id="chatBoite" aria-label="Clavardage avec l'adversaire">
@@ -2370,6 +2394,95 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
     dernier = 0; joue();  /* apercu immediat du son choisi */
   });
   etiquette();
+})();
+</script>
+
+<script>
+/* ===== FILM DE LA PARTIE - version 1 =====
+   Enregistre automatiquement chaque coup (photo de l'etat du jeu) et permet
+   de REVOIR la partie coup par coup : Debut / Precedent / Lecture / Suivant / Fin,
+   plus Telecharger (fichier d'etude). Fonctionne pour 2 joueurs, ordinateur et en ligne. */
+(function(){
+  var film = [];
+  try { film = JSON.parse(localStorage.getItem('eocFilm') || '[]'); } catch(e){ film = []; }
+  var enRevoir = false, sauvegarde = null, index = 0, lecteur = null;
+
+  /* enregistre : a chaque coup note au journal, on garde la photo de l'etat */
+  if (typeof ajouteJournal === 'function'){
+    var _ajF = ajouteJournal;
+    ajouteJournal = function(texte){
+      _ajF(texte);
+      try {
+        if (journal.length <= 1) film = [];   /* nouvelle partie -> nouveau film */
+        film.push({ n: String(texte).replace(/<[^>]+>/g,''), e: JSON.stringify(g) });
+        if (film.length > 400) film = film.slice(-400);
+        localStorage.setItem('eocFilm', JSON.stringify(film));
+      } catch(e){}
+    };
+  }
+
+  var bar = document.getElementById('filmBar'), info = document.getElementById('filmInfo');
+  var zc = function(){ return document.getElementById('zonesClic'); };
+  function montre(i){
+    if (!film.length){ info.textContent = 'Aucun coup enregistré pour le moment.'; return; }
+    index = Math.max(0, Math.min(film.length - 1, i));
+    try {
+      g = JSON.parse(film[index].e);
+      dessinePions();
+    } catch(e){}
+    info.textContent = 'Coup ' + (index+1) + ' / ' + film.length + ' — ' + film[index].n;
+  }
+  function ouvre(){
+    if (!film.length){ if (typeof msg === 'function') msg('Joue quelques coups d\'abord : le film s\'enregistre tout seul.'); return; }
+    if (enRevoir) return;
+    enRevoir = true;
+    try { sauvegarde = JSON.stringify(g); } catch(e){ sauvegarde = null; }
+    var z = zc(); if (z) z.style.pointerEvents = 'none';   /* on ne joue pas pendant la relecture */
+    bar.classList.add('on');
+    montre(0);
+  }
+  function ferme(){
+    if (!enRevoir) return;
+    enRevoir = false;
+    arret();
+    if (sauvegarde){ try { g = JSON.parse(sauvegarde); dessinePions(); } catch(e){} }
+    var z = zc(); if (z) z.style.pointerEvents = '';
+    bar.classList.remove('on');
+  }
+  function arret(){ if (lecteur){ clearInterval(lecteur); lecteur = null; }
+    var b = document.getElementById('filmLecture'); if (b) b.textContent = 'Lecture'; }
+  function lecture(){
+    if (lecteur){ arret(); return; }
+    var b = document.getElementById('filmLecture'); if (b) b.textContent = 'Pause';
+    lecteur = setInterval(function(){
+      if (index >= film.length - 1){ arret(); return; }
+      montre(index + 1);
+    }, 1400);
+  }
+  function telecharge(){
+    try {
+      var d = new Date();
+      var contenu = {
+        jeu: 'ÉCHEC O CUBE', date: d.toISOString(),
+        coups: film.map(function(x,i){ return (i+1) + '. ' + x.n; }),
+        etats: film.map(function(x){ return JSON.parse(x.e); })
+      };
+      var b = new Blob([JSON.stringify(contenu, null, 1)], {type: 'application/json'});
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(b);
+      a.download = 'eoc-partie-' + d.toISOString().slice(0,10) + '.json';
+      document.body.appendChild(a); a.click(); a.remove();
+    } catch(e){}
+  }
+  var B = function(id, fn){ var b = document.getElementById(id); if (b) b.addEventListener('click', fn); };
+  B('btnFilm', function(){ enRevoir ? ferme() : ouvre(); });
+  B('filmFermer', ferme);
+  B('filmDebut', function(){ arret(); montre(0); });
+  B('filmPrec', function(){ arret(); montre(index - 1); });
+  B('filmSuiv', function(){ arret(); montre(index + 1); });
+  B('filmFin', function(){ arret(); montre(film.length - 1); });
+  B('filmLecture', lecture);
+  B('filmTelecharger', telecharge);
 })();
 </script>
 
