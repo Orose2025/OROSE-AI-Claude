@@ -1,0 +1,2565 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">
+<meta name="description" content="ÉCHEC O CUBE - Le jeu de stratégie inventé au Québec en 1999. Placer, connecter, observer, fermer. Jouez contre l'ordinateur ou en ligne avec un ami.">
+<meta name="theme-color" content="#a26967">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>ÉCHEC O CUBE - Prototype officiel 7x7 - Règlement V3.0</title>
+<script>/* Adresse officielle unique : jeu.echecocube.ca (l'adresse technique Firebase redirige) */
+if (location.hostname === 'alaindupont-projet.web.app') location.replace('https://jeu.echecocube.ca' + location.pathname + location.search);</script>
+<style>
+:root{
+  /* Couleurs du plateau et des pions - Règlement V3.0 - NE JAMAIS MODIFIER */
+  --or:#d4af37; --or2:#f0d37a;
+  --tuile1:#cfa972; --tuile2:#b78b52; --rainure:#9a763f;
+  --pale:#f7ecd2; --fonce:#241203; --rouge:#c0392b;
+  /* Palette officielle choisie par Alain dans l'Atelier (14 juillet 2026) :
+     fond terracotta, panneaux marine, accent rouge brique, doré sable */
+  --fond:#a26967; --carte:#1e2843; --carte2:#1e2539; --bordure:#708cc7;
+  --texte:#eff2f9; --texte2:#9fabc6;
+  --accent:#b6382f; --accent2:#f6da9e; --accent-doux:#d7928d; --accent2-doux:#faebca;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(ellipse at 50% 0%, #a87270 0%, var(--fond) 65%);color:var(--texte);
+  font-family:'Segoe UI',Inter,system-ui,Arial,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:10px 8px 30px}
+header{text-align:center;margin:6px 0 2px}
+#logo{display:block;margin:0 auto;width:min(92%,440px);height:auto}
+.sous{font-size:12.5px;color:var(--texte2);letter-spacing:1px;text-transform:uppercase;margin-top:2px}
+.bandeau{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:10px 0 6px;width:100%;max-width:520px}
+.carte{background:var(--carte);border:1px solid var(--bordure);border-radius:0;
+  padding:7px 10px;flex:1;min-width:150px;box-shadow:0 3px 10px rgba(0,0,0,.4)}
+.carte.actif{border-color:var(--accent);box-shadow:0 0 12px rgba(182,56,47,.45)}
+.carte h3{font-size:12px;color:var(--accent2-doux);letter-spacing:1.5px;text-transform:uppercase}
+.carte .pts{font-size:25px;color:var(--accent);line-height:1.1;font-weight:800}
+.carte .net{font-size:11px;color:var(--texte2)}
+.carte .stock{font-size:11.5px;margin-top:2px;color:#c6cad4}
+.tour{width:100%;max-width:520px;text-align:center;font-size:14px;color:var(--accent-doux);min-height:20px;margin:2px 0;font-weight:600}
+#plateau{width:100%;max-width:480px;filter:drop-shadow(0 8px 18px rgba(0,0,0,.55))}
+.controles{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:10px;max-width:520px}
+button{font-family:inherit;cursor:pointer;border-radius:0;border:1px solid var(--bordure);
+  background:var(--carte);color:var(--texte);padding:9px 13px;font-size:14px;font-weight:600}
+button:hover{border-color:var(--accent)}
+button:disabled{opacity:.4;cursor:default;border-color:var(--bordure)}
+button.sel{border-color:var(--accent);background:var(--accent);color:#ffffff;box-shadow:0 0 10px rgba(182,56,47,.5)}
+button.annonce{background:var(--accent);color:#ffffff;font-weight:800;
+  font-size:17px;letter-spacing:1px;text-transform:uppercase;padding:12px 20px;border:2px solid var(--accent-doux);
+  animation:pulse 1.1s infinite alternate}
+@keyframes pulse{from{box-shadow:0 0 6px rgba(182,56,47,.5)}to{box-shadow:0 0 22px rgba(182,56,47,.95)}}
+.halo{animation:haloAnim .9s infinite alternate;pointer-events:none}
+@keyframes haloAnim{from{opacity:.30}to{opacity:1}}
+.mini{font-size:12px;padding:6px 10px}
+.jeton{display:inline-block;width:26px;height:8px;border-radius:0;vertical-align:middle;margin-right:5px}
+.jeton.p{background:var(--pale);border:1px solid #a98f5e}
+.jeton.f{background:var(--fonce);border:1px solid var(--or2);width:34px}
+.jeton.r{background:var(--rouge);width:8px;height:14px;border-radius:0}
+#msg{min-height:40px;max-width:520px;width:100%;text-align:center;font-size:13.5px;color:#c6cad4;
+  margin-top:8px;padding:6px 10px;background:rgba(0,0,0,.25);border-radius:0;border:1px solid var(--bordure)}
+#journal{max-width:520px;width:100%;max-height:110px;overflow-y:auto;margin-top:6px;padding:6px 12px;
+  background:rgba(0,0,0,.30);border:1px solid var(--bordure);border-radius:0;font-size:12px;
+  color:var(--texte2);line-height:1.6;text-align:left}
+#journal:empty{display:none}
+#journal b{color:var(--accent-doux)}
+.legende-notation{max-width:520px;width:100%;font-size:11px;color:var(--texte2);text-align:center;margin-top:4px}
+.barre{display:none;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px;width:100%;max-width:520px}
+.barre.on{display:flex}
+.voile{position:fixed;inset:0;background:radial-gradient(ellipse at 50% 0%, #24304f 0%, #0d1220 70%);display:none;align-items:center;justify-content:center;z-index:50;padding:14px}
+.voile.on{display:flex}
+.boite{background:var(--carte);border:1px solid var(--bordure);border-top:3px solid var(--accent);border-radius:0;
+  max-width:520px;width:100%;max-height:calc(88vh / var(--z,1));overflow:auto;padding:22px;box-shadow:0 10px 40px rgba(0,0,0,.8)}
+.boite h2{color:var(--accent);letter-spacing:2px;font-size:20px;margin-bottom:10px;text-align:center;text-transform:uppercase;font-weight:800}
+.boite p,.boite li{font-size:13.5px;line-height:1.55;color:#c6cad4}
+.boite ol{padding-left:20px;margin:8px 0}
+.boite .choix{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.boite .choix button{font-size:16px;padding:14px;text-align:left;border-left:5px solid var(--accent)}
+.boite .choix button.mini{font-size:13px;padding:10px 14px;border-left:5px solid var(--accent2)}
+.boite input{flex:1;min-width:0;font-family:inherit;font-size:16px;padding:12px;border-radius:0;
+  border:1px solid var(--bordure);background:#0e1320;color:var(--texte);text-transform:uppercase;letter-spacing:2px}
+.boite input:focus{outline:none;border-color:var(--accent)}
+#etatLigne{min-height:22px;text-align:center;font-size:14px;color:var(--accent-doux)}
+table.decompte{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.5px}
+table.decompte td,table.decompte th{border:1px solid var(--bordure);padding:6px 8px;text-align:center}
+table.decompte th{color:var(--accent-doux)}
+.vainqueur{text-align:center;font-size:18px;color:var(--accent);margin:8px 0;letter-spacing:1px;font-weight:800;text-transform:uppercase}
+.credit{font-size:11.5px;color:var(--texte2);text-align:center;margin-top:14px;line-height:1.55}
+.zone-rouge-note{font-size:11px;color:#ff9db0;text-align:center;max-width:520px;margin-top:4px;display:none}
+/* ===== Cadran numerique EOC ===== */
+#cadranEOC{display:none;width:100%;max-width:520px;margin:4px 0 2px;gap:8px;align-items:stretch;justify-content:center}
+#cadranEOC.on{display:flex}
+.cadran-boite{flex:1;background:rgba(0,0,0,.45);border:2px solid var(--bordure);padding:6px 10px;text-align:center;cursor:pointer;user-select:none}
+.cadran-boite.actif{border-color:var(--accent);box-shadow:0 0 12px rgba(246,218,158,.35)}
+.cadran-boite.bas .cadran-temps{color:#ff8a7a}
+.cadran-nom{display:block;font-size:10px;letter-spacing:1.5px;color:var(--texte2);font-weight:700}
+.cadran-temps{display:block;font-family:'Courier New',ui-monospace,monospace;font-size:30px;font-weight:800;color:var(--accent);line-height:1.05;font-variant-numeric:tabular-nums}
+.cadran-centre{display:flex;flex-direction:column;gap:5px;align-items:center;justify-content:center}
+.cadran-durees{display:flex;gap:4px;align-items:center}
+.cadran-duree{font-family:inherit;cursor:pointer;border:1px solid var(--bordure);background:var(--carte);color:var(--texte);font-size:12px;font-weight:700;padding:4px 8px;border-radius:0}
+.cadran-duree.sel-duree{border-color:var(--accent);color:var(--accent)}
+.cadran-min{font-size:10px;color:var(--texte2)}
+.zone-rouge-note.on{display:block}
+.banniere-gratuit{display:block;margin:0 auto 6px;padding:8px 14px;border-radius:0;text-align:center;
+  background:var(--accent2);color:#101418;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+  font-size:14px;border:2px solid var(--accent2-doux);box-shadow:0 0 16px rgba(246,218,158,.5)}
+.ruche{margin-top:14px;padding:14px 14px 12px;border-radius:0;text-align:center;
+  background:var(--carte2);border:1.5px solid var(--accent2);
+  box-shadow:0 0 20px rgba(246,218,158,.35),inset 0 0 26px rgba(246,218,158,.06)}
+.ruche-titre{color:var(--accent2-doux);font-weight:800;letter-spacing:2px;font-size:14px;text-transform:uppercase}
+.ruche-txt{color:#c6cad4;font-size:12.5px;line-height:1.5;margin:6px 0 10px}
+.ruche-cta{display:inline-block;background:var(--accent);color:#ffffff;
+  font-weight:800;letter-spacing:1px;font-size:13px;padding:9px 18px;border-radius:0;text-decoration:none;text-transform:uppercase;
+  border:1.5px solid var(--accent-doux);animation:rucheGlow 1.7s infinite alternate}
+@keyframes rucheGlow{from{box-shadow:0 0 8px rgba(182,56,47,.45)}to{box-shadow:0 0 22px rgba(182,56,47,.9)}}
+#chatBoite{position:fixed;right:10px;bottom:10px;width:min(calc(92vw / var(--z,1)),320px);z-index:45;display:none;flex-direction:column;
+  background:var(--carte);border:1px solid var(--accent);border-radius:0;
+  box-shadow:0 8px 30px rgba(0,0,0,.7)}
+#chatBoite.on{display:flex}
+#chatTitre{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-bottom:1px solid var(--bordure);
+  color:var(--accent-doux);font-size:13px;letter-spacing:1px}
+#chatMessages{max-height:180px;min-height:60px;overflow-y:auto;padding:8px 10px;font-size:13px;line-height:1.5;color:#c6cad4}
+#chatMessages .moi{color:var(--accent-doux)}
+#chatMessages .lui{color:#c6cad4}
+#chatMessages b{color:var(--accent)}
+#chatSaisie{display:flex;gap:6px;padding:8px}
+#chatSaisie input{flex:1;min-width:0;font-family:inherit;font-size:14px;padding:8px;border-radius:0;
+  border:1px solid var(--bordure);background:#0e1320;color:var(--texte)}
+#chatSaisie input:focus{outline:none;border-color:var(--accent)}
+button.avert{border-color:var(--accent);box-shadow:0 0 10px rgba(182,56,47,.6)}
+@media (max-width:560px){
+  .controles{position:sticky;top:0;z-index:20;background:rgba(30,40,67,.96);padding:7px 4px 8px;margin-top:0;border-bottom:1px solid var(--bordure)}
+  .controles button{padding:8px 10px;font-size:13px}
+}
+.menu-logo{display:block;margin:0 auto 2px;width:min(72%,300px);height:auto}
+.menu-logo.petite{width:min(52%,210px)}
+.rangee-taille{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:12px;
+  padding:8px;border:1px solid var(--bordure);border-radius:0;background:rgba(0,0,0,.25)}
+.rangee-taille span.lbl{font-size:12.5px;color:var(--texte2);letter-spacing:.5px}
+.btn-taille{font-family:inherit;cursor:pointer;border-radius:0;border:1px solid var(--bordure);
+  background:var(--carte);color:var(--texte);font-size:16px;font-weight:bold;
+  min-width:44px;padding:8px 0;text-align:center}
+.btn-taille:hover{border-color:var(--accent)}
+#lblTaille,#lblTaille2{color:var(--accent-doux);font-size:13px;min-width:44px;text-align:center}
+#salonMessages{max-height:calc(46vh / var(--z,1));min-height:170px;overflow-y:auto;background:rgba(0,0,0,.3);border:1px solid var(--bordure);border-radius:0;padding:8px 10px;font-size:13px;line-height:1.5;text-align:left}
+#salonMessages .m{margin-bottom:6px}
+#salonMessages .m b{color:var(--accent-doux)}
+#salonMessages .m .h{color:#6b7690;font-size:10.5px;margin-left:6px}
+.confetti{position:fixed;top:-14px;width:9px;height:9px;z-index:120;pointer-events:none;animation:confChute linear forwards}
+.confetti.txt{width:auto;height:auto;background:transparent;line-height:1;font-family:'Segoe UI',Arial,sans-serif}
+@keyframes confChute{to{transform:translateY(106vh) rotate(720deg);opacity:.85}}
+.rangee-confetti{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:10px;
+  padding:8px;border:1px solid var(--bordure);border-radius:0;background:rgba(0,0,0,.25)}
+.rangee-confetti span.lbl{font-size:12.5px;color:var(--texte2);letter-spacing:.5px}
+.rangee-confetti select{font-family:inherit;font-size:13px;padding:7px 8px;border-radius:0;cursor:pointer;
+  background:var(--carte);color:var(--texte);border:1px solid var(--bordure)}
+.rangee-confetti select:focus{outline:none;border-color:var(--accent)}
+/* ===== BANDEROLE FLOTTANTE ABONNEMENTS (idée d'Alain, 16 juillet 2026) ===== */
+#banderole{position:fixed;left:50%;transform:translateX(-50%);bottom:0;z-index:40;
+  width:min(560px,96vw);background:var(--carte);border:2px solid var(--accent2);border-bottom:none;
+  box-shadow:0 -6px 26px rgba(0,0,0,.55);padding:10px 40px 12px 14px;text-align:center;display:none}
+#banderole.on{display:block;animation:bandMonte .6s ease-out both}
+@keyframes bandMonte{from{opacity:0}to{opacity:1}}
+#banderole .bTitre{font-size:13px;font-weight:800;color:var(--accent2-doux);letter-spacing:.8px;
+  text-transform:uppercase;margin-bottom:4px}
+#banderole .bSlogan{font-size:12px;color:#e6ebf5;font-style:italic;line-height:1.4;margin-bottom:4px}
+#banderole .bPriv{font-size:11px;color:var(--accent2-doux);line-height:1.4;margin-bottom:8px}
+#banderole .bBoutons{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+#banderole a{display:inline-block;text-decoration:none;font-weight:800;font-size:13.5px;
+  padding:10px 16px;border-radius:0;letter-spacing:.4px}
+#banderole a.bBase{background:var(--carte2);color:var(--texte);border:1.5px solid var(--bordure)}
+#banderole a.bBase:hover{border-color:var(--accent)}
+#banderole a.bTout{background:var(--accent);color:#ffffff;border:1.5px solid var(--accent-doux);
+  animation:bandGlow 1.8s infinite alternate}
+@keyframes bandGlow{from{box-shadow:0 0 6px rgba(182,56,47,.4)}to{box-shadow:0 0 18px rgba(182,56,47,.85)}}
+#banderoleFermer{position:absolute;top:6px;right:8px;background:transparent;border:none;
+  color:var(--texte2);font-size:18px;font-weight:800;cursor:pointer;padding:2px 8px;line-height:1}
+#banderoleFermer:hover{color:var(--texte);border:none}
+@media (max-width:560px){
+  #banderole{width:100vw;padding:8px 36px 10px 10px}
+  #banderole a{font-size:12.5px;padding:9px 12px}
+}
+</style>
+</head>
+<body>
+<header>
+  <img id="logo" src="logo-eoc.png" alt="ÉCHEC O CUBE">
+  <div class="sous">Prototype officiel 7x7 - Règlement V3.0</div>
+</header>
+
+<div class="bandeau">
+  <div class="carte" id="carte1">
+    <h3 id="nom1">JOUEUR 1</h3>
+    <div class="pts" id="score1">0</div>
+    <div class="net" id="net1">Net estimé : -71</div>
+    <div class="stock"><span class="jeton p"></span><span id="p1">41</span> pâles &nbsp; <span class="jeton f"></span><span id="f1">15</span> foncés</div>
+  </div>
+  <div class="carte" id="carte2">
+    <h3 id="nom2">JOUEUR 2</h3>
+    <div class="pts" id="score2">0</div>
+    <div class="net" id="net2">Net estimé : -71</div>
+    <div class="stock"><span class="jeton p"></span><span id="p2">41</span> pâles &nbsp; <span class="jeton f"></span><span id="f2">15</span> foncés</div>
+  </div>
+</div>
+<div class="tour" id="tour"></div>
+
+<!-- ===== CADRAN NUMERIQUE EOC (optionnel, se montre via le bouton Cadran) ===== -->
+<div id="cadranEOC" aria-label="Cadran de partie">
+  <div class="cadran-boite" id="cadranBoite1" title="Cadran du Joueur 1">
+    <span class="cadran-nom">JOUEUR 1</span>
+    <span class="cadran-temps" id="cadranT1">10:00</span>
+  </div>
+  <div class="cadran-centre">
+    <button id="btnCadranGo" class="mini" type="button">Démarrer</button>
+    <div class="cadran-durees">
+      <button class="cadran-duree" data-min="5" type="button">5</button>
+      <button class="cadran-duree sel-duree" data-min="10" type="button">10</button>
+      <button class="cadran-duree" data-min="15" type="button">15</button>
+      <span class="cadran-min">min</span>
+    </div>
+  </div>
+  <div class="cadran-boite" id="cadranBoite2" title="Cadran du Joueur 2">
+    <span class="cadran-nom">JOUEUR 2</span>
+    <span class="cadran-temps" id="cadranT2">10:00</span>
+  </div>
+</div>
+
+<div class="controles">
+  <button id="btnPale" class="sel"><span class="jeton p"></span>Pâle - 1 pt</button>
+  <button id="btnFonce"><span class="jeton f"></span>Foncé - 2 pts</button>
+  <button id="btnRouge" class="mini"><span class="jeton r"></span>Rouge (zone morte) : <span id="resRouge">8</span></button>
+  <button id="btnRegles" class="mini">Règles</button>
+  <button id="btnNouvelle" class="mini">Nouvelle partie</button>
+  <button id="btnAnnuler" class="mini" title="Annuler le dernier coup joué">Annuler le coup</button>
+  <button id="btnChat" class="mini" style="display:none">Clavardage</button>
+  <button id="btnCadran" class="mini" title="Jouer au temps : un chrono par joueur">Cadran</button>
+  <button id="btnTailleMoins2" class="mini" title="Réduire la taille">A−</button>
+  <span id="lblTaille2">100%</span>
+  <button id="btnTaillePlus2" class="mini" title="Grossir l'écran">A+</button>
+</div>
+
+<div id="chatBoite" aria-label="Clavardage avec l'adversaire">
+  <div id="chatTitre"><span>CLAVARDAGE</span><button id="btnFermerChat" class="mini">Fermer</button></div>
+  <div id="chatMessages"></div>
+  <div id="chatSaisie">
+    <input id="champChat" maxlength="200" placeholder="Votre message...">
+    <button id="btnEnvoyerChat" class="mini">Envoyer</button>
+  </div>
+</div>
+
+<svg id="plateau" viewBox="0 0 450 450" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Plateau ÉCHEC O CUBE 7x7">
+  <defs>
+    <linearGradient id="gTuile" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d5b07a"/><stop offset="1" stop-color="#b1854c"/>
+    </linearGradient>
+    <linearGradient id="gBoisH" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ecd3a2"/><stop offset="0.45" stop-color="#d9b67e"/><stop offset="1" stop-color="#c09659"/>
+    </linearGradient>
+    <linearGradient id="gBoisV" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ecd3a2"/><stop offset="0.45" stop-color="#d9b67e"/><stop offset="1" stop-color="#c09659"/>
+    </linearGradient>
+    <pattern id="grainH" width="180" height="8" patternUnits="userSpaceOnUse">
+      <path d="M0 4 q 22 -2.2 45 0 t 45 0 t 45 0 t 45 0" stroke="rgba(122,88,44,0.28)" fill="none" stroke-width="1"/>
+      <path d="M0 7 q 30 1.8 60 0 t 60 0 t 60 0" stroke="rgba(122,88,44,0.16)" fill="none" stroke-width="0.8"/>
+    </pattern>
+    <pattern id="grainV" width="8" height="180" patternUnits="userSpaceOnUse">
+      <path d="M4 0 q -2.2 22 0 45 t 0 45 t 0 45 t 0 45" stroke="rgba(122,88,44,0.28)" fill="none" stroke-width="1"/>
+      <path d="M7 0 q 1.8 30 0 60 t 0 60 t 0 60" stroke="rgba(122,88,44,0.16)" fill="none" stroke-width="0.8"/>
+    </pattern>
+  </defs>
+  <!-- Moulure du cadre : construite par le code selon la grandeur du plateau et le design choisi -->
+  <g id="decorTheme"></g>
+  <g id="cadre"></g>
+  <g id="fondRainures"></g>
+  <g id="tuiles"></g>
+  <g id="carresGagnes"></g>
+  <g id="pions"></g>
+  <g id="rouges"></g>
+  <g id="zonesClic"></g>
+</svg>
+
+<div class="zone-rouge-note" id="noteRouge">Mode rouge : touchez une intersection libre pour marquer une zone morte (mode familial : placement par consensus, article 18). Touchez un rouge existant pour le retirer : un rouge peut être annulé en tout temps et retourne à la réserve. Le rouge ne consomme aucun tour.</div>
+
+<div class="barre" id="barreAnnonce">
+  <button class="annonce" id="btnAnnonce">ÉCHEC O CUBE !</button>
+  <button id="btnSansAnnonce" class="mini">Terminer sans annoncer</button>
+</div>
+<div class="barre" id="barreReprise">
+  <button class="annonce" id="btnReclamer">Réclamer : ÉCHEC O CUBE !</button>
+  <button id="btnIgnorer" class="mini">Ignorer et jouer</button>
+</div>
+<div class="barre" id="barreAnalyse">
+  <span style="align-self:center;color:#c6cad4;font-size:13px">Analyse du plateau final</span>
+  <button id="btnRevoirFin" class="mini">Revoir le décompte</button>
+</div>
+
+<div id="msg">Bienvenue. Le premier pion est libre; ensuite chaque pion doit toucher une couleur contraire.</div>
+<div id="journal" aria-label="Journal des coups en notation officielle"></div>
+<div class="legende-notation">Notation : les lettres A-H suivent les rainures verticales, les chiffres 1-8 les rainures horizontales (1 en bas). Un croisement se nomme D5; un pion se note par ses deux croisements : D5-E5 (horizontal) ou D5-D6 (vertical); un rouge par son croisement unique.</div>
+
+<div class="credit">ÉCHEC O CUBE - Inventé par Alain Dupont, Québec, 1999 - Droit d'auteur OPIC Canada No 477714<br>
+Prototype conforme au Livre de règles officiel V3.0 (29 juin 2026) - Plateaux 7x7 découverte, 9x9 récréatif et 11x11 compétition FEOC<br>
+Version du 13 juillet 2026 : couleurs du plateau ET des pions au choix, partage du plateau dans le Chat Blogue, annulation avec compte exact</div>
+
+<!-- collecte des inscriptions via JotForm depuis le 11 juillet 2026 -->
+
+<div class="voile on" id="voileInscription" style="z-index:60">
+  <div class="boite">
+    <img src="logo-eoc.png" alt="ÉCHEC O CUBE" class="menu-logo petite">
+    <div class="banniere-gratuit">GRATUIT JUSQU'AU 1ᵉʳ JANVIER 2027</div>
+    <p style="text-align:center">ÉCHEC O CUBE est gratuit jusqu'au 1ᵉʳ janvier 2027 : accès complet, sans frais. Profitez-en dès maintenant — inscrivez-vous une fois sur cet appareil pour jouer.</p>
+    <div class="choix">
+      <input id="champPrenom" placeholder="Votre prénom" style="text-transform:none;letter-spacing:0" autocomplete="given-name">
+      <input id="champCourriel" type="email" placeholder="Votre courriel" style="text-transform:none;letter-spacing:0" autocomplete="email">
+      <div id="etatInscription" style="font-size:13px;color:var(--accent-doux);min-height:18px;text-align:center"></div>
+      <button id="btnInscrire">Entrer et jouer</button>
+    </div>
+    <p style="font-size:11px;color:#6b7690;margin-top:10px">Un seul courriel, une seule fois sur cet appareil. Sert à vous prévenir des nouveautés et du lancement officiel de La Ruche. <a href='/confidentialite' style='color:var(--accent-doux)'>Politique de confidentialité</a>.</p>
+  </div>
+</div>
+
+<div class="voile on" id="voileMode">
+  <div class="boite">
+    <img src="logo-eoc.png" alt="ÉCHEC O CUBE" class="menu-logo">
+    <div class="menu-slogan">Le jeu de stratégie inventé au Québec — depuis 1999</div>
+    <div class="banniere-gratuit">GRATUIT — jusqu'au 1ᵉʳ janvier 2027</div>
+    <p style="text-align:center">Placez, connectez, observez, fermez le cube — et criez ÉCHEC O CUBE !</p>
+    <div class="choix">
+      <button id="btnReprendre" style="display:none">Reprendre la partie en cours</button>
+      <button id="btnModeIA" class="menu-principal">Jouer contre l'ordinateur<span class="menu-sous">Quatre niveaux, du débutant au difficile</span></button>
+      <button id="btnMode2J" class="menu-principal">Deux joueurs sur cet appareil<span class="menu-sous">Face à face, comme sur le vrai plateau</span></button>
+      <button id="btnModeLigne" class="menu-principal">Jouer en ligne avec un ami<span class="menu-sous">Chacun sur son appareil, partout au monde</span></button>
+      <button id="btnChatBlog" class="menu-principal">Chat Blogue EOC<span class="menu-sous">Salons publics et groupes privés entre joueurs</span></button>
+    </div>
+    <div class="menu-grille">
+      <button id="btnVoirRegles">Règles essentielles</button>
+      <button id="btnAssistantMenu" class="assistant-menu">Assistant EOC</button>
+      <a class="btn-lien" href="https://echecocube.ca/collections/all" target="_blank" rel="noopener">Boutique officielle</a>
+      <button id="btnCodeMenu">Abonnements et codes</button>
+    </div>
+    <div class="rangee-taille">
+      <span class="lbl">TAILLE DE L'ÉCRAN</span>
+      <button id="btnTailleMoins" class="btn-taille" title="Réduire">A−</button>
+      <span id="lblTaille">100%</span>
+      <button id="btnTaillePlus" class="btn-taille" title="Grossir">A+</button>
+    </div>
+    <div class="rangee-taille">
+      <span class="lbl">PLATEAU</span>
+      <button class="btn-taille btn-format" data-format="7">7x7</button>
+      <button class="btn-taille btn-format" data-format="9">9x9</button>
+      <button class="btn-taille btn-format" data-format="11">11x11</button>
+    </div>
+    <div class="menu-sous" style="text-align:center">7x7 découverte · 9x9 récréatif · 11x11 compétition FEOC (Règlement V3.0).<br>S'applique à la prochaine nouvelle partie. En ligne : toujours 7x7.</div>
+    <div class="rangee-taille" style="flex-wrap:wrap">
+      <span class="lbl">DESIGN</span>
+      <button class="btn-taille btn-design" data-design="classique">Bois</button>
+      <button class="btn-taille btn-design" data-design="chat">Chat</button>
+      <button class="btn-taille btn-design" data-design="neon">Néon</button>
+      <button class="btn-taille btn-design" data-design="erable">Érable</button>
+      <button class="btn-taille btn-design" data-design="ocean">Océan</button>
+    </div>
+    <div class="menu-sous" style="text-align:center">Couleurs acryliques vives et forme du plateau — pour tous les goûts, filles et garçons, 14 à 40 ans et plus.</div>
+    <div class="rangee-taille" style="flex-wrap:wrap">
+      <span class="lbl">MES COULEURS</span>
+      <span style="font-size:11px;color:#8f9ab5">Plateau</span>
+      <input type="color" id="pickCouleur" value="#ff6fb0" title="Couleur du plateau"
+        style="width:42px;height:34px;border:1px solid var(--bordure);border-radius:0;background:#0e1320;padding:2px;cursor:pointer">
+      <span style="font-size:11px;color:#8f9ab5">Pâles</span>
+      <input type="color" id="pickPale" value="#f7ecd2" title="Couleur des pions pâles"
+        style="width:42px;height:34px;border:1px solid var(--bordure);border-radius:0;background:#0e1320;padding:2px;cursor:pointer">
+      <span style="font-size:11px;color:#8f9ab5">Foncés</span>
+      <input type="color" id="pickFonce" value="#241203" title="Couleur des pions foncés"
+        style="width:42px;height:34px;border:1px solid var(--bordure);border-radius:0;background:#0e1320;padding:2px;cursor:pointer">
+      <button id="btnCouleurDefaut" class="btn-taille" style="min-width:auto;padding:8px 12px;font-size:12px">Couleurs du design</button>
+    </div>
+    <div class="menu-sous" style="text-align:center">Touchez un carré de couleur : la palette s'ouvre. Plateau, pions pâles et pions foncés — chacun sa couleur, le design garde sa forme. Conseil : gardez les pâles CLAIRS et les foncés SOMBRES pour bien les distinguer. « Couleurs du design » ramène tout à l'origine.</div>
+    <div class="rangee-confetti">
+      <span class="lbl">MA PLUIE DE VICTOIRE</span>
+      <select id="pickConfetti" onchange="choisirConfetti(this.value)" title="Choisissez vos confettis de victoire">
+        <option value="classique">🎊 Confettis classiques</option>
+        <option value="fleurs">🌸 Pluie de fleurs</option>
+        <option value="dollars">💲 Jackpot GAGNANT</option>
+        <option value="pions">🁢 Pluie de pions EOC</option>
+        <option value="erable">🍁 Érable du Québec</option>
+      </select>
+    </div>
+    <div class="menu-sous" style="text-align:center">Quand vous criez ÉCHEC O CUBE, c'est VOTRE pluie qui tombe ! Choisissez — un aperçu tombe tout de suite.</div>
+    <div class="ruche">
+      <div class="ruche-titre">ÉDITION FONDATEUR · BOUTIQUE</div>
+      <div class="ruche-txt">Casquettes, t-shirts et objets de collection ÉCHEC O CUBE. Chaque achat te rend Membre fondateur 2027 — livraison GRATUITE au Canada.</div>
+      <div class="ruche-txt" style="border-top:1px solid var(--bordure);margin-top:12px;padding-top:12px">Une pièce ne sera jamais vendue en boutique : le plateau 9x9 en bois, Collection Vintage 1999, signé et numéroté par l'inventeur. Elle sera dévoilée à l'ouverture de La Ruche, au printemps 2027. Les fondateurs seront avisés en premier.</div>
+      <a class="ruche-cta" href="https://echecocube.ca/collections/all" target="_blank" rel="noopener">🛍️ VOIR LA BOUTIQUE</a>
+      <div style="margin-top:10px"><a href="https://echecocube.ca/blogs/communaute-echec-o-cube" target="_blank" rel="noopener" style="color:var(--accent2-doux);font-size:12px;text-decoration:none">Blogue et communauté&nbsp;→</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="voile" id="voileNiveau">
+  <div class="boite">
+    <h2>Niveau de l'ordinateur</h2>
+    <p style="text-align:center">Comme dans les vrais tournois, montez les classes une à une. Les quatre niveaux sont inclus dans le jeu de base.</p>
+    <div class="choix">
+      <button id="btnNivDebutant">Débutant</button>
+      <button id="btnNivInter">Facile</button>
+      <button id="btnNivDifficile">Intermédiaire</button>
+      <button id="btnNivExtreme">Difficile</button>
+      <button id="btnFermerNiveau" class="mini">Retour</button>
+    </div>
+  </div>
+</div>
+
+<div class="voile" id="voileLigne">
+  <div class="boite">
+    <h2>Jouer en ligne</h2>
+    <p style="text-align:center">Chacun sur son appareil, partout dans le monde. L'un crée la partie et reçoit un code; l'autre entre ce code <b>sur son propre appareil</b> et la partie commence.</p>
+    <div class="choix">
+      <button id="btnCreer">Créer une partie</button>
+      <div id="blocCodeHote" style="display:none;text-align:center">
+        <div style="font-size:12px;color:#8f9ab5">Code de votre partie - envoyez-le à votre ami :</div>
+        <div id="codeHoteAffiche" style="font-size:34px;letter-spacing:8px;color:var(--or);margin:4px 0"></div>
+        <button id="btnCopierCode" class="mini">Copier le code</button>
+      </div>
+      <div style="display:flex;gap:8px">
+        <input id="champCode" maxlength="6" placeholder="CODE reçu (ex: K7PM)" autocapitalize="characters">
+        <button id="btnRejoindre">Rejoindre</button>
+      </div>
+      <div id="etatLigne"></div>
+      <button id="btnFermerLigne" class="mini">Retour</button>
+    </div>
+    <p style="font-size:11px;color:#6b7690;margin-top:10px">Important : celui qui crée la partie garde l'application ouverte et l'écran allumé jusqu'à l'arrivée de son ami, sinon le code cesse d'exister. La partie passe par le serveur infonuagique sécurisé ÉCHEC O CUBE (Google Firebase) : fiable sur tous les réseaux, cellulaire compris.</p>
+  </div>
+</div>
+
+<div class="voile" id="voileSalons">
+  <div class="boite">
+    <img src="logo-eoc.png" alt="ÉCHEC O CUBE" class="menu-logo petite">
+    <h2>Chat Blogue EOC</h2>
+    <div id="salonChoix">
+      <p style="text-align:center">Discutez entre joueurs : parties, tournois, jeu en bois et application. Choisissez un salon public, ou créez votre groupe privé et partagez son code avec vos amis.</p>
+      <div style="display:flex;gap:8px;align-items:center;justify-content:center;margin:8px 0;flex-wrap:wrap">
+        <span style="font-size:12px;color:#8f9ab5">Votre nom d'affichage :</span>
+        <input id="champPseudo" maxlength="20" placeholder="Prénom ou surnom" style="max-width:170px;text-transform:none;letter-spacing:normal">
+      </div>
+      <div class="choix">
+        <button id="btnSalonGeneral">Salon général</button>
+        <button id="btnSalonTournois">Parties et tournois</button>
+        <button id="btnCreerGroupe">Créer un groupe privé</button>
+        <div style="display:flex;gap:8px">
+          <input id="champCodeGroupe" maxlength="6" placeholder="CODE du groupe (ex: R7KM)" autocapitalize="characters">
+          <button id="btnJoindreGroupe">Entrer</button>
+        </div>
+        <div id="etatSalon" style="min-height:18px;text-align:center;font-size:13px;color:var(--or2)"></div>
+        <button id="btnFermerSalons" class="mini">Retour</button>
+      </div>
+      <p style="font-size:11px;color:#ff9db0;text-align:center;margin-top:8px">Prudence : ne partagez jamais votre adresse, votre école, votre numéro de téléphone ni aucun renseignement personnel. Jeunes joueurs : demandez à un adulte de vous accompagner. Respect et bonne humeur — c'est l'esprit ÉCHEC O CUBE.</p>
+    </div>
+    <div id="salonFenetre" style="display:none">
+      <div id="salonTitre" style="text-align:center;color:var(--or2);font-size:15px;letter-spacing:1px;margin-bottom:4px"></div>
+      <div id="salonCodeInfo" style="text-align:center;font-size:12px;color:#8f9ab5;margin-bottom:6px"></div>
+      <div id="salonMessages"></div>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <input id="champSalonTexte" maxlength="300" placeholder="Votre message..." style="text-transform:none;letter-spacing:normal">
+        <button id="btnSalonPlateau" class="mini" title="Partager une image de mon plateau de jeu">Mon plateau</button>
+        <button id="btnSalonEnvoyer">Envoyer</button>
+      </div>
+      <div class="choix" style="margin-top:8px">
+        <button id="btnQuitterSalon" class="mini">Changer de salon</button>
+        <button id="btnFermerSalons2" class="mini">Retour au menu</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="voile" id="voileAbo">
+  <div class="boite">
+    <h2>Abonnement ÉCHEC O CUBE</h2>
+    <p style="text-align:center">Essai gratuit de 30 jours du jeu de base : ordinateur (Débutant et Intermédiaire) et deux joueurs sur cet appareil. Ensuite, jeu de base : 3,99 $/mois ou 39,99 $/an. Tout inclus (jeu en ligne, Chat Blogue EOC, tournois, tous les niveaux) : 7,99 $/mois ou 79,99 $/an - La Ruche. Après paiement, EOC vous envoie un code personnel valide un an.</p>
+    <div class="choix">
+      <button id="btnAllerAbonnement" onclick="window.location.href='abonnement.html'">Voir les abonnements et les prix</button>
+      <div style="display:flex;gap:8px">
+        <input id="champCodeMembre" maxlength="13" placeholder="CODE MEMBRE (EOC-XXXX-XXXX)" autocapitalize="characters">
+        <button id="btnActiverCode">Activer</button>
+      </div>
+      <div id="etatAbo" style="font-size:13px;color:var(--accent-doux);min-height:18px;text-align:center"></div>
+      <button id="btnFermerAbo" class="mini">Retour</button>
+    </div>
+    <p style="font-size:11px;color:#6b7690;margin-top:10px">Vous avez reçu votre code personnel EOC après paiement : entrez-le ci-dessus. Un code par personne, valide un an, activation instantanée, aucune connexion requise.</p>
+  </div>
+</div>
+
+<div class="voile" id="voileRegles">
+  <div class="boite">
+    <h2>Règles et guide de l'application EOC</h2>
+    <p style="text-align:center">L'application suit le Livre de règles officiel V3.0 (29 juin 2026) et fait l'arbitre à votre place : elle refuse les coups illégaux et explique toujours pourquoi.</p>
+
+    <h3 style="color:var(--or2);margin-top:12px">1. Jouer sur l'application</h3>
+    <ol>
+      <li>Choisissez votre pion avec les boutons « Pâle - 1 pt » ou « Foncé - 2 pts », puis touchez une rainure du plateau pour le poser.</li>
+      <li>Le premier pion de la partie est libre. Ensuite, chaque pion doit toucher une couleur contraire : pâle touche foncé, foncé touche pâle, jamais deux pareils. L'application refuse le coup sinon.</li>
+      <li>Bouton « Rouge (zone morte) » : touchez ensuite une intersection pour poser un rouge debout (0 point, aucun tour consommé). Touchez un rouge existant pour le retirer en tout temps.</li>
+      <li>Quand votre pion ferme un carré, l'application vous le dit : touchez « ÉCHEC O CUBE ! » pour marquer les points et rejouer (tour bonus), ou « Terminer sans annoncer ». Si vous oubliez, l'adversaire peut réclamer vos points avant de jouer — comme dans la vraie règle (article 16).</li>
+      <li>Le dernier pion posé brille en doré sur le plateau, et le journal sous le plateau note tous les coups en notation officielle (exemple : pâle D5-E5).</li>
+    </ol>
+
+    <h3 style="color:var(--or2);margin-top:12px">2. Les boutons pratiques de l'appli</h3>
+    <ol>
+      <li>« Annuler le coup » : reprend le dernier coup joué (jusqu'à 10), parfait pour apprendre sans stress. Offert contre l'ordinateur et à deux sur le même appareil.</li>
+      <li>« Nouvelle partie » : retourne au menu. Votre partie locale est sauvegardée automatiquement à chaque coup — « Reprendre la partie en cours » vous ramène exactement où vous étiez.</li>
+      <li>A− / A+ : grossit toute l'interface (mémorisé). Le zoom à deux doigts fonctionne aussi en tout temps.</li>
+      <li>En fin de partie : « Analyser le plateau » enlève l'écran du décompte pour étudier les cases libres; « Revoir le décompte » le ramène.</li>
+      <li>« Chat Blogue EOC » : salons publics et groupes privés entre joueurs. Le bouton « Mon plateau » partage une image de votre plateau générée par l'application — c'est la SEULE image permise : jamais de photo, de vidéo ni de message vocal, jamais d'adresse, d'école ni de téléphone; pseudonymes seulement et les jeunes accompagnés d'un adulte.</li>
+    </ol>
+
+    <h3 style="color:var(--or2);margin-top:12px">3. Plateaux et designs</h3>
+    <ol>
+      <li>Trois grandeurs au menu (Règlement V3.0, article 4) : 7x7 découverte, 9x9 récréatif (72 pâles et 33 foncés par joueur, 15 rouges), 11x11 compétition FEOC (115 et 50 par joueur, 20 rouges). Le choix s'applique à la prochaine partie.</li>
+      <li>En ligne avec un ami : toujours 7x7, pour que les deux appareils soient identiques.</li>
+      <li>Cinq designs acryliques au menu : Bois, Chat, Néon, Érable, Océan. Le design ne change que les couleurs et la décoration — jamais les règles.</li>
+      <li>« MA COULEUR » : chaque joueuse et joueur choisit sa couleur dans la palette; le design garde sa forme (oreilles, éclairs, feuille, vagues) et prend cette couleur. « Couleurs du design » ramène l'original.</li>
+      <li>Sur 11x11 aux niveaux Intermédiaire et Difficile, l'ordinateur peut réfléchir quelques secondes de plus : c'est normal, le plateau est grand.</li>
+    </ol>
+
+    <h3 style="color:var(--or2);margin-top:12px">4. Les règles officielles en bref (article 26, V3.0)</h3>
+    <ol>
+      <li>Premier joueur choisi par pile ou face; premier pion libre.</li>
+      <li>Chaînage : chaque pion suivant touche une couleur contraire. Pâle ne touche jamais pâle, foncé ne touche jamais foncé.</li>
+      <li>Les pions sont couchés dans les rainures; le foncé long déborde dans les coins-gorges.</li>
+      <li>Le rouge est debout dans l'intersection : zone morte, 0 point, aucun tour consommé, annulable en tout temps.</li>
+      <li>Fermer un carré valide donne des points seulement si on annonce ÉCHEC O CUBE; l'annonce oubliée peut être réclamée par le joueur suivant.</li>
+      <li>Tour bonus : on rejoue tant qu'on ferme des carrés.</li>
+      <li>Pointage sur la ligne structurante seulement : carré 1x1 standard 6 pts, enrichi 9 pts, maximal ou 2x2 12 pts. Un rouge dans la ligne structurante : 0 point.</li>
+      <li>Fin : dernier pion posé ou blocage. Décompte final : points marqués, moins 1 pt par pâle restant et 2 pts par foncé restant. Le « Net estimé » affiché sous votre score suit ce calcul en direct.</li>
+      <li>Notation : lettres sur les rainures verticales, chiffres sur les horizontales (1 en bas). Un croisement se nomme D5; un pion se note D5-E5 (horizontal) ou D5-D6 (vertical); un carré par ses coins opposés : D5-E6.</li>
+    </ol>
+
+    <h3 style="color:var(--or2);margin-top:12px">5. Conseils pour bien débuter</h3>
+    <ol>
+      <li>Surveillez le « Net estimé » : chaque foncé gardé en main coûte 2 points à la fin. Faites-les travailler.</li>
+      <li>Les foncés créent le contact (ils débordent dans les coins-gorges) : ce sont eux qui ouvrent le jeu aux pâles.</li>
+      <li>Avant de fermer un carré, regardez si votre coup en offre un plus gros à l'adversaire juste après.</li>
+      <li>Utilisez « Annuler le coup » pour essayer des idées : c'est le meilleur professeur de l'application.</li>
+      <li>Commencez sur 7x7 au niveau Débutant, puis montez les classes une à une, comme dans les vrais tournois.</li>
+    </ol>
+    <div class="choix"><button id="btnFermerRegles">Fermer</button></div>
+  </div>
+</div>
+
+<div class="voile" id="voileFin">
+  <div class="boite">
+    <h2>Décompte final (article 22)</h2>
+    <p id="raisonFin" style="text-align:center"></p>
+    <table class="decompte">
+      <tr><th></th><th id="th1">Joueur 1</th><th id="th2">Joueur 2</th></tr>
+      <tr><td>Points marqués</td><td id="d1b"></td><td id="d2b"></td></tr>
+      <tr><td>Pâles restants (x1)</td><td id="d1p"></td><td id="d2p"></td></tr>
+      <tr><td>Foncés restants (x2)</td><td id="d1f"></td><td id="d2f"></td></tr>
+      <tr><th>Total net</th><th id="d1n"></th><th id="d2n"></th></tr>
+    </table>
+    <div class="vainqueur" id="vainqueur"></div>
+    <div class="choix">
+      <button id="btnAnalyser">Analyser le plateau (voir les cases libres)</button>
+      <button id="btnRejouer">Nouvelle partie</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   MOTEUR DE JEU - conforme au Livre de règles officiel V3.0
+   ============================================================ */
+const PALE = 'p', FONCE = 'f';
+/* Formats officiels (Règlement V3.0, article 4). Pions PAR JOUEUR et réserve de rouges.
+   7x7 découverte : version prototype de l'application (41 pâles et 15 foncés par joueur, 8 rouges).
+   9x9 récréatif : 144 pâles et 66 foncés au total = 72 et 33 par joueur, 15 rouges.
+   11x11 compétition FEOC : 230 pâles et 100 foncés au total = 115 et 50 par joueur, 20 rouges. */
+const FORMATS = {
+  7:  {p: 41,  f: 15, rouges: 8,  nom: '7x7 découverte'},
+  9:  {p: 72,  f: 33, rouges: 15, nom: '9x9 récréatif officiel'},
+  11: {p: 115, f: 50, rouges: 20, nom: '11x11 compétition FEOC'}
+};
+let N = 7;
+function formatChoisi() {
+  try { const v = parseInt(localStorage.getItem('eocFormatN'), 10); if (FORMATS[v]) return v; } catch (e) {}
+  return 7;
+}
+N = formatChoisi();
+
+function mat(r, c, v) { return Array.from({length: r}, () => Array(c).fill(v === undefined ? null : v)); }
+
+function nouvellePartie() {
+  const fmt = FORMATS[N];
+  return {
+    H: mat(N + 1, N), V: mat(N, N + 1), R: mat(N + 1, N + 1, false),
+    c1: mat(N, N), c2: mat(N - 1, N - 1),
+    pl: {1: {score: 0, p: fmt.p, f: fmt.f}, 2: {score: 0, p: fmt.p, f: fmt.f}},
+    rouges: fmt.rouges, cur: 1, first: true, over: false
+  };
+}
+function boutsDe(t, r, c) { return t === 'H' ? [[r, c], [r, c + 1]] : [[r, c], [r + 1, c]]; }
+function seg(g, t, r, c) { return t === 'H' ? g.H[r][c] : g.V[r][c]; }
+function poseSeg(g, t, r, c, v) { if (t === 'H') g.H[r][c] = v; else g.V[r][c] = v; }
+function incidents(g, ir, ic) {
+  const a = [];
+  if (ic > 0 && g.H[ir][ic - 1]) a.push({t: 'H', r: ir, c: ic - 1, v: g.H[ir][ic - 1]});
+  if (ic < N && g.H[ir][ic]) a.push({t: 'H', r: ir, c: ic, v: g.H[ir][ic]});
+  if (ir > 0 && g.V[ir - 1][ic]) a.push({t: 'V', r: ir - 1, c: ic, v: g.V[ir - 1][ic]});
+  if (ir < N && g.V[ir][ic]) a.push({t: 'V', r: ir, c: ic, v: g.V[ir][ic]});
+  return a;
+}
+/* Contact physique : le foncé long déborde dans les coins-gorges; le pâle court reste dans sa rainure.
+   Deux pions se touchent s'ils partagent une intersection et qu'au moins un des deux est un foncé. */
+function coupLegal(g, couleur, t, r, c) {
+  if (seg(g, t, r, c)) return {ok: false, why: 'Rainure déjà occupée (collision interdite, article 11).'};
+  let contact = false;
+  for (const [ir, ic] of boutsDe(t, r, c)) {
+    if (couleur === FONCE && g.R[ir][ic])
+      return {ok: false, why: 'Un rouge occupe ce coin-gorge : le foncé long ne peut pas y déborder.'};
+    for (const n of incidents(g, ir, ic)) {
+      if (couleur === FONCE && n.v.c === FONCE)
+        return {ok: false, why: 'Foncé ne touche jamais foncé (article 10).'};
+      if (n.v.c !== couleur) contact = true;
+      if (couleur === FONCE && n.v.c === PALE) contact = true;
+    }
+  }
+  if (couleur === PALE) {
+    /* le pâle court ne touche que par le débordement d'un foncé voisin */
+    contact = false;
+    for (const [ir, ic] of boutsDe(t, r, c))
+      for (const n of incidents(g, ir, ic)) if (n.v.c === FONCE) contact = true;
+  }
+  if (!g.first && !contact)
+    return {ok: false, why: couleur === PALE
+      ? 'Chaînage (article 9) : le pâle doit toucher le débordement d\'un foncé déjà posé.'
+      : 'Chaînage (article 9) : le foncé doit toucher un pâle déjà posé.'};
+  return {ok: true};
+}
+function rougeLegal(g, ir, ic) {
+  if (g.rouges <= 0) return {ok: false, why: 'Réserve de rouges épuisée.'};
+  if (g.R[ir][ic]) return {ok: false, why: 'Un rouge occupe déjà cette intersection.'};
+  for (const n of incidents(g, ir, ic))
+    if (n.v.c === FONCE) return {ok: false, why: 'Le coin-gorge est occupé par le débordement d\'un foncé.'};
+  return {ok: true};
+}
+/* Évaluation d'un carré 1x1. Ligne structurante : les 4 arêtes + les foncés qui débordent
+   perpendiculairement dans les coins-gorges. Validité (alternance, articles 12-13) :
+   chaque coin du carré doit être tenu par au moins un foncé séparateur.
+   Cette lecture reproduit exactement les pointages officiels : 6, 9 et 12 points. */
+function evalCarre1(g, cr, cc) {
+  const E = [['H', cr, cc], ['H', cr + 1, cc], ['V', cr, cc], ['V', cr, cc + 1]];
+  const vals = E.map(([t, r, c]) => seg(g, t, r, c));
+  if (vals.some(v => !v)) return {closed: false};
+  const coins = [[cr, cc], [cr, cc + 1], [cr + 1, cc], [cr + 1, cc + 1]];
+  for (const [ir, ic] of coins) if (g.R[ir][ic]) return {closed: true, valid: false, dead: true};
+  let pts = 0;
+  for (const v of vals) pts += (v.c === PALE ? 1 : 2);
+  for (const [ir, ic] of coins) {
+    let aFonce = false;
+    for (const n of incidents(g, ir, ic)) {
+      if (n.v.c !== FONCE) continue;
+      aFonce = true;
+      const estArete = E.some(([t, r, c]) => t === n.t && r === n.r && c === n.c);
+      if (!estArete) pts += 2;
+    }
+    if (!aFonce) return {closed: true, valid: false, dead: false};
+  }
+  return {closed: true, valid: true, pts: pts};
+}
+/* Carré 2x2 (article 13) : périmètre complet de 8 pions, 4 pâles + 4 foncés en alternance,
+   aucun rouge sur ses intersections; vaut 12 points. */
+function evalCarre2(g, tr, tc) {
+  const P = [['H', tr, tc], ['H', tr, tc + 1], ['H', tr + 2, tc], ['H', tr + 2, tc + 1],
+             ['V', tr, tc], ['V', tr + 1, tc], ['V', tr, tc + 2], ['V', tr + 1, tc + 2]];
+  const vals = P.map(([t, r, c]) => seg(g, t, r, c));
+  if (vals.some(v => !v)) return {closed: false};
+  const inters = [[tr, tc], [tr, tc + 1], [tr, tc + 2], [tr + 1, tc], [tr + 1, tc + 2],
+                  [tr + 2, tc], [tr + 2, tc + 1], [tr + 2, tc + 2]];
+  for (const [ir, ic] of inters) if (g.R[ir][ic]) return {closed: true, valid: false, dead: true};
+  const nf = vals.filter(v => v.c === FONCE).length;
+  if (nf !== 4) return {closed: true, valid: false, dead: false};
+  return {closed: true, valid: true, pts: 12};
+}
+/* Cellules 1x1 et blocs 2x2 pouvant être affectés par un segment donné */
+function cellulesTouchees(t, r, c) {
+  const s1 = new Set(), s2 = new Set();
+  for (const [ir, ic] of boutsDe(t, r, c)) {
+    for (let a = ir - 1; a <= ir; a++) for (let b = ic - 1; b <= ic; b++)
+      if (a >= 0 && a < N && b >= 0 && b < N) s1.add(a + ',' + b);
+    for (let a = ir - 2; a <= ir; a++) for (let b = ic - 2; b <= ic; b++)
+      if (a >= 0 && a < N - 1 && b >= 0 && b < N - 1) s2.add(a + ',' + b);
+  }
+  return {
+    c1: [...s1].map(k => k.split(',').map(Number)),
+    c2: [...s2].map(k => k.split(',').map(Number))
+  };
+}
+/* Nouveaux carrés valides créés par la pose du segment (avant/après) */
+function nouveauxCarres(g, t, r, c, couleur) {
+  const zone = cellulesTouchees(t, r, c);
+  const avant1 = zone.c1.map(([a, b]) => g.c1[a][b] ? true : !!(evalCarre1(g, a, b).valid));
+  const avant2 = zone.c2.map(([a, b]) => g.c2[a][b] ? true : !!(evalCarre2(g, a, b).valid));
+  poseSeg(g, t, r, c, {c: couleur});
+  const neufs = [];
+  zone.c1.forEach(([a, b], i) => {
+    if (avant1[i] || g.c1[a][b]) return;
+    const e = evalCarre1(g, a, b);
+    if (e.valid) neufs.push({type: 1, r: a, c: b, pts: e.pts});
+  });
+  zone.c2.forEach(([a, b], i) => {
+    if (avant2[i] || g.c2[a][b]) return;
+    const e = evalCarre2(g, a, b);
+    if (e.valid) neufs.push({type: 2, r: a, c: b, pts: e.pts});
+  });
+  poseSeg(g, t, r, c, null);
+  return neufs;
+}
+function marqueMorts(g) {
+  for (let a = 0; a < N; a++) for (let b = 0; b < N; b++)
+    if (!g.c1[a][b]) { const e = evalCarre1(g, a, b); if (e.closed && e.dead) g.c1[a][b] = {etat: 'mort'}; }
+  for (let a = 0; a < N - 1; a++) for (let b = 0; b < N - 1; b++)
+    if (!g.c2[a][b]) { const e = evalCarre2(g, a, b); if (e.closed && e.dead) g.c2[a][b] = {etat: 'mort'}; }
+}
+function tousLesCoups(g, pid) {
+  const P = g.pl[pid], coups = [];
+  const couleurs = [];
+  if (P.p > 0) couleurs.push(PALE);
+  if (P.f > 0) couleurs.push(FONCE);
+  for (const cl of couleurs) {
+    for (let r = 0; r <= N; r++) for (let c = 0; c < N; c++)
+      if (coupLegal(g, cl, 'H', r, c).ok) coups.push({cl, t: 'H', r, c});
+    for (let r = 0; r < N; r++) for (let c = 0; c <= N; c++)
+      if (coupLegal(g, cl, 'V', r, c).ok) coups.push({cl, t: 'V', r, c});
+  }
+  return coups;
+}
+/* Ordinateur a quatre niveaux, comme les classes des vrais tournois :
+   - debutant (gratuit) : joue surtout au hasard et rate souvent les carrés à fermer;
+   - inter : prend les points immédiats, mais ne surveille pas la riposte adverse;
+   - difficile : points immédiats et limite la meilleure riposte adverse;
+   - extreme : pèse la riposte plus lourdement et prépare ses propres menaces. */
+let niveauIA = 'debutant';
+const NIVEAUX_NOMS = {debutant: 'Débutant', inter: 'Facile', difficile: 'Intermédiaire', extreme: 'Difficile'};
+function coupOrdinateur(g) {
+  const coups = tousLesCoups(g, g.cur);
+  if (!coups.length) return null;
+  const adv = g.cur === 1 ? 2 : 1;
+  if (niveauIA === 'debutant') {
+    const fermants = coups.filter(m => nouveauxCarres(g, m.t, m.r, m.c, m.cl).length > 0);
+    if (fermants.length && Math.random() < 0.3) return fermants[Math.floor(Math.random() * fermants.length)];
+    return coups[Math.floor(Math.random() * coups.length)];
+  }
+  let meilleurs = [], meilleureVal = -Infinity;
+  for (const m of coups) {
+    const mesPts = nouveauxCarres(g, m.t, m.r, m.c, m.cl).reduce((s, q) => s + q.pts, 0);
+    let riposte = 0, menace = 0;
+    if (niveauIA !== 'inter') {
+      poseSeg(g, m.t, m.r, m.c, {c: m.cl});
+      const premFlag = g.first; g.first = false;
+      if (mesPts === 0) {
+        const coupsAdv = tousLesCoups(g, adv);
+        for (const a of coupsAdv) {
+          const p = nouveauxCarres(g, a.t, a.r, a.c, a.cl).reduce((s, q) => s + q.pts, 0);
+          if (p > riposte) riposte = p;
+          if (riposte >= 12) break;
+        }
+        if (niveauIA === 'extreme' && riposte === 0) {
+          const suites = tousLesCoups(g, g.cur);
+          for (const a of suites) {
+            const p = nouveauxCarres(g, a.t, a.r, a.c, a.cl).reduce((s, q) => s + q.pts, 0);
+            if (p > menace) menace = p;
+            if (menace >= 12) break;
+          }
+        }
+      }
+      g.first = premFlag;
+      poseSeg(g, m.t, m.r, m.c, null);
+    }
+    const centre = 3.5 - (Math.abs((m.t === 'H' ? m.c + 0.5 : m.c) - 3.5) + Math.abs((m.t === 'H' ? m.r : m.r + 0.5) - 3.5)) / 2;
+    const poidsRiposte = niveauIA === 'extreme' ? 80 : 60;
+    const val = mesPts * 100 - riposte * poidsRiposte + menace * 15 + (m.cl === PALE ? 4 : 0) + centre + Math.random() * 2;
+    if (val > meilleureVal + 0.001) { meilleureVal = val; meilleurs = [m]; }
+    else if (Math.abs(val - meilleureVal) <= 0.001) meilleurs.push(m);
+  }
+  return meilleurs[Math.floor(Math.random() * meilleurs.length)];
+}
+
+/* ============================================================
+   INTERFACE
+   ============================================================ */
+const U = 54, G = 12, M = 30;
+const P = i => M + G / 2 + i * U;
+let g = nouvellePartie();
+let modeIA = true, selection = PALE, modeRouge = false;
+let modeEnLigne = false, monJoueur = 1;
+let phase = 'attente'; /* attente | jeu | annonce | ia | fin */
+let enAttente = null;  /* carrés fermés non encore annoncés {pid, carres, pts} */
+let oublie = null;     /* carrés oubliés réclamables {pid, carres, pts} */
+let dernierCoup = null; /* dernier pion posé {t, r, c} - mis en évidence sur le plateau */
+let pileAnnul = [];     /* photos de la partie avant chaque coup humain - pour Annuler le coup */
+let iaTimer = null;     /* minuterie du coup de l'ordinateur - annulée par Annuler le coup */
+const $ = id => document.getElementById(id);
+const SVGNS = 'http://www.w3.org/2000/svg';
+function el(tag, attrs, parent) {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+const S = () => 2 * M + G + N * U; /* côté du plateau en unités SVG selon la grandeur choisie */
+
+/* ============================================================
+   DESIGNS - 5 styles acryliques aux couleurs vives (14-40 ans)
+   Chaque design change les couleurs du plateau, des pions et
+   la forme décorative autour du cadre. Choix mémorisé.
+   ============================================================ */
+const VARS_DEFAUT = {'--fond': '#a26967', '--tuile1': '#cfa972', '--rainure': '#9a763f',
+  '--pale': '#f7ecd2', '--fonce': '#241203', '--rouge': '#c0392b'};
+const THEMES = {
+  classique: {nom: 'Bois classique', bois: ['#ecd3a2', '#d9b67e', '#c09659'], grain: true,
+    grav: '#6b4a1e', onglet: '#8a6538', bord: '#7d5f34', lisere: 'rgba(255,240,210,0.35)',
+    decorCols: ['#d9b67e', '#ecd3a2', '#c09659'], vars: {}, pad: 0, decor: null},
+  chat: {nom: 'Chat acrylique', bois: ['#ff9ad5', '#ff6fb0', '#e0407e'], grain: false,
+    grav: '#8a1d55', onglet: '#c22a72', bord: '#a91f60', lisere: 'rgba(255,255,255,0.5)',
+    vars: {'--fond': '#241028', '--tuile1': '#ffd9ee', '--rainure': '#e0559a', '--pale': '#fffef4', '--fonce': '#5b2a86'},
+    decorCols: ['#ff6fb0', '#ffd9ee', '#e0407e'],
+    pad: 46, decor: function (gd, s) {
+      /* deux oreilles de chat aplat acrylique + moustaches */
+      const c = PAL.decorCols;
+      el('polygon', {points: '30,6 96,-40 132,6', fill: c[0]}, gd);
+      el('polygon', {points: '52,4 95,-24 118,4', fill: c[1]}, gd);
+      el('polygon', {points: (s - 132) + ',6 ' + (s - 96) + ',-40 ' + (s - 30) + ',6', fill: c[0]}, gd);
+      el('polygon', {points: (s - 118) + ',4 ' + (s - 95) + ',-24 ' + (s - 52) + ',4', fill: c[1]}, gd);
+      for (const k of [-1, 1]) for (let i = 0; i < 3; i++) {
+        const x0 = s / 2 + k * 40, y = -8 - i * 9;
+        el('line', {x1: x0, y1: y + 4, x2: x0 + k * 52, y2: y, stroke: c[1], 'stroke-width': 3, 'stroke-linecap': 'round'}, gd);
+      }
+      el('circle', {cx: s / 2, cy: -14, r: 6, fill: c[2]}, gd);
+    }},
+  neon: {nom: 'Néon électrique', bois: ['#26f7ff', '#7a2bff', '#ff2fb3'], grain: false,
+    grav: '#26f7ff', onglet: '#ff2fb3', bord: '#26f7ff', lisere: 'rgba(255,47,179,0.6)',
+    vars: {'--fond': '#07070d', '--tuile1': '#232633', '--rainure': '#0c0d14', '--pale': '#ffe14a', '--fonce': '#8324d8', '--rouge': '#ff3355'},
+    decorCols: ['#ffe14a', '#26f7ff', '#ff2fb3'],
+    pad: 34, decor: function (gd, s) {
+      /* éclairs acryliques aux deux coins du haut */
+      const c = PAL.decorCols;
+      el('polygon', {points: '26,-28 46,-28 36,-8 52,-8 22,26 34,-2 18,-2', fill: c[0]}, gd);
+      el('polygon', {points: (s - 46) + ',-28 ' + (s - 26) + ',-28 ' + (s - 36) + ',-8 ' + (s - 20) + ',-8 ' + (s - 50) + ',26 ' + (s - 38) + ',-2 ' + (s - 54) + ',-2', fill: c[1]}, gd);
+      for (let i = 0; i < 5; i++) el('circle', {cx: s / 2 - 60 + i * 30, cy: -16, r: 4, fill: i % 2 ? c[2] : c[1]}, gd);
+    }},
+  erable: {nom: 'Érable Québec', bois: ['#8ee65f', '#3fae52', '#1f7a33'], grain: false,
+    grav: '#14521f', onglet: '#2a8a3c', bord: '#1f7a33', lisere: 'rgba(255,255,255,0.45)',
+    vars: {'--fond': '#0d2013', '--tuile1': '#e2f6c8', '--rainure': '#3f9a4e', '--pale': '#fffbe8', '--fonce': '#3d1f0a'},
+    decorCols: ['#e33d2e', '#8ee65f', '#1f7a33'],
+    pad: 48, decor: function (gd, s) {
+      /* feuille d'érable rouge vif, aplat acrylique, au centre du haut */
+      const cc = PAL.decorCols, c = s / 2;
+      el('path', {d: 'M' + c + ',-44 l7,12 12,-7 -4,14 14,2 -11,10 9,10 -15,0 -2,15 -10,-11 -10,11 -2,-15 -15,0 9,-10 -11,-10 14,-2 -4,-14 12,7 z', fill: cc[0]}, gd);
+      el('rect', {x: c - 2, y: 0, width: 4, height: 8, fill: cc[0]}, gd);
+      el('circle', {cx: c - 90, cy: -18, r: 6, fill: cc[1]}, gd);
+      el('circle', {cx: c + 90, cy: -18, r: 6, fill: cc[1]}, gd);
+    }},
+  ocean: {nom: 'Océan turquoise', bois: ['#6fdcf7', '#2a9fd8', '#1462a8'], grain: false,
+    grav: '#0d3f6b', onglet: '#1e77b8', bord: '#1462a8', lisere: 'rgba(255,255,255,0.5)',
+    vars: {'--fond': '#071b2b', '--tuile1': '#d4f1fb', '--rainure': '#2c8ec4', '--pale': '#fff8e0', '--fonce': '#0d2d5e'},
+    decorCols: ['#6fdcf7', '#bdeffc', '#2a9fd8'],
+    pad: 40, decor: function (gd, s) {
+      /* vagues acryliques au-dessus du cadre */
+      const cc = PAL.decorCols;
+      for (let i = 0; i < 3; i++) {
+        const y = -10 - i * 11, col = [cc[0], cc[2], cc[1]][i];
+        let d = 'M' + (s * 0.12) + ',' + y;
+        for (let x = s * 0.12; x < s * 0.88; x += 44) d += ' q22,-14 44,0';
+        el('path', {d: d, stroke: col, 'stroke-width': 4, fill: 'none', 'stroke-linecap': 'round'}, gd);
+      }
+    }}
+};
+let designActuel = 'classique';
+try { const dm = localStorage.getItem('eocDesign'); if (THEMES[dm]) designActuel = dm; } catch (e) {}
+/* Couleur personnelle : chaque joueuse ou joueur choisit SA couleur dans la palette;
+   le design garde sa forme (oreilles de chat, éclairs, feuille, vagues) mais prend cette couleur. */
+let couleurPerso = '', couleurPale = '', couleurFonce = '';
+try {
+  const cp = localStorage.getItem('eocCouleur'); if (cp && /^#[0-9a-fA-F]{6}$/.test(cp)) couleurPerso = cp;
+  const ca = localStorage.getItem('eocCouleurPale'); if (ca && /^#[0-9a-fA-F]{6}$/.test(ca)) couleurPale = ca;
+  const cf = localStorage.getItem('eocCouleurFonce'); if (cf && /^#[0-9a-fA-F]{6}$/.test(cf)) couleurFonce = cf;
+} catch (e) {}
+function hexHsl(hex) {
+  const r = parseInt(hex.slice(1, 3), 16) / 255, v = parseInt(hex.slice(3, 5), 16) / 255, b = parseInt(hex.slice(5, 7), 16) / 255;
+  const mx = Math.max(r, v, b), mn = Math.min(r, v, b), l = (mx + mn) / 2;
+  if (mx === mn) return [0, 0, l];
+  const dl = mx - mn, s = l > 0.5 ? dl / (2 - mx - mn) : dl / (mx + mn);
+  let h = mx === r ? (v - b) / dl + (v < b ? 6 : 0) : mx === v ? (b - r) / dl + 2 : (r - v) / dl + 4;
+  return [h / 6, s, l];
+}
+function hslHex(h, s, l) {
+  const f = n => { const k = (n + h * 12) % 12, c = l - s * Math.min(l, 1 - l) * Math.max(-1, Math.min(k - 3, 9 - k, 1));
+    return Math.round(c * 255).toString(16).padStart(2, '0'); };
+  return '#' + f(0) + f(8) + f(4);
+}
+function nuance(hex, dl, ds) {
+  const t = hexHsl(hex);
+  return hslHex(t[0], Math.max(0, Math.min(1, t[1] + (ds || 0))), Math.max(0.04, Math.min(0.96, t[2] + dl)));
+}
+let PAL = null; /* palette effective : couleurs du design, ou couleurs dérivées du choix personnel */
+function paletteEffective(d) {
+  if (!couleurPerso) return {bois: d.bois, grav: d.grav, onglet: d.onglet, bord: d.bord,
+    lisere: d.lisere, vars: d.vars, decorCols: d.decorCols, grain: d.grain};
+  const c = couleurPerso, sombre = designActuel === 'neon';
+  return {
+    bois: [nuance(c, 0.20, 0.05), c, nuance(c, -0.16)],
+    grav: nuance(c, -0.34), onglet: nuance(c, -0.22), bord: nuance(c, -0.20),
+    lisere: 'rgba(255,255,255,0.45)', grain: false,
+    decorCols: [c, nuance(c, 0.28), nuance(c, -0.18)],
+    vars: Object.assign({}, d.vars, sombre
+      ? {'--tuile1': nuance(c, -0.30, -0.25), '--rainure': nuance(c, -0.40, -0.25), '--fond': nuance(c, -0.44, -0.30)}
+      : {'--tuile1': nuance(c, 0.34, -0.08), '--rainure': nuance(c, -0.05), '--fond': nuance(c, -0.40, -0.18)})
+  };
+}
+
+function dessineCadre() {
+  const s = S(), k = $('cadre');
+  const d = PAL || THEMES[designActuel];
+  k.innerHTML = '';
+  /* dégradés du cadre selon le design (ou la couleur personnelle) */
+  const set = id => { const st = document.querySelectorAll('#' + id + ' stop');
+    st[0].setAttribute('stop-color', d.bois[0]); st[1].setAttribute('stop-color', d.bois[1]); st[2].setAttribute('stop-color', d.bois[2]); };
+  set('gBoisH'); set('gBoisV');
+  const poly = (pts, fill) => el('polygon', {points: pts, fill: fill}, k);
+  const b = 28, m = 2;
+  poly(m + ',' + m + ' ' + (s - m) + ',' + m + ' ' + (s - b) + ',' + b + ' ' + b + ',' + b, 'url(#gBoisH)');
+  poly(m + ',' + (s - m) + ' ' + (s - m) + ',' + (s - m) + ' ' + (s - b) + ',' + (s - b) + ' ' + b + ',' + (s - b), 'url(#gBoisH)');
+  poly(m + ',' + m + ' ' + b + ',' + b + ' ' + b + ',' + (s - b) + ' ' + m + ',' + (s - m), 'url(#gBoisV)');
+  poly((s - m) + ',' + m + ' ' + (s - b) + ',' + b + ' ' + (s - b) + ',' + (s - b) + ' ' + (s - m) + ',' + (s - m), 'url(#gBoisV)');
+  if (d.grain) {
+    poly(m + ',' + m + ' ' + (s - m) + ',' + m + ' ' + (s - b) + ',' + b + ' ' + b + ',' + b, 'url(#grainH)');
+    poly(m + ',' + (s - m) + ' ' + (s - m) + ',' + (s - m) + ' ' + (s - b) + ',' + (s - b) + ' ' + b + ',' + (s - b), 'url(#grainH)');
+    poly(m + ',' + m + ' ' + b + ',' + b + ' ' + b + ',' + (s - b) + ' ' + m + ',' + (s - m), 'url(#grainV)');
+    poly((s - m) + ',' + m + ' ' + (s - b) + ',' + b + ' ' + (s - b) + ',' + (s - b) + ' ' + (s - m) + ',' + (s - m), 'url(#grainV)');
+  }
+  for (const [x1, y1, x2, y2] of [[m, m, b, b], [s - m, m, s - b, b], [m, s - m, b, s - b], [s - m, s - m, s - b, s - b]])
+    el('line', {x1, y1, x2, y2, stroke: d.onglet, 'stroke-width': 1.3}, k);
+  el('rect', {x: m, y: m, width: s - 2 * m, height: s - 2 * m, fill: 'none', stroke: d.bord, 'stroke-width': 2.5}, k);
+  el('rect', {x: b - 1, y: b - 1, width: s - 2 * b + 2, height: s - 2 * b + 2, fill: 'none', stroke: 'rgba(30,20,10,0.5)', 'stroke-width': 1.5}, k);
+  el('rect', {x: 4.5, y: 4.5, width: s - 9, height: s - 9, fill: 'none', stroke: d.lisere, 'stroke-width': 1}, k);
+}
+function dessineFond() {
+  const f = $('fondRainures'), tl = $('tuiles'), s = S();
+  const d = PAL || THEMES[designActuel];
+  f.innerHTML = ''; tl.innerHTML = '';
+  el('rect', {x: P(0) - G / 2 - 2, y: P(0) - G / 2 - 2, width: N * U + G + 4, height: N * U + G + 4, fill: 'var(--rainure)', stroke: 'rgba(20,12,4,0.8)', 'stroke-width': 1.5, 'shape-rendering': 'crispEdges'}, f);
+  for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) {
+    /* Tuiles carrees, couleur unie, sans reflet ni degrade */
+    el('rect', {x: P(c) + G / 2, y: P(r) + G / 2, width: U - G, height: U - G,
+      fill: 'var(--tuile1)', 'shape-rendering': 'crispEdges'}, tl);
+  }
+  /* Coordonnées gravées sur le rebord, vis-à-vis des RAINURES :
+     rainures verticales = lettres, rainures horizontales = chiffres (1 en bas) */
+  const grav = (x, y, txt) => {
+    const e = el('text', {x, y, 'text-anchor': 'middle', 'font-size': 13, 'font-family': 'Georgia',
+      'font-weight': 'bold', fill: d.grav, opacity: 0.9}, tl);
+    e.textContent = txt;
+  };
+  for (let ic = 0; ic <= N; ic++) {
+    const lettre = String.fromCharCode(65 + ic);
+    grav(P(ic), 19, lettre); grav(P(ic), s - 9, lettre);
+  }
+  for (let ir = 0; ir <= N; ir++) {
+    const chiffre = String(N + 1 - ir);
+    grav(15, P(ir) + 4.5, chiffre); grav(s - 15, P(ir) + 4.5, chiffre);
+  }
+}
+function construirePlateau() {
+  const s = S(), d = THEMES[designActuel], pv = $('plateau');
+  const pad = d.pad || 0;
+  pv.setAttribute('viewBox', '0 ' + (-pad) + ' ' + s + ' ' + (s + pad));
+  pv.setAttribute('aria-label', 'Plateau ÉCHEC O CUBE ' + N + 'x' + N);
+  pv.style.maxWidth = (N === 7 ? 480 : N === 9 ? 560 : 640) + 'px';
+  const gd = $('decorTheme');
+  gd.innerHTML = '';
+  if (d.decor) d.decor(gd, s);
+  dessineCadre();
+  dessineFond();
+  dessineZonesClic();
+  if (typeof g !== 'undefined' && g) dessinePions();
+}
+function appliqueDesign(nomD) {
+  designActuel = THEMES[nomD] ? nomD : 'classique';
+  try { localStorage.setItem('eocDesign', designActuel); } catch (e) {}
+  const d = THEMES[designActuel];
+  PAL = paletteEffective(d);
+  for (const k in VARS_DEFAUT) document.documentElement.style.setProperty(k, (PAL.vars && PAL.vars[k]) || VARS_DEFAUT[k]);
+  /* couleurs personnelles des pions : priorité absolue au choix du joueur */
+  if (couleurPale) document.documentElement.style.setProperty('--pale', couleurPale);
+  if (couleurFonce) document.documentElement.style.setProperty('--fonce', couleurFonce);
+  construirePlateau();
+  document.querySelectorAll('.btn-design').forEach(b => b.classList.toggle('sel', b.dataset.design === designActuel));
+  const pc = $('pickCouleur');
+  if (pc && couleurPerso) pc.value = couleurPerso;
+  const pp = $('pickPale'), pf = $('pickFonce');
+  if (pp) pp.value = couleurPale || getComputedStyle(document.documentElement).getPropertyValue('--pale').trim() || '#f7ecd2';
+  if (pf) pf.value = couleurFonce || getComputedStyle(document.documentElement).getPropertyValue('--fonce').trim() || '#241203';
+}
+/* Notation vis-à-vis des rainures : chaque croisement = lettre de la rainure verticale (A-H)
+   + chiffre de la rainure horizontale (1-8, 1 en bas). Exemple : D5.
+   Un pion se note par ses deux croisements : D5-E5 (couché horizontal), D5-D6 (couché vertical).
+   Un rouge se note par son croisement unique. Un carré se note coin SO - coin NE. */
+function nomPoint(ir, ic) { return String.fromCharCode(65 + ic) + (N + 1 - ir); }
+function notationSeg(t, r, c) {
+  if (t === 'H') return nomPoint(r, c) + '-' + nomPoint(r, c + 1);
+  return nomPoint(r + 1, c) + '-' + nomPoint(r, c);
+}
+function notationCoin(ir, ic) { return nomPoint(ir, ic); }
+function nomCarre(q) {
+  const taille = q.type === 2 ? 2 : 1;
+  return nomPoint(q.r + taille, q.c) + '-' + nomPoint(q.r, q.c + taille);
+}
+let journal = [];
+function ajouteJournal(texte) {
+  journal.push(texte);
+  const j = $('journal');
+  j.innerHTML = journal.slice(-60).map(l => '<div>' + l + '</div>').join('');
+  j.scrollTop = j.scrollHeight;
+}
+function dessineZonesClic() {
+  const z = $('zonesClic');
+  z.innerHTML = '';
+  const zone = (attrs, fn) => { const r = el('rect', Object.assign({fill: 'transparent', cursor: 'pointer'}, attrs), z); r.addEventListener('click', fn); return r; };
+  for (let r = 0; r <= N; r++) for (let c = 0; c < N; c++)
+    zone({x: P(c) + 3, y: P(r) - G / 2 - 2, width: U - 6, height: G + 4}, () => clicSegment('H', r, c));
+  for (let r = 0; r < N; r++) for (let c = 0; c <= N; c++)
+    zone({x: P(c) - G / 2 - 2, y: P(r) + 3, width: G + 4, height: U - 6}, () => clicSegment('V', r, c));
+  for (let ir = 0; ir <= N; ir++) for (let ic = 0; ic <= N; ic++) {
+    const r = el('circle', {cx: P(ic), cy: P(ir), r: 9, fill: 'transparent', cursor: 'pointer'}, z);
+    r.addEventListener('click', () => clicIntersection(ir, ic));
+  }
+}
+function dessinePions() {
+  const gp = $('pions'), gr = $('rouges'), gc = $('carresGagnes');
+  gp.innerHTML = ''; gr.innerHTML = ''; gc.innerHTML = '';
+  for (let a = 0; a < N; a++) for (let b = 0; b < N; b++) {
+    const m = g.c1[a][b]; if (!m) continue;
+    if (m.etat === 'gagne') {
+      el('rect', {x: P(b) + G / 2 + 1, y: P(a) + G / 2 + 1, width: U - G - 2, height: U - G - 2, rx: 0,
+        fill: m.pid === 1 ? 'rgba(212,175,55,0.30)' : 'rgba(240,211,122,0.30)', stroke: 'var(--or)', 'stroke-width': 1.4}, gc);
+      el('text', {x: P(b) + U / 2, y: P(a) + U / 2 + 4, 'text-anchor': 'middle', 'font-size': 13,
+        fill: 'var(--or2)', 'font-family': 'Georgia'}, gc).textContent = m.pts;
+    } else if (m.etat === 'mort') {
+      el('rect', {x: P(b) + G / 2 + 1, y: P(a) + G / 2 + 1, width: U - G - 2, height: U - G - 2, rx: 0,
+        fill: 'rgba(80,20,10,0.35)'}, gc);
+    } else if (m.etat === 'perdu') {
+      el('rect', {x: P(b) + G / 2 + 1, y: P(a) + G / 2 + 1, width: U - G - 2, height: U - G - 2, rx: 0,
+        fill: 'none', stroke: '#8a7550', 'stroke-dasharray': '4 3', 'stroke-width': 1.2}, gc);
+    }
+  }
+  for (let a = 0; a < N - 1; a++) for (let b = 0; b < N - 1; b++) {
+    const m = g.c2[a][b]; if (!m || m.etat !== 'gagne') continue;
+    el('rect', {x: P(b) + G / 2, y: P(a) + G / 2, width: 2 * U - G, height: 2 * U - G, rx: 0,
+      fill: 'none', stroke: 'var(--or2)', 'stroke-width': 2.5, 'stroke-dasharray': '7 4'}, gc);
+  }
+  const pose = (t, r, c, v) => {
+    const fonce = v.c === FONCE;
+    /* Pions rectangulaires, coins carres, aucun reflet.
+       Epaisseur = G : le pion a exactement la largeur de la rainure (la rainure disparait sous le pion).
+       Pale = U - G : exactement le cote du cube. Fonce = U + G : remplit aussi les deux coins-gorges. */
+    const long = fonce ? U + G : U - G, ep = G;
+    const fill = fonce ? 'var(--fonce)' : 'var(--pale)';
+    /* Aplat pur sans contour + crispEdges : coins parfaitement pointus, aucune couleur melangee au bord */
+    if (t === 'H') {
+      const cx = (P(c) + P(c + 1)) / 2;
+      el('rect', {x: cx - long / 2, y: P(r) - ep / 2, width: long, height: ep, fill, 'shape-rendering': 'crispEdges'}, gp);
+    } else {
+      const cy = (P(r) + P(r + 1)) / 2;
+      el('rect', {x: P(c) - ep / 2, y: cy - long / 2, width: ep, height: long, fill, 'shape-rendering': 'crispEdges'}, gp);
+    }
+  };
+  for (let r = 0; r <= N; r++) for (let c = 0; c < N; c++) if (g.H[r][c]) pose('H', r, c, g.H[r][c]);
+  for (let r = 0; r < N; r++) for (let c = 0; c <= N; c++) if (g.V[r][c]) pose('V', r, c, g.V[r][c]);
+  for (let ir = 0; ir <= N; ir++) for (let ic = 0; ic <= N; ic++) if (g.R[ir][ic]) {
+    el('rect', {x: P(ic) - G / 2, y: P(ir) - G / 2, width: G, height: G, fill: 'var(--rouge)', 'shape-rendering': 'crispEdges'}, gr);
+    el('rect', {x: P(ic) - 2, y: P(ir) - 2, width: 4, height: 4, fill: '#f3c1b4', 'shape-rendering': 'crispEdges'}, gr);
+  }
+  /* Halo doré clignotant autour du dernier pion posé */
+  if (dernierCoup) {
+    const d = dernierCoup;
+    let h;
+    if (d.t === 'H') h = el('rect', {x: P(d.c) - G / 2 - 3, y: P(d.r) - 10, width: U + G + 6, height: 20, rx: 0,
+      fill: 'none', stroke: 'var(--or)', 'stroke-width': 3}, gr);
+    else h = el('rect', {x: P(d.c) - 10, y: P(d.r) - G / 2 - 3, width: 20, height: U + G + 6, rx: 0,
+      fill: 'none', stroke: 'var(--or)', 'stroke-width': 3}, gr);
+    h.setAttribute('class', 'halo');
+  }
+}
+function maj() {
+  for (const i of [1, 2]) {
+    const pl = g.pl[i];
+    $('score' + i).textContent = pl.score;
+    $('p' + i).textContent = pl.p;
+    $('f' + i).textContent = pl.f;
+    $('net' + i).textContent = 'Net estimé : ' + (pl.score - pl.p - 2 * pl.f);
+    $('carte' + i).classList.toggle('actif', g.cur === i && !g.over);
+  }
+  sauvePartie();
+  $('resRouge').textContent = g.rouges;
+  const pasMonTour = (modeIA && g.cur === 2) || (modeEnLigne && g.cur !== monJoueur);
+  $('btnPale').disabled = g.pl[g.cur].p <= 0 || pasMonTour;
+  $('btnFonce').disabled = g.pl[g.cur].f <= 0 || pasMonTour;
+  const ba = $('btnAnnuler');
+  if (ba) { ba.style.display = modeEnLigne ? 'none' : ''; ba.disabled = pileAnnul.length === 0; }
+  const noms = modeEnLigne
+    ? {1: monJoueur === 1 ? 'VOUS' : 'ADVERSAIRE', 2: monJoueur === 2 ? 'VOUS' : 'ADVERSAIRE'}
+    : {1: 'JOUEUR 1', 2: modeIA ? 'ORDINATEUR - ' + NIVEAUX_NOMS[niveauIA].toUpperCase() : 'JOUEUR 2'};
+  $('nom1').textContent = noms[1]; $('nom2').textContent = noms[2];
+  let t = '';
+  if (g.over) t = 'Partie terminée.';
+  else if (phase === 'annonce') t = 'Carré fermé. Annoncez ÉCHEC O CUBE !';
+  else if (phase === 'ia') t = 'L\'ordinateur réfléchit...';
+  else t = 'Au tour de : ' + (g.cur === 1 ? noms[1] : noms[2]) + ' - pion sélectionné : ' + (selection === PALE ? 'pâle' : 'foncé');
+  $('tour').textContent = t;
+  dessinePions();
+}
+function msg(s) { $('msg').textContent = s; }
+function nomDe(pid) {
+  if (modeEnLigne) return pid === monJoueur ? 'Vous' : 'L\'adversaire';
+  return pid === 1 ? 'Joueur 1' : (modeIA ? 'L\'ordinateur' : 'Joueur 2');
+}
+
+/* ===== ANNULER LE COUP - photo de la partie avant chaque coup humain ===== */
+function sauveAnnul() {
+  pileAnnul.push(JSON.stringify({
+    g: g, phase: phase, enAttente: enAttente, oublie: oublie,
+    dernierCoup: dernierCoup, journal: journal
+  }));
+  if (pileAnnul.length > 10) pileAnnul.shift();
+}
+let dernierAnnulQuand = 0;
+function annulerCoup() {
+  if (modeEnLigne) { msg('L\'annulation n\'est pas offerte en partie en ligne (les deux appareils doivent rester identiques).'); return; }
+  if (!pileAnnul.length) { msg('Aucun coup à annuler.'); return; }
+  /* Protection contre le double-toucher (cellulaire) : UNE annulation par touche, jamais deux. */
+  const mtn = Date.now();
+  if (mtn - dernierAnnulQuand < 900) return;
+  dernierAnnulQuand = mtn;
+  if (iaTimer) { clearTimeout(iaTimer); iaTimer = null; }
+  const compteAvantAnnul = comptePions(g);
+  const s = JSON.parse(pileAnnul.pop());
+  g = s.g;
+  phase = s.phase; enAttente = s.enAttente || null; oublie = s.oublie || null;
+  dernierCoup = s.dernierCoup || null;
+  journal = Array.isArray(s.journal) ? s.journal : [];
+  const j = $('journal');
+  j.innerHTML = journal.slice(-60).map(l => '<div>' + l + '</div>').join('');
+  j.scrollTop = j.scrollHeight;
+  $('voileFin').classList.remove('on');
+  $('barreAnalyse').classList.remove('on');
+  $('barreAnnonce').classList.toggle('on', phase === 'annonce' && !!enAttente);
+  $('barreReprise').classList.toggle('on', !!oublie && oublie.pid !== g.cur && phase === 'jeu');
+  const repris = compteAvantAnnul - comptePions(g);
+  msg(repris <= 1
+    ? 'Un seul pion repris : le dernier posé. À ' + nomDe(g.cur) + ' de jouer.'
+    : repris + ' pions repris : le vôtre et la réponse de l\'ordinateur, pour revenir à VOTRE tour. À vous de jouer.');
+  maj();
+}
+function comptePions(gg) {
+  let n = 0;
+  for (let r = 0; r <= N; r++) for (let c = 0; c < N; c++) if (gg.H[r][c]) n++;
+  for (let r = 0; r < N; r++) for (let c = 0; c <= N; c++) if (gg.V[r][c]) n++;
+  return n;
+}
+function clicSegment(t, r, c) {
+  if (g.over) return;
+  if (modeRouge) { msg('Mode rouge actif : touchez une intersection (le point où quatre rainures se croisent).'); return; }
+  if (phase === 'annonce') {
+    msg(modeEnLigne && enAttente && enAttente.pid !== monJoueur
+      ? 'On attend l\'annonce de l\'adversaire...'
+      : 'Annoncez d\'abord ÉCHEC O CUBE, ou terminez sans annoncer.');
+    return;
+  }
+  if (phase === 'ia') return;
+  if (modeEnLigne && g.cur !== monJoueur) { msg('Ce n\'est pas votre tour : l\'adversaire réfléchit.'); return; }
+  const photo = !modeEnLigne;
+  if (photo) sauveAnnul();
+  if (oublie && oublie.pid !== g.cur) { $('barreReprise').classList.remove('on'); fermeReprise(true); }
+  const pl = g.pl[g.cur];
+  if ((selection === PALE && pl.p <= 0) || (selection === FONCE && pl.f <= 0)) {
+    if (photo) pileAnnul.pop();
+    msg('Plus de pions de ce type en main.'); return;
+  }
+  const v = coupLegal(g, selection, t, r, c);
+  if (!v.ok) { if (photo) pileAnnul.pop(); msg('Coup refusé. ' + v.why); return; }
+  const neufs = nouveauxCarres(g, t, r, c, selection);
+  poseSeg(g, t, r, c, {c: selection});
+  dernierCoup = {t, r, c};
+  if (modeEnLigne) envoie({type: 'pose', t, r, c, couleur: selection});
+  if (selection === PALE) pl.p--; else pl.f--;
+  g.first = false;
+  marqueMorts(g);
+  const nota = notationSeg(t, r, c);
+  ajouteJournal('<b>' + nomDe(g.cur) + '</b> : ' + (selection === PALE ? 'pâle' : 'foncé') + ' <b>' + nota + '</b>');
+  if (neufs.length > 0) {
+    enAttente = {pid: g.cur, carres: neufs, pts: neufs.reduce((s, q) => s + q.pts, 0)};
+    phase = 'annonce';
+    $('barreAnnonce').classList.add('on');
+    msg('Votre pion en ' + nota + ' ferme ' + (neufs.length > 1 ? neufs.length + ' carrés' : 'un carré') + '. L\'annonce est obligatoire (article 15).');
+  } else {
+    msg('Pion ' + (selection === PALE ? 'pâle' : 'foncé') + ' posé en ' + nota + '.');
+    finDePose();
+  }
+  maj();
+}
+function clicIntersection(ir, ic) {
+  if (!modeRouge || g.over) return;
+  if (g.R[ir][ic]) { retireRouge(ir, ic, true); return; }
+  const v = rougeLegal(g, ir, ic);
+  if (!v.ok) { msg('Rouge refusé. ' + v.why); return; }
+  g.R[ir][ic] = true; g.rouges--;
+  if (modeEnLigne) envoie({type: 'rouge', ir, ic});
+  marqueMorts(g);
+  const nc = notationCoin(ir, ic);
+  ajouteJournal('Rouge debout au coin <b>' + nc + '</b> (zone morte)');
+  msg('Zone morte marquée d\'un rouge debout au coin ' + nc + ' (article 18). Aucun tour consommé.');
+  maj();
+}
+function reviveMorts(g) {
+  for (let a = 0; a < N; a++) for (let b = 0; b < N; b++) {
+    const m = g.c1[a][b];
+    if (m && m.etat === 'mort') { const e = evalCarre1(g, a, b); if (!e.closed || !e.dead) g.c1[a][b] = null; }
+  }
+  for (let a = 0; a < N - 1; a++) for (let b = 0; b < N - 1; b++) {
+    const m = g.c2[a][b];
+    if (m && m.etat === 'mort') { const e = evalCarre2(g, a, b); if (!e.closed || !e.dead) g.c2[a][b] = null; }
+  }
+}
+function retireRouge(ir, ic, local) {
+  g.R[ir][ic] = false; g.rouges++;
+  reviveMorts(g);
+  if (local && modeEnLigne) envoie({type: 'rougeRetrait', ir, ic});
+  const nc = notationCoin(ir, ic);
+  ajouteJournal('Rouge retiré du croisement <b>' + nc + '</b> (correction, retour à la réserve)');
+  msg('Rouge retiré en ' + nc + ' : la zone redevient jouable. Un rouge peut être annulé en tout temps.');
+  maj();
+}
+function annoncer() {
+  if (!enAttente) return;
+  const e = enAttente; enAttente = null;
+  $('barreAnnonce').classList.remove('on');
+  for (const q of e.carres) {
+    if (q.type === 1) g.c1[q.r][q.c] = {etat: 'gagne', pid: e.pid, pts: q.pts};
+    else g.c2[q.r][q.c] = {etat: 'gagne', pid: e.pid, pts: q.pts};
+  }
+  g.pl[e.pid].score += e.pts;
+  ajouteJournal('<b>' + nomDe(e.pid) + '</b> annonce ÉCHEC O CUBE : carré ' + e.carres.map(q => nomCarre(q) + (q.type === 2 ? ' (2x2)' : '') + ' +' + q.pts).join(', carré '));
+  msg(nomDe(e.pid) + ' annonce : ÉCHEC O CUBE ! +' + e.pts + ' points. Tour bonus (article 17).');
+  feteCube();
+  if (g.pl[e.pid].p + g.pl[e.pid].f === 0) { finPartie(nomDe(e.pid) + ' a posé son dernier pion.'); return; }
+  phase = (modeIA && e.pid === 2) ? 'ia' : 'jeu';
+  maj();
+  if (phase === 'ia') iaTimer = setTimeout(tourOrdinateur,700);
+  else verifieBlocage();
+}
+function sansAnnonce() {
+  if (!enAttente) return;
+  const e = enAttente; enAttente = null;
+  $('barreAnnonce').classList.remove('on');
+  oublie = e;
+  msg('Aucune annonce. Le joueur suivant peut réclamer les points avant de jouer (article 16).');
+  if (g.pl[e.pid].p + g.pl[e.pid].f === 0) { fermeReprise(false); finPartie(nomDe(e.pid) + ' a posé son dernier pion.'); return; }
+  finTour();
+}
+function fermeReprise(silencieux) {
+  if (!oublie) return;
+  for (const q of oublie.carres) {
+    const cible = q.type === 1 ? g.c1 : g.c2;
+    if (!cible[q.r][q.c]) cible[q.r][q.c] = {etat: 'perdu'};
+  }
+  if (!silencieux) msg('La fenêtre de reprise est fermée : les points du carré oublié sont perdus (article 16).');
+  oublie = null;
+}
+function reclamer() {
+  if (!oublie) return;
+  const e = oublie; oublie = null;
+  $('barreReprise').classList.remove('on');
+  for (const q of e.carres) {
+    if (q.type === 1) g.c1[q.r][q.c] = {etat: 'gagne', pid: g.cur, pts: q.pts};
+    else g.c2[q.r][q.c] = {etat: 'gagne', pid: g.cur, pts: q.pts};
+  }
+  g.pl[g.cur].score += e.pts;
+  ajouteJournal('<b>' + nomDe(g.cur) + '</b> réclame le carré oublié : +' + e.pts + ' points (reprise, article 16)');
+  msg(nomDe(g.cur) + ' réclame le carré oublié : ÉCHEC O CUBE ! +' + e.pts + ' points (article 16). À lui de jouer maintenant.');
+  phase = 'jeu';
+  maj();
+}
+function finDePose() {
+  const pl = g.pl[g.cur];
+  if (pl.p + pl.f === 0) { finPartie(nomDe(g.cur) + ' a posé son dernier pion (article 20).'); return; }
+  finTour();
+}
+function finTour() {
+  g.cur = g.cur === 1 ? 2 : 1;
+  phase = (modeIA && g.cur === 2) ? 'ia' : 'jeu';
+  maj();
+  if (phase === 'ia') iaTimer = setTimeout(tourOrdinateur,650);
+  else {
+    if (oublie && oublie.pid !== g.cur && (!modeEnLigne || g.cur === monJoueur)) { $('barreReprise').classList.add('on'); }
+    verifieBlocage();
+  }
+}
+function verifieBlocage() {
+  if (g.over) return;
+  if (!tousLesCoups(g, g.cur).length) {
+    fermeReprise(true);
+    finPartie('Blocage : ' + nomDe(g.cur) + ' ne peut placer aucun pion valide (article 20).');
+  }
+}
+function tourOrdinateur() {
+  if (g.over) return;
+  if (oublie && oublie.pid !== 2) {
+    const e = oublie; oublie = null;
+    for (const q of e.carres) {
+      if (q.type === 1) g.c1[q.r][q.c] = {etat: 'gagne', pid: 2, pts: q.pts};
+      else g.c2[q.r][q.c] = {etat: 'gagne', pid: 2, pts: q.pts};
+    }
+    g.pl[2].score += e.pts;
+    ajouteJournal('<b>L\'ordinateur</b> réclame le carré oublié : +' + e.pts + ' points (reprise, article 16)');
+    msg('L\'ordinateur réclame le carré oublié : ÉCHEC O CUBE ! +' + e.pts + ' points (article 16).');
+    maj();
+  }
+  const m = coupOrdinateur(g);
+  if (!m) { finPartie('Blocage : l\'ordinateur ne peut placer aucun pion valide (article 20).'); return; }
+  const neufs = nouveauxCarres(g, m.t, m.r, m.c, m.cl);
+  poseSeg(g, m.t, m.r, m.c, {c: m.cl});
+  dernierCoup = {t: m.t, r: m.r, c: m.c};
+  if (m.cl === PALE) g.pl[2].p--; else g.pl[2].f--;
+  g.first = false;
+  marqueMorts(g);
+  const nota = notationSeg(m.t, m.r, m.c);
+  ajouteJournal('<b>L\'ordinateur</b> : ' + (m.cl === PALE ? 'pâle' : 'foncé') + ' <b>' + nota + '</b>');
+  if (neufs.length) {
+    const pts = neufs.reduce((s, q) => s + q.pts, 0);
+    for (const q of neufs) {
+      if (q.type === 1) g.c1[q.r][q.c] = {etat: 'gagne', pid: 2, pts: q.pts};
+      else g.c2[q.r][q.c] = {etat: 'gagne', pid: 2, pts: q.pts};
+    }
+    g.pl[2].score += pts;
+    ajouteJournal('<b>L\'ordinateur</b> annonce ÉCHEC O CUBE : carré ' + neufs.map(q => nomCarre(q) + (q.type === 2 ? ' (2x2)' : '') + ' +' + q.pts).join(', carré '));
+    msg('L\'ordinateur pose un ' + (m.cl === PALE ? 'pâle' : 'foncé') + ' en ' + nota + ' et annonce : ÉCHEC O CUBE ! +' + pts + ' points. Tour bonus.');
+    maj();
+    if (g.pl[2].p + g.pl[2].f === 0) { finPartie('L\'ordinateur a posé son dernier pion (article 20).'); return; }
+    iaTimer = setTimeout(tourOrdinateur,850);
+  } else {
+    msg('L\'ordinateur pose un pion ' + (m.cl === PALE ? 'pâle' : 'foncé') + ' en ' + nota + '.');
+    if (g.pl[2].p + g.pl[2].f === 0) { maj(); finPartie('L\'ordinateur a posé son dernier pion (article 20).'); return; }
+    finTour();
+  }
+}
+function finPartie(raison) {
+  g.over = true; phase = 'fin';
+  $('barreAnnonce').classList.remove('on');
+  $('barreReprise').classList.remove('on');
+  maj();
+  $('raisonFin').textContent = raison;
+  const noms = modeEnLigne
+    ? {1: monJoueur === 1 ? 'Vous' : 'Adversaire', 2: monJoueur === 2 ? 'Vous' : 'Adversaire'}
+    : {1: 'Joueur 1', 2: modeIA ? 'Ordinateur' : 'Joueur 2'};
+  $('th1').textContent = noms[1]; $('th2').textContent = noms[2];
+  const nets = {};
+  for (const i of [1, 2]) {
+    const pl = g.pl[i];
+    nets[i] = pl.score - pl.p - 2 * pl.f;
+    $('d' + i + 'b').textContent = pl.score;
+    $('d' + i + 'p').textContent = '-' + pl.p;
+    $('d' + i + 'f').textContent = '-' + (2 * pl.f);
+    $('d' + i + 'n').textContent = nets[i];
+  }
+  $('vainqueur').textContent = nets[1] === nets[2] ? 'Égalité parfaite.'
+    : 'Vainqueur : ' + (nets[1] > nets[2] ? noms[1] : noms[2]) + ' (total net ' + Math.max(nets[1], nets[2]) + ')';
+  $('voileFin').classList.add('on');
+}
+function demarrer(ia) {
+  modeIA = ia;
+  modeEnLigne = false;
+  quitteLigne();
+  codeHote = null;
+  if ($('blocCodeHote')) { $('blocCodeHote').style.display = 'none'; $('codeHoteAffiche').textContent = ''; }
+  if ($('btnChat')) { $('btnChat').style.display = 'none'; $('btnChat').classList.remove('avert'); }
+  if ($('chatBoite')) { $('chatBoite').classList.remove('on'); $('chatMessages').innerHTML = ''; }
+  lacheVerrouEcran();
+  const nVoulu = formatChoisi();
+  if (nVoulu !== N) { N = nVoulu; }
+  g = nouvellePartie();
+  construirePlateau();
+  enAttente = null; oublie = null; modeRouge = false; dernierCoup = null;
+  pileAnnul = []; if (iaTimer) { clearTimeout(iaTimer); iaTimer = null; }
+  journal = []; $('journal').innerHTML = '';
+  $('btnRouge').classList.remove('sel'); $('noteRouge').classList.remove('on');
+  $('voileMode').classList.remove('on'); $('voileFin').classList.remove('on');
+  $('barreAnnonce').classList.remove('on'); $('barreReprise').classList.remove('on');
+  $('barreAnalyse').classList.remove('on');
+  g.cur = Math.random() < 0.5 ? 1 : 2;
+  const noms = {1: 'Joueur 1', 2: ia ? 'l\'ordinateur' : 'Joueur 2'};
+  msg('Pile ou face (article 7) : ' + noms[g.cur] + ' commence. Le premier pion est libre (article 8).');
+  phase = (ia && g.cur === 2) ? 'ia' : 'jeu';
+  selection = PALE;
+  $('btnPale').classList.add('sel'); $('btnFonce').classList.remove('sel');
+  maj();
+  if (phase === 'ia') iaTimer = setTimeout(tourOrdinateur,900);
+}
+/* ============================================================
+   SAUVEGARDE LOCALE - la partie en cours sur cet appareil
+   (ordinateur ou deux joueurs) est conservée automatiquement
+   après chaque action; elle peut être reprise depuis le menu.
+   Le mode en ligne (deux appareils) n'est pas couvert : sans
+   serveur central, la partie n'existe que pendant la connexion.
+   ============================================================ */
+const EOC_CLE_SAUVE = 'eocPartieLocale';
+function sauvePartie() {
+  try {
+    if (phase === 'attente') return;
+    if (g.over) { localStorage.removeItem(EOC_CLE_SAUVE); return; }
+    /* Les parties EN LIGNE sont sauvegardées aussi : si la connexion tombe ou si on ferme
+       l'application, le plateau, les mains et le journal sont conservés. La reprise se fait
+       en mode deux joueurs sur cet appareil (le lien réseau, lui, ne peut pas être rétabli). */
+    localStorage.setItem(EOC_CLE_SAUVE, JSON.stringify({
+      v: 1, quand: Date.now(), g: g, modeIA: modeEnLigne ? false : modeIA, niveauIA: niveauIA,
+      taille: N, enLigne: modeEnLigne, phase: phase, selection: selection, enAttente: enAttente,
+      oublie: oublie, dernierCoup: dernierCoup, journal: journal
+    }));
+  } catch (e) {}
+}
+function litSauvegarde() {
+  try {
+    const s = localStorage.getItem(EOC_CLE_SAUVE);
+    if (!s) return null;
+    const d = JSON.parse(s);
+    if (!d || d.v !== 1 || !d.g || d.g.over) return null;
+    return d;
+  } catch (e) { return null; }
+}
+function majBoutonReprendre() {
+  const b = $('btnReprendre');
+  if (!b) return;
+  const d = litSauvegarde();
+  if (!d) { b.style.display = 'none'; return; }
+  b.style.display = '';
+  b.textContent = 'Reprendre la partie en cours ('
+    + (d.enLigne ? 'partie en ligne sauvegardée - suite à deux sur cet appareil'
+      : d.modeIA ? 'ordinateur - ' + (NIVEAUX_NOMS[d.niveauIA] || 'Débutant') : 'deux joueurs sur cet appareil') + ')';
+}
+function reprendrePartie() {
+  const d = litSauvegarde();
+  if (!d) { majBoutonReprendre(); return; }
+  if (!accesBase()) { aboRetour = 'menu'; $('voileMode').classList.remove('on'); $('voileAbo').classList.add('on'); $('etatAbo').textContent = ''; return; }
+  modeEnLigne = false;
+  quitteLigne();
+  N = FORMATS[d.taille] ? d.taille : 7;
+  g = d.g;
+  construirePlateau();
+  modeIA = !!d.modeIA;
+  niveauIA = NIVEAUX_NOMS[d.niveauIA] ? d.niveauIA : 'debutant';
+  phase = d.phase === 'annonce' ? 'annonce' : ((modeIA && g.cur === 2) ? 'ia' : 'jeu');
+  selection = d.selection === FONCE ? FONCE : PALE;
+  enAttente = d.enAttente || null;
+  oublie = d.oublie || null;
+  dernierCoup = d.dernierCoup || null;
+  modeRouge = false;
+  pileAnnul = []; if (iaTimer) { clearTimeout(iaTimer); iaTimer = null; }
+  journal = Array.isArray(d.journal) ? d.journal : [];
+  const j = $('journal');
+  j.innerHTML = journal.slice(-60).map(l => '<div>' + l + '</div>').join('');
+  j.scrollTop = j.scrollHeight;
+  $('btnRouge').classList.remove('sel'); $('noteRouge').classList.remove('on');
+  $('voileMode').classList.remove('on'); $('voileFin').classList.remove('on');
+  $('barreAnalyse').classList.remove('on');
+  $('barreAnnonce').classList.toggle('on', phase === 'annonce' && !!enAttente);
+  $('barreReprise').classList.toggle('on', !!oublie && oublie.pid !== g.cur && phase === 'jeu');
+  if (selection === PALE) { $('btnPale').classList.add('sel'); $('btnFonce').classList.remove('sel'); }
+  else { $('btnFonce').classList.add('sel'); $('btnPale').classList.remove('sel'); }
+  if (d.enLigne) {
+    ajouteJournal('<b>Partie en ligne reprise sur cet appareil</b> : le plateau et les mains sont exacts; la suite se joue à deux sur cet appareil (le lien réseau n\'est pas rétabli).');
+    msg('Partie en ligne sauvegardée et reprise ICI, à deux sur cet appareil. Au tour de : ' + nomDe(g.cur) + '.');
+  } else {
+    ajouteJournal('<b>Partie reprise</b> exactement là où elle avait été laissée (sauvegarde de cet appareil).');
+    msg('Partie reprise. ' + (phase === 'annonce' ? 'Carré fermé : annoncez ÉCHEC O CUBE !' : 'Au tour de : ' + nomDe(g.cur) + '.'));
+  }
+  maj();
+  if (phase === 'ia') iaTimer = setTimeout(tourOrdinateur,900);
+}
+$('btnReprendre').addEventListener('click', reprendrePartie);
+
+/* ============================================================
+   MODE EN LIGNE - deux appareils, code de partie
+   Transport : serveur infonuagique ÉCHEC O CUBE (Google Firebase,
+   Realtime Database) - fiable sur tous les réseaux.
+   Aucun appel vidéo : retiré volontairement par sécurité (protection
+   des jeunes joueurs). Le clavardage écrit, limité à la partie, demeure.
+   ============================================================ */
+const FB_CONFIG = {
+  apiKey: "AIzaSyDAYMZffuRaRRAWp3jgRafk3aqnzxZbuxM",
+  authDomain: "alaindupont-projet.firebaseapp.com",
+  databaseURL: "https://alaindupont-projet-default-rtdb.firebaseio.com",
+  projectId: "alaindupont-projet",
+  storageBucket: "alaindupont-projet.firebasestorage.app",
+  messagingSenderId: "370166130096",
+  appId: "1:370166130096:web:7c7f735e91d1d926fb6275"
+};
+let fdb = null;                /* base de données Firebase */
+let refPartie = null;          /* noeud parties/CODE de la partie en cours */
+let ecouteurs = [];            /* [ref, evenement, fonction] à détacher au ménage */
+let connOuverte = false;       /* vrai quand les deux joueurs sont reliés */
+function msgLigne(s) { $('etatLigne').textContent = s; }
+function chargeFirebase(cb) {
+  if (window.firebase && firebase.apps && firebase.apps.length) { fdb = firebase.database(); return cb(); }
+  msgLigne('Connexion au serveur ÉCHEC O CUBE...');
+  function ajoute(src, apres) {
+    const s = document.createElement('script');
+    s.src = src; s.onload = apres;
+    s.onerror = () => msgLigne('Impossible de joindre le serveur. Vérifiez votre connexion Internet, puis réessayez.');
+    document.head.appendChild(s);
+  }
+  ajoute('https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js', () =>
+    ajoute('https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js', () => {
+      try { firebase.initializeApp(FB_CONFIG); fdb = firebase.database(); cb(); }
+      catch (e) { msgLigne('Erreur de démarrage du serveur. Rechargez la page et réessayez.'); }
+    }));
+}
+function codeAleatoire() {
+  const car = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+  let s = '';
+  for (let i = 0; i < 4; i++) s += car[Math.floor(Math.random() * car.length)];
+  return s;
+}
+function envoie(d) {
+  if (!refPartie) return;
+  try { refPartie.child('m' + monJoueur).push(JSON.stringify(d)); } catch (e) {}
+}
+function ecoute(ref, evenement, fonction) {
+  ref.on(evenement, fonction);
+  ecouteurs.push([ref, evenement, fonction]);
+}
+function detacheEcouteurs() {
+  for (const [r, ev, f] of ecouteurs) { try { r.off(ev, f); } catch (e) {} }
+  ecouteurs = [];
+}
+function ecouteMessages(deQui) {
+  ecoute(refPartie.child('m' + deQui), 'child_added', sn => {
+    let d = null;
+    try { d = JSON.parse(sn.val()); } catch (e) {}
+    if (d) recoit(d);
+  });
+}
+function ecoutePresence(deQui) {
+  ecoute(refPartie.child('present' + deQui), 'value', sn => {
+    if (connOuverte && sn.val() === false && modeEnLigne && g && !g.over) {
+      msg('Connexion perdue avec l\'adversaire. La partie est interrompue.');
+      msgLigne('Connexion perdue.');
+    }
+  });
+}
+function quitteLigne() {
+  detacheEcouteurs();
+  try {
+    if (refPartie) {
+      refPartie.onDisconnect().cancel();
+      refPartie.child('present' + monJoueur).onDisconnect().cancel();
+      if (codeHote && !connOuverte) refPartie.remove();       /* partie jamais commencée : on efface le code */
+      else if (connOuverte) refPartie.child('present' + monJoueur).set(false);
+    }
+  } catch (e) {}
+  refPartie = null; connOuverte = false; joindreEnCours = false;
+  codeHote = null; montreCodeHote(null);
+}
+function recoit(d) {
+  if (!d || !d.type) return;
+  if (d.type === 'debut') { monJoueur = 2; demarrerEnLigne(d.premier); }
+  else if (d.type === 'pose') poseDistante(d.t, d.r, d.c, d.couleur);
+  else if (d.type === 'annonce') annoncer();
+  else if (d.type === 'sansAnnonce') sansAnnonce();
+  else if (d.type === 'reclame') reclamer();
+  else if (d.type === 'ignore') { $('barreReprise').classList.remove('on'); fermeReprise(false); maj(); }
+  else if (d.type === 'rougeRetrait') retireRouge(d.ir, d.ic, false);
+  else if (d.type === 'chat') recoitChat(String(d.texte || ''));
+  else if (d.type === 'rouge') {
+    g.R[d.ir][d.ic] = true; g.rouges--;
+    marqueMorts(g);
+    ajouteJournal('Rouge debout au croisement <b>' + notationCoin(d.ir, d.ic) + '</b> (zone morte)');
+    msg('L\'adversaire marque une zone morte au croisement ' + notationCoin(d.ir, d.ic) + '.');
+    maj();
+  }
+}
+function poseDistante(t, r, c, couleur) {
+  if (oublie && oublie.pid !== g.cur) { $('barreReprise').classList.remove('on'); fermeReprise(true); }
+  const pl = g.pl[g.cur];
+  const neufs = nouveauxCarres(g, t, r, c, couleur);
+  poseSeg(g, t, r, c, {c: couleur});
+  dernierCoup = {t, r, c};
+  if (couleur === PALE) pl.p--; else pl.f--;
+  g.first = false;
+  marqueMorts(g);
+  const nota = notationSeg(t, r, c);
+  ajouteJournal('<b>' + nomDe(g.cur) + '</b> : ' + (couleur === PALE ? 'pâle' : 'foncé') + ' <b>' + nota + '</b>');
+  if (neufs.length > 0) {
+    enAttente = {pid: g.cur, carres: neufs, pts: neufs.reduce((s, q) => s + q.pts, 0)};
+    phase = 'annonce';
+    msg('L\'adversaire a posé en ' + nota + ' et son pion ferme un carré. On attend son annonce...');
+  } else {
+    msg('L\'adversaire pose un ' + (couleur === PALE ? 'pâle' : 'foncé') + ' en ' + nota + '. À vous.');
+    finDePose();
+  }
+  maj();
+}
+function demarrerEnLigne(premier) {
+  modeIA = false; modeEnLigne = true;
+  codeHote = null; montreCodeHote(null); prendVerrouEcran();
+  /* En ligne : toujours 7x7 pour que les deux appareils soient identiques */
+  if (N !== 7) { N = 7; }
+  g = nouvellePartie();
+  construirePlateau();
+  enAttente = null; oublie = null; modeRouge = false; dernierCoup = null;
+  pileAnnul = []; if (iaTimer) { clearTimeout(iaTimer); iaTimer = null; }
+  journal = []; $('journal').innerHTML = '';
+  $('btnRouge').classList.remove('sel'); $('noteRouge').classList.remove('on');
+  $('voileMode').classList.remove('on'); $('voileFin').classList.remove('on'); $('voileLigne').classList.remove('on');
+  $('barreAnalyse').classList.remove('on');
+  $('barreAnnonce').classList.remove('on'); $('barreReprise').classList.remove('on');
+  g.cur = premier;
+  phase = 'jeu';
+  selection = PALE;
+  $('btnPale').classList.add('sel'); $('btnFonce').classList.remove('sel');
+  ajouteJournal('Partie en ligne commencée. Vous êtes le <b>Joueur ' + monJoueur + '</b>.');
+  msg('Partie en ligne. Pile ou face (article 7) : ' + (premier === monJoueur ? 'vous commencez.' : 'l\'adversaire commence.') + ' Le premier pion est libre (article 8).');
+  if ($('btnChat')) $('btnChat').style.display = '';
+  maj();
+}
+/* ===== CLAVARDAGE EN LIGNE (par le serveur, comme les coups) ===== */
+function ajouteMessageChat(qui, texte) {
+  const zone = $('chatMessages');
+  const ligne = document.createElement('div');
+  ligne.className = qui === 'moi' ? 'moi' : 'lui';
+  const nom = document.createElement('b');
+  nom.textContent = (qui === 'moi' ? 'Vous' : 'Adversaire') + ' : ';
+  ligne.appendChild(nom);
+  ligne.appendChild(document.createTextNode(texte));
+  zone.appendChild(ligne);
+  zone.scrollTop = zone.scrollHeight;
+}
+function recoitChat(texte) {
+  texte = texte.slice(0, 200);
+  if (!texte) return;
+  ajouteMessageChat('lui', texte);
+  if (!$('chatBoite').classList.contains('on')) $('btnChat').classList.add('avert');
+}
+function envoieChat() {
+  const t = ($('champChat').value || '').trim().slice(0, 200);
+  if (!t) return;
+  if (!connOuverte) { msg('Le clavardage n\'est possible qu\'une fois connecté à un adversaire.'); return; }
+  envoie({type: 'chat', texte: t});
+  ajouteMessageChat('moi', t);
+  $('champChat').value = '';
+}
+$('btnChat').addEventListener('click', () => {
+  $('chatBoite').classList.toggle('on');
+  $('btnChat').classList.remove('avert');
+  if ($('chatBoite').classList.contains('on')) $('champChat').focus();
+});
+$('btnFermerChat').addEventListener('click', () => $('chatBoite').classList.remove('on'));
+$('btnEnvoyerChat').addEventListener('click', envoieChat);
+$('champChat').addEventListener('keydown', e => { if (e.key === 'Enter') envoieChat(); });
+$('btnModeLigne').addEventListener('click', () => {
+  if (!accesTout()) { aboRetour = 'menu'; $('voileMode').classList.remove('on'); $('voileAbo').classList.add('on'); $('etatAbo').textContent = ''; return; }
+  $('voileMode').classList.remove('on'); $('voileLigne').classList.add('on');
+  msgLigne('Membre ÉCHEC O CUBE : accès complet.');
+});
+let codeHote = null;          /* code de la partie créée sur CET appareil */
+let verrouEcran = null;       /* Screen Wake Lock pendant l'attente et la partie en ligne */
+async function prendVerrouEcran() {
+  try { if ('wakeLock' in navigator && !verrouEcran) { verrouEcran = await navigator.wakeLock.request('screen'); verrouEcran.addEventListener('release', () => { verrouEcran = null; }); } } catch (e) {}
+}
+function lacheVerrouEcran() { try { if (verrouEcran) { verrouEcran.release(); verrouEcran = null; } } catch (e) {} }
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && (codeHote || modeEnLigne)) prendVerrouEcran(); });
+function montreCodeHote(code) {
+  $('blocCodeHote').style.display = code ? '' : 'none';
+  $('codeHoteAffiche').textContent = code || '';
+}
+$('btnCopierCode').addEventListener('click', () => {
+  if (!codeHote) return;
+  try { navigator.clipboard.writeText(codeHote).then(() => msgLigne('Code ' + codeHote + ' copié. Envoyez-le à votre ami.')); } catch (e) { msgLigne('Copie impossible : notez le code ' + codeHote + '.'); }
+});
+$('btnFermerLigne').addEventListener('click', () => {
+  $('voileLigne').classList.remove('on'); $('voileMode').classList.add('on');
+  /* Si une partie créée attend un ami, on la garde vivante : fermer ce panneau ne détruit pas le code. */
+  if (codeHote && !modeEnLigne) msg('Votre partie ' + codeHote + ' reste ouverte en attente de votre ami. Gardez l\'application ouverte.');
+});
+$('btnCreer').addEventListener('click', () => chargeFirebase(async () => {
+  joindreEnCours = false;
+  quitteLigne(); /* efface toute ancienne partie en attente */
+  msgLigne('Création de la partie...');
+  let code = null, ref = null;
+  try {
+    for (let essai = 0; essai < 6; essai++) {
+      code = codeAleatoire();
+      ref = fdb.ref('parties/' + code);
+      const sn = await ref.once('value');
+      const v = sn.val();
+      /* code libre, ou vieille partie abandonnée depuis plus de 12 h : on le prend */
+      if (!v || (v.creeLe && Date.now() - v.creeLe > 12 * 3600 * 1000)) break;
+      code = null;
+    }
+    if (!code) { msgLigne('Le serveur est occupé. Touchez Créer une partie pour réessayer.'); return; }
+    monJoueur = 1;
+    await ref.set({creeLe: firebase.database.ServerValue.TIMESTAMP, etat: 'attente', present1: true});
+    ref.onDisconnect().remove(); /* tant que personne n'est arrivé : si l'hôte ferme, le code disparaît */
+    refPartie = ref;
+    codeHote = code;
+    montreCodeHote(code);
+    prendVerrouEcran();
+    msgLigne('Partie créée. En attente de votre ami... Gardez cet écran allumé.');
+    ecoute(ref.child('etat'), 'value', sn => {
+      if (sn.val() === 'jeu' && !connOuverte) {
+        connOuverte = true;
+        try { ref.onDisconnect().cancel(); ref.child('present1').onDisconnect().set(false); } catch (e) {}
+        ecouteMessages(2); ecoutePresence(2);
+        const premier = Math.random() < 0.5 ? 1 : 2;
+        envoie({type: 'debut', premier});
+        demarrerEnLigne(premier);
+      }
+    });
+  } catch (e) {
+    msgLigne('Erreur réseau pendant la création. Vérifiez votre connexion, puis réessayez.');
+  }
+}));
+let joindreEnCours = false;
+$('btnRejoindre').addEventListener('click', () => {
+  const code = ($('champCode').value || '').trim().toUpperCase();
+  if (code.length < 4) { msgLigne('Entrez le code de 4 caractères reçu de votre ami.'); return; }
+  if (codeHote && code === codeHote) {
+    msgLigne('Ce code est celui de VOTRE partie, créée sur cet appareil. C\'est votre ami qui doit l\'entrer, sur son propre appareil.');
+    return;
+  }
+  if (joindreEnCours) return;
+  chargeFirebase(async () => {
+    joindreEnCours = true;
+    quitteLigne(); joindreEnCours = true; /* ménage, puis on reprend le drapeau */
+    msgLigne('Recherche de la partie ' + code + '...');
+    const ref = fdb.ref('parties/' + code);
+    try {
+      const sn = await ref.once('value');
+      const v = sn.val();
+      if (!v) {
+        joindreEnCours = false;
+        msgLigne('Partie ' + code + ' introuvable. Vérifiez le code. Votre ami doit garder son application OUVERTE jusqu\'à votre arrivée.');
+        return;
+      }
+      if (v.etat !== 'attente') {
+        joindreEnCours = false;
+        msgLigne('La partie ' + code + ' a déjà commencé ou est terminée. Demandez un nouveau code à votre ami.');
+        return;
+      }
+      monJoueur = 2;
+      refPartie = ref;
+      ecouteMessages(1); ecoutePresence(1);
+      await ref.update({etat: 'jeu', present2: true});
+      try { ref.child('present2').onDisconnect().set(false); } catch (e) {}
+      connOuverte = true;
+      joindreEnCours = false;
+      prendVerrouEcran();
+      msgLigne('Connecté. La partie commence...');
+    } catch (e) {
+      joindreEnCours = false;
+      msgLigne('Erreur réseau. Vérifiez votre connexion, puis réessayez.');
+    }
+  });
+});
+
+
+/* ===== FETE VISUELLE - pluie de confettis au choix du joueur quand un cube est fermé =====
+   5 styles (idée d'Alain, 14 juillet 2026) : le joueur choisit SA pluie de victoire.
+   Le choix est memorise sur l'appareil (localStorage eocConfetti). */
+let styleConfetti = 'classique';
+try { styleConfetti = localStorage.getItem('eocConfetti') || 'classique'; } catch (e) {}
+function choisirConfetti(s) {
+  styleConfetti = s;
+  try { localStorage.setItem('eocConfetti', s); } catch (e) {}
+  feteCube(); /* petit aperçu immédiat du choix */
+}
+function feteCube() {
+  const couleurs = ['#b6382f', '#f6da9e', '#708cc7', '#eff2f9'];
+  const fleurs = ['🌸', '🌺', '🌼', '💮', '🌷'];
+  const erables = ['🍁'];
+  for (let i = 0; i < 28; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = (3 + Math.random() * 93) + 'vw';
+    c.style.animationDuration = (1.1 + Math.random() * 1.3) + 's';
+    c.style.animationDelay = (Math.random() * 0.35) + 's';
+    if (styleConfetti === 'fleurs') {
+      c.classList.add('txt');
+      c.textContent = fleurs[i % fleurs.length];
+      c.style.fontSize = (15 + Math.random() * 12) + 'px';
+    } else if (styleConfetti === 'dollars') {
+      c.classList.add('txt');
+      if (i % 7 === 0) { c.textContent = 'GAGNANT'; c.style.color = '#f6da9e'; c.style.fontSize = '15px'; c.style.fontWeight = '800'; c.style.textShadow = '0 0 6px rgba(0,0,0,.6)'; }
+      else { c.textContent = '$'; c.style.color = i % 2 ? '#3ddc84' : '#f6da9e'; c.style.fontSize = (16 + Math.random() * 14) + 'px'; c.style.fontWeight = '800'; }
+    } else if (styleConfetti === 'pions') {
+      /* pluie de pions EOC : pâles, foncés et rouges, comme sur le vrai plateau */
+      const t = i % 3;
+      if (t === 0) { c.style.background = '#f7ecd2'; c.style.width = '18px'; c.style.height = '6px'; c.style.border = '1px solid #a98f5e'; }
+      else if (t === 1) { c.style.background = '#241203'; c.style.width = '24px'; c.style.height = '6px'; c.style.border = '1px solid #f0d37a'; }
+      else { c.style.background = '#c0392b'; c.style.width = '6px'; c.style.height = '11px'; }
+    } else if (styleConfetti === 'erable') {
+      c.classList.add('txt');
+      c.textContent = erables[0];
+      c.style.fontSize = (16 + Math.random() * 14) + 'px';
+    } else {
+      /* classique : les confettis choisis par Alain */
+      c.style.background = couleurs[i % couleurs.length];
+      if (i % 3 === 0) { c.style.width = '5px'; c.style.height = '14px'; }
+    }
+    document.body.appendChild(c);
+    setTimeout(() => { try { c.remove(); } catch (e) {} }, 3200);
+  }
+}
+
+/* ===== CHAT BLOGUE EOC - salons publics et groupes privés (Firebase) ===== */
+let salonRef = null, salonEcouteur = null;
+function pseudoJoueur() {
+  let p = ($('champPseudo').value || '').trim().slice(0, 20);
+  if (!p) { try { p = (localStorage.getItem('eocInscritPrenom') || '').trim().slice(0, 20); } catch (e) {} }
+  if (!p) p = 'Joueur' + Math.floor(100 + Math.random() * 900);
+  try { localStorage.setItem('eocPseudoSalon', p); } catch (e) {}
+  return p;
+}
+function ouvreSalons() {
+  $('voileMode').classList.remove('on');
+  $('voileSalons').classList.add('on');
+  $('salonChoix').style.display = '';
+  $('salonFenetre').style.display = 'none';
+  $('etatSalon').textContent = '';
+  try { $('champPseudo').value = localStorage.getItem('eocPseudoSalon') || localStorage.getItem('eocInscritPrenom') || ''; } catch (e) {}
+}
+function fermeSalons() {
+  quitteSalon();
+  $('voileSalons').classList.remove('on');
+  $('voileMode').classList.add('on');
+}
+function quitteSalon() {
+  try { if (salonRef && salonEcouteur) salonRef.off('child_added', salonEcouteur); } catch (e) {}
+  salonRef = null; salonEcouteur = null;
+  $('salonMessages').innerHTML = '';
+}
+function entreSalon(chemin, titre, info) {
+  $('etatSalon').textContent = 'Connexion au salon...';
+  chargeFirebase(() => {
+    quitteSalon();
+    salonRef = fdb.ref(chemin).limitToLast(100);
+    $('salonChoix').style.display = 'none';
+    $('salonFenetre').style.display = '';
+    $('salonTitre').textContent = titre;
+    $('salonCodeInfo').textContent = info || '';
+    $('etatSalon').textContent = '';
+    salonEcouteur = salonRef.on('child_added', sn => {
+      const v = sn.val() || {};
+      const zone = $('salonMessages');
+      const l = document.createElement('div'); l.className = 'm';
+      const b = document.createElement('b'); b.textContent = String(v.p || 'Joueur').slice(0, 20) + ' : ';
+      l.appendChild(b);
+      l.appendChild(document.createTextNode(String(v.t || '').slice(0, 300)));
+      /* Image de plateau générée par l'application seulement (jamais de photo ni de fichier personnel).
+         Sécurité : on n'affiche que des données d'image JPEG/PNG en base64, rien d'autre. */
+      if (typeof v.img === 'string' && v.img.length < 200000 && /^data:image\/(jpeg|png);base64,[A-Za-z0-9+/=]+$/.test(v.img)) {
+        const im = document.createElement('img');
+        im.src = v.img;
+        im.alt = 'Plateau partagé';
+        im.style.cssText = 'display:block;max-width:100%;width:240px;border-radius:0;border:1px solid #28304a;margin:4px 0';
+        l.appendChild(im);
+      }
+      if (v.ts) {
+        const h = document.createElement('span'); h.className = 'h';
+        const d = new Date(v.ts);
+        h.textContent = d.toLocaleDateString('fr-CA') + ' ' + d.toLocaleTimeString('fr-CA', {hour: '2-digit', minute: '2-digit'});
+        l.appendChild(h);
+      }
+      zone.appendChild(l);
+      zone.scrollTop = zone.scrollHeight;
+    });
+    setTimeout(() => { const z = $('salonMessages'); if (z && !z.firstChild) { const l = document.createElement('div'); l.className = 'm'; l.textContent = 'Aucun message pour le moment. Soyez le premier à écrire !'; z.appendChild(l); } }, 1500);
+  });
+}
+function envoieSalon() {
+  const t = ($('champSalonTexte').value || '').trim().slice(0, 300);
+  if (!t || !salonRef) return;
+  try { salonRef.ref.push({p: pseudoJoueur(), t: t, ts: firebase.database.ServerValue.TIMESTAMP}); } catch (e) {}
+  $('champSalonTexte').value = '';
+}
+/* Partage du PLATEAU : image générée par l'application à partir de la partie en cours.
+   C'est le seul type d'image permis dans les salons : jamais de photo, de vidéo ni de voix
+   (protection des jeunes joueurs - pas de contenu personnel, pseudonymes seulement). */
+function partagePlateau() {
+  if (!salonRef) return;
+  try {
+    const sv = $('plateau');
+    let code = new XMLSerializer().serializeToString(sv);
+    /* les couleurs var(--x) doivent devenir des couleurs réelles dans l'image */
+    const rs = getComputedStyle(document.documentElement);
+    for (const k of ['--rainure', '--tuile1', '--pale', '--fonce', '--rouge', '--or2', '--or']) {
+      code = code.split('var(' + k + ')').join(rs.getPropertyValue(k).trim() || '#000');
+    }
+    const im = new Image();
+    im.onload = function () {
+      const vb = sv.getAttribute('viewBox').split(' ');
+      const larg = 480, haut = Math.round(larg * parseFloat(vb[3]) / parseFloat(vb[2]));
+      const cv = document.createElement('canvas');
+      cv.width = larg; cv.height = haut;
+      const cx = cv.getContext('2d');
+      cx.fillStyle = rs.getPropertyValue('--fond').trim() || '#a26967';
+      cx.fillRect(0, 0, larg, haut);
+      cx.drawImage(im, 0, 0, larg, haut);
+      const donnee = cv.toDataURL('image/jpeg', 0.72);
+      if (donnee.length > 190000) { msg('Plateau trop lourd à partager, réessayez.'); return; }
+      try {
+        salonRef.ref.push({p: pseudoJoueur(), t: 'partage son plateau ' + N + 'x' + N, img: donnee, ts: firebase.database.ServerValue.TIMESTAMP});
+      } catch (e) {}
+    };
+    im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(code);
+  } catch (e) {}
+}
+$('btnChatBlog').addEventListener('click', ouvreSalons);
+$('btnFermerSalons').addEventListener('click', fermeSalons);
+$('btnFermerSalons2').addEventListener('click', fermeSalons);
+$('btnQuitterSalon').addEventListener('click', () => { quitteSalon(); $('salonFenetre').style.display = 'none'; $('salonChoix').style.display = ''; });
+$('btnSalonEnvoyer').addEventListener('click', envoieSalon);
+$('btnSalonPlateau').addEventListener('click', partagePlateau);
+$('champSalonTexte').addEventListener('keydown', e => { if (e.key === 'Enter') envoieSalon(); });
+$('btnSalonGeneral').addEventListener('click', () => entreSalon('salons/publics/general/msgs', 'Salon général', 'Salon public ouvert à tous les joueurs ÉCHEC O CUBE.'));
+$('btnSalonTournois').addEventListener('click', () => entreSalon('salons/publics/tournois/msgs', 'Parties et tournois', 'Trouvez des adversaires, organisez vos parties et tournois.'));
+$('btnCreerGroupe').addEventListener('click', () => {
+  $('etatSalon').textContent = 'Création du groupe...';
+  chargeFirebase(async () => {
+    try {
+      let code = null, ref = null;
+      for (let essai = 0; essai < 6; essai++) {
+        code = codeAleatoire();
+        ref = fdb.ref('salons/prives/' + code);
+        const sn = await ref.child('infos').once('value');
+        if (!sn.val()) break;
+        code = null;
+      }
+      if (!code) { $('etatSalon').textContent = 'Serveur occupé, réessayez.'; return; }
+      await ref.child('infos').set({creeLe: firebase.database.ServerValue.TIMESTAMP});
+      entreSalon('salons/prives/' + code + '/msgs', 'Groupe privé ' + code, 'Code du groupe : ' + code + ' — partagez-le seulement avec vos amis.');
+    } catch (e) { $('etatSalon').textContent = 'Erreur réseau. Vérifiez votre connexion.'; }
+  });
+});
+$('btnJoindreGroupe').addEventListener('click', () => {
+  const code = ($('champCodeGroupe').value || '').trim().toUpperCase();
+  if (code.length < 4) { $('etatSalon').textContent = 'Entrez le code du groupe (4 caractères).'; return; }
+  $('etatSalon').textContent = 'Recherche du groupe ' + code + '...';
+  chargeFirebase(async () => {
+    try {
+      const sn = await fdb.ref('salons/prives/' + code + '/infos').once('value');
+      if (!sn.val()) { $('etatSalon').textContent = 'Groupe ' + code + ' introuvable. Vérifiez le code avec vos amis.'; return; }
+      entreSalon('salons/prives/' + code + '/msgs', 'Groupe privé ' + code, 'Code du groupe : ' + code);
+    } catch (e) { $('etatSalon').textContent = 'Erreur réseau. Vérifiez votre connexion.'; }
+  });
+});
+
+/* Boutons */
+$('btnPale').addEventListener('click', () => { selection = PALE; modeRouge = false; $('btnPale').classList.add('sel'); $('btnFonce').classList.remove('sel'); $('btnRouge').classList.remove('sel'); $('noteRouge').classList.remove('on'); maj(); });
+$('btnFonce').addEventListener('click', () => { selection = FONCE; modeRouge = false; $('btnFonce').classList.add('sel'); $('btnPale').classList.remove('sel'); $('btnRouge').classList.remove('sel'); $('noteRouge').classList.remove('on'); maj(); });
+$('btnRouge').addEventListener('click', () => { modeRouge = !modeRouge; $('btnRouge').classList.toggle('sel', modeRouge); $('noteRouge').classList.toggle('on', modeRouge); });
+$('btnAnnonce').addEventListener('click', () => { if (enAttente && modeEnLigne) envoie({type: 'annonce'}); annoncer(); });
+$('btnSansAnnonce').addEventListener('click', () => { if (enAttente && modeEnLigne) envoie({type: 'sansAnnonce'}); sansAnnonce(); });
+$('btnReclamer').addEventListener('click', () => { if (oublie && modeEnLigne) envoie({type: 'reclame'}); reclamer(); });
+$('btnIgnorer').addEventListener('click', () => { if (oublie && modeEnLigne) envoie({type: 'ignore'}); $('barreReprise').classList.remove('on'); fermeReprise(false); maj(); });
+$('btnRegles').addEventListener('click', () => $('voileRegles').classList.add('on'));
+$('btnVoirRegles').addEventListener('click', () => $('voileRegles').classList.add('on'));
+$('btnFermerRegles').addEventListener('click', () => $('voileRegles').classList.remove('on'));
+$('btnNouvelle').addEventListener('click', () => { majBoutonReprendre(); $('voileMode').classList.add('on'); });
+$('btnRejouer').addEventListener('click', () => { majBoutonReprendre(); $('voileFin').classList.remove('on'); $('barreAnalyse').classList.remove('on'); $('voileMode').classList.add('on'); });
+$('btnAnalyser').addEventListener('click', () => {
+  $('voileFin').classList.remove('on');
+  $('barreAnalyse').classList.add('on');
+  msg('Analyse du plateau final : regardez les rainures libres et les carrés. Touchez « Revoir le décompte » quand vous avez terminé.');
+});
+$('btnRevoirFin').addEventListener('click', () => { $('barreAnalyse').classList.remove('on'); $('voileFin').classList.add('on'); });
+$('btnAnnuler').addEventListener('click', annulerCoup);
+/* Choix de la grandeur du plateau (appliquée à la prochaine partie) */
+function majBoutonsFormat() {
+  const n = formatChoisi();
+  document.querySelectorAll('.btn-format').forEach(b => b.classList.toggle('sel', parseInt(b.dataset.format, 10) === n));
+}
+document.querySelectorAll('.btn-format').forEach(b => b.addEventListener('click', () => {
+  try { localStorage.setItem('eocFormatN', b.dataset.format); } catch (e) {}
+  majBoutonsFormat();
+}));
+majBoutonsFormat();
+/* Choix du design (appliqué immédiatement) */
+document.querySelectorAll('.btn-design').forEach(b => b.addEventListener('click', () => appliqueDesign(b.dataset.design)));
+/* Couleur personnelle : palette libre, appliquée au design choisi */
+if ($('pickCouleur')) {
+  $('pickCouleur').addEventListener('input', e => {
+    couleurPerso = e.target.value;
+    try { localStorage.setItem('eocCouleur', couleurPerso); } catch (e2) {}
+    appliqueDesign(designActuel);
+  });
+  $('btnCouleurDefaut').addEventListener('click', () => {
+    couleurPerso = ''; couleurPale = ''; couleurFonce = '';
+    try { localStorage.removeItem('eocCouleur'); localStorage.removeItem('eocCouleurPale'); localStorage.removeItem('eocCouleurFonce'); } catch (e2) {}
+    appliqueDesign(designActuel);
+  });
+  $('pickPale').addEventListener('input', e => {
+    couleurPale = e.target.value;
+    try { localStorage.setItem('eocCouleurPale', couleurPale); } catch (e2) {}
+    appliqueDesign(designActuel);
+  });
+  $('pickFonce').addEventListener('input', e => {
+    couleurFonce = e.target.value;
+    try { localStorage.setItem('eocCouleurFonce', couleurFonce); } catch (e2) {}
+    appliqueDesign(designActuel);
+  });
+}
+$('btnModeIA').addEventListener('click', () => { $('voileMode').classList.remove('on'); $('voileNiveau').classList.add('on'); });
+$('btnMode2J').addEventListener('click', () => {
+  if (!accesBase()) { aboRetour = 'menu'; $('voileMode').classList.remove('on'); $('voileAbo').classList.add('on'); $('etatAbo').textContent = ''; return; }
+  demarrer(false);
+});
+$('btnFermerNiveau').addEventListener('click', () => { $('voileNiveau').classList.remove('on'); $('voileMode').classList.add('on'); });
+let aboRetour = 'menu';
+function lanceNiveau(niv, palier) {
+  const autorise = palier === 'tout' ? accesTout() : accesBase();
+  if (!autorise) {
+    aboRetour = 'niveau';
+    $('voileNiveau').classList.remove('on'); $('voileAbo').classList.add('on'); $('etatAbo').textContent = '';
+    return;
+  }
+  niveauIA = niv;
+  $('voileNiveau').classList.remove('on');
+  demarrer(true);
+}
+$('btnNivDebutant').addEventListener('click', () => lanceNiveau('debutant', 'base'));
+$('btnNivInter').addEventListener('click', () => lanceNiveau('inter', 'base'));
+$('btnNivDifficile').addEventListener('click', () => lanceNiveau('difficile', 'base'));
+$('btnNivExtreme').addEventListener('click', () => lanceNiveau('extreme', 'base'));
+{ const _bc = $('btnCodeMenu'); if (_bc) _bc.addEventListener('click', () => { aboRetour = 'menu'; $('voileMode').classList.remove('on'); $('voileAbo').classList.add('on'); $('etatAbo').textContent = ''; }); }
+
+/* ===== ACCÈS ET FORFAITS (décisions d'Alain du 12 juillet 2026, prix officiels) =====
+   ESSAI GRATUIT 30 JOURS du jeu de base : ordinateur Débutant et Intermédiaire + deux joueurs sur cet appareil.
+   Ensuite JEU DE BASE : 3,99 $/mois ou 39,99 $/an. TOUT INCLUS (jeu en ligne, Chat Blogue EOC, tournois,
+   tous les niveaux et tout le jeu de base) : 7,99 $/mois ou 79,99 $/an - La Ruche.
+   Après paiement, EOC envoie un code personnel EOC-XXXX-XXXX VALIDE UN AN (à partir de l'activation) :
+   corps commençant par J = jeu de base; tout autre corps = tout inclus (les codes fondateurs restent tout inclus). */
+const EOC_ESSAI_JOURS = 30;
+const EOC_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+function eocSomme(corps) {
+  let s = 7;
+  for (let i = 0; i < corps.length; i++) s = (s * 31 + EOC_ALPHABET.indexOf(corps[i]) + 1) % 32;
+  return EOC_ALPHABET[s];
+}
+function eocCodeValide(code) {
+  code = (code || '').trim().toUpperCase();
+  const m = code.match(/^EOC-([A-Z2-9]{4})-([A-Z2-9]{4})$/);
+  if (!m) return false;
+  const corps = m[1] + m[2];
+  for (const ch of corps) { if (EOC_ALPHABET.indexOf(ch) < 0) return false; }
+  return eocSomme(corps.slice(0, 7)) === corps[7];
+}
+function eocTypeCode(code) {
+  const m = (code || '').trim().toUpperCase().match(/^EOC-([A-Z2-9]{4})-([A-Z2-9]{4})$/);
+  if (!m) return null;
+  return m[1][0] === 'J' ? 'base' : 'complet';
+}
+function eocEtatAcces() {
+  try {
+    const code = localStorage.getItem('eocCodeMembre');
+    if (eocCodeValide(code)) {
+      let d = Number(localStorage.getItem('eocCodeDate'));
+      if (!d) { d = Date.now(); localStorage.setItem('eocCodeDate', String(d)); }
+      if (Date.now() - d < 365 * 86400000) return {type: eocTypeCode(code)};
+    }
+    let debut = Number(localStorage.getItem('eocEssaiDebut'));
+    if (!debut) { debut = Date.now(); localStorage.setItem('eocEssaiDebut', String(debut)); }
+    const jour = Math.floor((Date.now() - debut) / 86400000) + 1;
+    return jour <= EOC_ESSAI_JOURS ? {type: 'essai', jour: jour} : {type: 'expire'};
+  } catch (e) { return {type: 'essai', jour: 1}; }
+}
+const EOC_GRATUIT = true;
+function accesBase() { if (EOC_GRATUIT) return true; const a = eocEtatAcces(); return a.type === 'complet' || a.type === 'base' || a.type === 'essai'; }
+function accesTout() { if (EOC_GRATUIT) return true; return eocEtatAcces().type === 'complet'; }
+function majOffres() {
+  const b = $('btnOffreBase');
+  if (!b) return;
+  const a = eocEtatAcces();
+  if (a.type === 'essai') b.textContent = 'Jeu ordinateur + 2 joueurs : essai gratuit, jour ' + a.jour + ' de ' + EOC_ESSAI_JOURS + ', puis 3,99 $/mois';
+  else if (a.type === 'base') b.textContent = 'Votre jeu de base est actif : code personnel valide un an';
+  else if (a.type === 'complet') b.textContent = 'Membre tout inclus : toutes les options sont actives (code valide un an)';
+  else b.textContent = 'Essai de 30 jours terminé - jeu de base : 3,99 $/mois ou 39,99 $/an';
+}
+$('btnActiverCode').addEventListener('click', () => {
+  const code = $('champCodeMembre').value.trim().toUpperCase();
+  if (eocCodeValide(code)) {
+    try { localStorage.setItem('eocCodeMembre', code); localStorage.setItem('eocCodeDate', String(Date.now())); } catch (e) {}
+    $('voileAbo').classList.remove('on');
+    if (aboRetour === 'niveau') $('voileNiveau').classList.add('on');
+    else $('voileMode').classList.add('on');
+    msg(eocTypeCode(code) === 'base'
+      ? 'Code jeu de base activé : valide un an sur cet appareil.'
+      : 'Code tout inclus activé : valide un an. Bienvenue dans la communauté ÉCHEC O CUBE.');
+    majOffres();
+  } else {
+    $('etatAbo').textContent = 'Code invalide. Vérifiez les caractères (format EOC-XXXX-XXXX).';
+  }
+});
+$('btnFermerAbo').addEventListener('click', () => { $('voileAbo').classList.remove('on'); (aboRetour === 'niveau' ? $('voileNiveau') : $('voileMode')).classList.add('on'); });
+
+const EOC_CLE_INSCRIT = 'eocInscrit';
+function estInscrit() { try { return !!localStorage.getItem(EOC_CLE_INSCRIT); } catch (e) { return true; } }
+function envoieInscription(prenom, courriel) {
+  try {
+    /* Envoi vers JotForm (Inscriptions ECHEC O CUBE) - remplace l'ancien envoi Netlify */
+    const body = new URLSearchParams({ formID: '261916803271053', q3_prenom: prenom, q5_email: courriel });
+    fetch('https://submit.jotform.com/submit/261916803271053', { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString() }).catch(() => {});
+  } catch (e) {}
+}
+function afficheInscriptionSiBesoin() {
+  if (estInscrit()) { $('voileInscription').classList.remove('on'); }
+  else { $('voileInscription').classList.add('on'); }
+}
+{ const _bi = $('btnInscrire'); if (_bi) _bi.addEventListener('click', () => {
+  const prenom = ($('champPrenom').value || '').trim();
+  const courriel = ($('champCourriel').value || '').trim();
+  if (prenom.length < 2) { $('etatInscription').textContent = 'Entrez votre prénom.'; return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(courriel)) { $('etatInscription').textContent = 'Entrez un courriel valide.'; return; }
+  try { localStorage.setItem(EOC_CLE_INSCRIT, courriel); localStorage.setItem('eocInscritPrenom', prenom); } catch (e) {}
+  envoieInscription(prenom, courriel);
+  $('voileInscription').classList.remove('on');
+  $('voileMode').classList.add('on');
+  msg('Bienvenue ' + prenom + ' ! Accès complet gratuit pendant le lancement. Bon jeu.');
+}); }
+
+appliqueDesign(designActuel);
+maj();
+majOffres();
+majBoutonReprendre();
+afficheInscriptionSiBesoin();
+
+/* Application installable : enregistrement du service worker (hors ligne, icône d'accueil) */
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+</script>
+<!-- ===== NOUVEAU MENU ET ASSISTANT EOC (chatbot JotForm) - 11 juillet 2026 ===== -->
+<style>
+.menu-slogan{text-align:center;color:var(--texte2);font-size:12px;letter-spacing:1.5px;margin:-4px 0 8px;text-transform:uppercase}
+.menu-principal{text-align:center;font-weight:bold}
+.menu-sous{display:block;font-size:11.5px;color:var(--texte2);font-weight:normal;letter-spacing:.5px;margin-top:3px}
+.menu-grille{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.menu-grille button,.menu-grille .btn-lien{font-size:13.5px;padding:11px 8px;text-align:center;border-left:1px solid var(--bordure)}
+.btn-lien{display:block;font-family:inherit;cursor:pointer;border-radius:0;border:1px solid var(--bordure);
+  background:var(--carte);color:var(--texte);text-decoration:none;font-weight:600}
+.btn-lien:hover{border-color:var(--accent)}
+.assistant-menu{border-color:var(--accent2);box-shadow:0 0 8px rgba(246,218,158,.5)}
+#panneauAssistant{position:fixed;right:10px;bottom:10px;z-index:90;width:min(380px,calc((100vw - 20px) / var(--z,1)));
+  height:min(560px,calc((100vh - 20px) / var(--z,1)));display:none;flex-direction:column;border-radius:0;overflow:hidden;
+  border:1.5px solid var(--accent);background:var(--carte);box-shadow:0 12px 40px rgba(0,0,0,.85)}
+#panneauAssistant.on{display:flex}
+#panneauAssistant header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;
+  background:var(--carte2);border-bottom:1px solid var(--accent)}
+#panneauAssistant header b{color:var(--accent);letter-spacing:1.5px;font-size:13px}
+#panneauAssistant iframe{flex:1;border:0;width:100%;background:#fff}
+#assistantMessage{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;text-align:center;color:#c6cad4;font-size:14px;line-height:1.6}
+</style>
+<div id="panneauAssistant" role="dialog" aria-label="Assistant ÉCHEC O CUBE">
+  <header><b>ASSISTANT ÉCHEC O CUBE</b><button id="btnFermerAssistant" class="mini" type="button">Fermer</button></header>
+  <div id="assistantMessage">L'assistant sera activé très bientôt. Règles, façons de jouer, boutique officielle, ouverture de La Ruche : il répondra à toutes vos questions.</div>
+</div>
+<script>
+(function(){
+  var EOC_CHATBOT_URL = "https://agent.jotform.com/019f4b229b387000856cfbaf5137d2cb8b7c"; /* Assistant JotForm ECHEC O CUBE */
+  var panneau = document.getElementById('panneauAssistant');
+  var charge = false;
+  function ouvrirAssistant(){
+    if (EOC_CHATBOT_URL && !charge) {
+      var f = document.createElement('iframe');
+      f.src = EOC_CHATBOT_URL;
+      f.allow = 'microphone';
+      f.title = 'Assistant ÉCHEC O CUBE';
+      panneau.appendChild(f);
+      document.getElementById('assistantMessage').style.display = 'none';
+      charge = true;
+    }
+    panneau.classList.add('on');
+  }
+  var bm = document.getElementById('btnAssistantMenu');
+  if (bm) bm.addEventListener('click', ouvrirAssistant);
+  document.getElementById('btnFermerAssistant').addEventListener('click', function(){ panneau.classList.remove('on'); });
+})();
+</script>
+<script>
+/* ===== TAILLE DE L'ECRAN (A- / A+) - version 25 =====
+   Grossit OU REDUIT toute l'interface (50% a 160%) et memorise le choix.
+   A 50-90% on voit tout le plateau d'un coup; 100% = normal; au-dela on grossit. */
+(function(){
+  var NIVEAUX = [0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.15, 1.3, 1.45, 1.6];
+  var DEFAUT = 5; /* index de 100% */
+  var idx = DEFAUT;
+  try {
+    var v2 = localStorage.getItem('eocTaille2');
+    if (v2 !== null) { idx = parseInt(v2, 10); }
+    else {
+      /* migration douce depuis l'ancienne echelle (0..4 = 100..160%) */
+      var v1 = localStorage.getItem('eocTaille');
+      if (v1 !== null) idx = DEFAUT + (parseInt(v1, 10) || 0);
+    }
+  } catch(e){}
+  if (isNaN(idx) || idx < 0 || idx >= NIVEAUX.length) idx = DEFAUT;
+  function appliquer(){
+    var z = NIVEAUX[idx];
+    document.body.style.zoom = z;
+    document.documentElement.style.setProperty('--z', z);
+    var t = Math.round(z * 100) + '%';
+    var l1 = document.getElementById('lblTaille');
+    var l2 = document.getElementById('lblTaille2');
+    if (l1) l1.textContent = t;
+    if (l2) l2.textContent = t;
+    try { localStorage.setItem('eocTaille2', String(idx)); } catch(e){}
+  }
+  function plus(){ if (idx < NIVEAUX.length - 1) { idx++; appliquer(); } }
+  function moins(){ if (idx > 0) { idx--; appliquer(); } }
+  var b;
+  if ((b = document.getElementById('btnTaillePlus')))  b.addEventListener('click', plus);
+  if ((b = document.getElementById('btnTailleMoins'))) b.addEventListener('click', moins);
+  if ((b = document.getElementById('btnTaillePlus2'))) b.addEventListener('click', plus);
+  if ((b = document.getElementById('btnTailleMoins2')))b.addEventListener('click', moins);
+  appliquer();
+  /* Afficher le choix de confettis memorise du joueur */
+  var pc = document.getElementById('pickConfetti');
+  if (pc && typeof styleConfetti !== 'undefined') pc.value = styleConfetti;
+})();
+</script>
+
+<script>
+/* ===== CADRAN NUMERIQUE EOC - version 1 =====
+   Un chrono par joueur, comme une horloge d'echecs. Optionnel : bouton "Cadran".
+   Suit le tour AUTOMATIQUEMENT (observe l'affichage du tour et lit g.cur).
+   Toucher un cadran bascule aussi manuellement. 5/10/15 minutes. */
+(function(){
+  var boiteAll = document.getElementById('cadranEOC');
+  if (!boiteAll) return;
+  var t1 = 600, t2 = 600, actif = 0, iv = null, marche = false;
+  var e1 = document.getElementById('cadranT1'), e2 = document.getElementById('cadranT2');
+  var b1 = document.getElementById('cadranBoite1'), b2 = document.getElementById('cadranBoite2');
+  var go = document.getElementById('btnCadranGo');
+  function fmt(s){ var m = Math.floor(s/60), x = s%60; return m + ':' + (x<10?'0':'') + x; }
+  function peint(){
+    e1.textContent = fmt(t1); e2.textContent = fmt(t2);
+    b1.classList.toggle('actif', actif===1); b2.classList.toggle('actif', actif===2);
+    b1.classList.toggle('bas', t1<=30); b2.classList.toggle('bas', t2<=30);
+    go.textContent = marche ? 'Pause' : 'Démarrer';
+  }
+  function tic(){
+    if (!marche) return;
+    if (actif===1){ t1=Math.max(0,t1-1); if(!t1){marche=false;stop();} }
+    else if (actif===2){ t2=Math.max(0,t2-1); if(!t2){marche=false;stop();} }
+    peint();
+  }
+  function run(){ if(!iv) iv=setInterval(tic,1000); }
+  function stop(){ if(iv){clearInterval(iv);iv=null;} peint(); }
+  function dureeChoisie(){
+    var s = document.querySelector('.cadran-duree.sel-duree');
+    return (s ? parseInt(s.dataset.min,10) : 10) * 60;
+  }
+  function remet(){ t1 = t2 = dureeChoisie(); actif = 0; marche = false; stop(); }
+  go.addEventListener('click', function(){
+    marche = !marche;
+    if (marche){ if(!actif) actif = (typeof g!=='undefined' && g && g.cur===2) ? 2 : 1; run(); }
+    peint();
+  });
+  b1.addEventListener('click', function(){ actif = 2; if(marche) run(); peint(); });
+  b2.addEventListener('click', function(){ actif = 1; if(marche) run(); peint(); });
+  document.querySelectorAll('.cadran-duree').forEach(function(d){
+    d.addEventListener('click', function(){
+      document.querySelectorAll('.cadran-duree').forEach(function(x){x.classList.remove('sel-duree');});
+      d.classList.add('sel-duree'); remet();
+    });
+  });
+  /* bascule automatique : quand l'affichage du tour change, on suit g.cur */
+  var tourEl = document.getElementById('tour');
+  if (tourEl && window.MutationObserver){
+    new MutationObserver(function(){
+      if (!marche) return;
+      try {
+        if (typeof g!=='undefined' && g && !g.over && (g.cur===1 || g.cur===2)) { actif = g.cur; peint(); }
+        if (typeof g!=='undefined' && g && g.over) { marche=false; stop(); }
+      } catch(e){}
+    }).observe(tourEl, {childList:true, characterData:true, subtree:true});
+  }
+  /* bouton Cadran : montre/cache et remet a la duree choisie */
+  var btn = document.getElementById('btnCadran');
+  if (btn) btn.addEventListener('click', function(){
+    var on = boiteAll.classList.toggle('on');
+    if (on) remet(); else { marche=false; stop(); }
+  });
+  peint();
+})();
+</script>
+
+<!-- ===== BANDEROLE FLOTTANTE ABONNEMENTS (16 juillet 2026) =====
+     Toujours en bas de l'écran. Le joueur peut la fermer : elle revient 7 jours plus tard.
+     Les textes se modifient avec le mode ✏️ de l'Atelier d'Alain. -->
+<div id="banderole" role="complementary" aria-label="Abonnements ÉCHEC O CUBE">
+  <button id="banderoleFermer" title="Fermer (revient dans 7 jours)">✕</button>
+  <div class="bTitre">GRATUIT jusqu'au 1ᵉʳ janvier 2027 — ensuite par abonnement</div>
+  <div class="bSlogan">Tu ne paies pas pour jouer : tu fais naître la communauté ÉCHEC O CUBE. Joueur aujourd'hui, FONDATEUR pour toujours.</div>
+  <div class="bPriv">👑 TOUT INCLUS = Membre officiel FEOC &middot; infos et privilèges en primeur &middot; compétitions et tournois EOC GRATUITS</div>
+  <div class="bBoutons">
+    <a class="bBase" href="abonnement.html">🎯 Jeu de base · 3,99 $/mois</a>
+    <a class="bTout" href="abonnement.html">👑 TOUT INCLUS · 7,99 $/mois</a>
+  </div>
+</div>
+<script>
+(function(){
+  var CLE = 'eocBanderoleFermee', JOURS = 7;
+  var b = document.getElementById('banderole');
+  var ferme = 0;
+  try { ferme = Number(localStorage.getItem(CLE) || 0); } catch(e){}
+  if (Date.now() - ferme > JOURS * 86400000) b.classList.add('on');
+  document.getElementById('banderoleFermer').addEventListener('click', function(){
+    b.classList.remove('on');
+    try { localStorage.setItem(CLE, String(Date.now())); } catch(e){}
+  });
+})();
+</script>
+
+<!-- ===== ATELIER DESIGN (privé, 13 juillet 2026) =====
+     Panneau réservé à Alain : s'ouvre seulement avec ?atelier=EOC1999 dans l'adresse.
+     Permet de modifier en direct l'habillage de l'appli (fond, panneaux, accents, police, coins).
+     Les réglages sont conservés dans CE navigateur seulement (localStorage) :
+     les joueurs ne voient rien tant que la palette n'est pas intégrée au code et déployée. -->
+<style>
+#atelierBtn{position:fixed;left:10px;bottom:10px;z-index:200;display:none;width:52px;height:52px;
+  font-size:24px;padding:0;border:2px solid var(--accent);background:var(--carte);cursor:pointer;border-radius:0}
+#atelierBtn.on{display:block}
+#atelier{position:fixed;left:10px;bottom:70px;z-index:201;width:min(320px,92vw);max-height:min(76vh,640px);
+  overflow-y:auto;display:none;flex-direction:column;gap:8px;padding:14px;
+  background:#0d1220;border:2px solid var(--accent);box-shadow:0 12px 40px rgba(0,0,0,.85);
+  font-family:'Segoe UI',Inter,system-ui,Arial,sans-serif}
+#atelier.on{display:flex}
+#atelier h4{color:var(--accent);letter-spacing:2px;font-size:14px;text-transform:uppercase;text-align:center;margin-bottom:2px}
+#atelier .aide{font-size:10.5px;color:#8f9ab5;line-height:1.45;text-align:center}
+#atelier .ligne{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#atelier .ligne label{font-size:12px;color:#c6cad4;flex:1}
+#atelier .ligne input[type=color]{width:46px;height:30px;border:1px solid #28304a;background:#0e1320;padding:2px;cursor:pointer;border-radius:0}
+#atelier .ligne select,#atelier .ligne input[type=range]{flex:1;font-family:inherit;font-size:12px;
+  background:#0e1320;color:#eef1f8;border:1px solid #28304a;padding:5px;border-radius:0}
+#atelier .presets{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+#atelier .presets button,#atelier .actions button{font-size:11.5px;padding:8px 6px;border:1px solid #28304a;
+  background:#151a28;color:#eef1f8;cursor:pointer;font-family:inherit;font-weight:600;border-radius:0}
+#atelier .presets button:hover,#atelier .actions button:hover{border-color:var(--accent)}
+#atelier .actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:2px}
+#atelier .actions button.large{grid-column:1 / -1}
+#atelierEtat{font-size:11px;color:#7de8f5;min-height:14px;text-align:center}
+body.atelier-textes button:not(#atelier button):not(#atelierBtn):hover,
+body.atelier-textes h2:hover,body.atelier-textes h3:hover,body.atelier-textes p:hover,
+body.atelier-textes .sous:hover,body.atelier-textes .tour:hover,body.atelier-textes #msg:hover,
+body.atelier-textes .menu-slogan:hover,body.atelier-textes .menu-sous:hover,
+body.atelier-textes .ruche-titre:hover,body.atelier-textes .ruche-txt:hover,
+body.atelier-textes .ruche-cta:hover,body.atelier-textes .banniere-gratuit:hover,
+body.atelier-textes .credit:hover,body.atelier-textes .legende-notation:hover,
+body.atelier-textes li:hover,body.atelier-textes span.lbl:hover{
+  outline:2px dashed #22d3ee !important;cursor:text !important}
+</style>
+<button id="atelierBtn" title="Atelier design (privé)">🎨</button>
+<div id="atelier" role="dialog" aria-label="Atelier design privé">
+  <h4>Atelier design</h4>
+  <div class="aide">Réservé à toi, Alain. Les couleurs changent en direct, sur cet appareil seulement. Quand t'es content : « Copier ma palette » et envoie-la à Claude pour l'appliquer à tous les joueurs.</div>
+  <div class="ligne"><label>Fond de l'écran</label><input type="color" id="at_fond"></div>
+  <div class="ligne"><label>Panneaux et boutons</label><input type="color" id="at_carte"></div>
+  <div class="ligne"><label>Panneaux secondaires</label><input type="color" id="at_carte2"></div>
+  <div class="ligne"><label>Bordures</label><input type="color" id="at_bordure"></div>
+  <div class="ligne"><label>Texte principal</label><input type="color" id="at_texte"></div>
+  <div class="ligne"><label>Texte secondaire</label><input type="color" id="at_texte2"></div>
+  <div class="ligne"><label>Couleur vedette (actions)</label><input type="color" id="at_accent"></div>
+  <div class="ligne"><label>Couleur festive (bannières)</label><input type="color" id="at_accent2"></div>
+  <div class="ligne"><label>Police</label>
+    <select id="at_police">
+      <option value="moderne">Moderne (sans-serif)</option>
+      <option value="classique">Classique (Georgia)</option>
+    </select>
+  </div>
+  <div class="ligne"><label>Coins arrondis : <span id="at_rayonVal">0</span> px</label>
+    <input type="range" id="at_rayon" min="0" max="18" step="1" value="0">
+  </div>
+  <div class="presets">
+    <button data-preset="neon">Néon Cube</button>
+    <button data-preset="volt">Volt</button>
+    <button data-preset="royal">Royal Moderne</button>
+    <button data-preset="classique">Classique brun-or</button>
+  </div>
+  <div class="actions">
+    <button id="at_textes" class="large">✏️ Mode textes : OFF — cliquer pour activer</button>
+    <button id="at_sauver">💾 Sauvegarder</button>
+    <button id="at_reset">↩ Réinitialiser</button>
+    <button id="at_copier" class="large">📋 Copier mes réglages (pour Claude)</button>
+    <button id="at_fermer">Fermer</button>
+    <button id="at_quitter">Quitter l'atelier</button>
+  </div>
+  <div id="atelierEtat"></div>
+</div>
+<script>
+(function(){
+  var CLE = 'eocAtelierDesign', FLAG = 'eocAtelierOn', CODE = 'EOC1999';
+  var VARS = ['fond','carte','carte2','bordure','texte','texte2','accent','accent2'];
+  /* DEFAUTS = palette officielle choisie par Alain (14 juillet 2026) — le bouton Réinitialiser y revient */
+  var DEFAUTS = {fond:'#a26967',carte:'#1e2843',carte2:'#1e2539',bordure:'#708cc7',
+    texte:'#eff2f9',texte2:'#9fabc6',accent:'#b6382f',accent2:'#f6da9e',police:'moderne',rayon:0};
+  var PRESETS = {
+    neon: {fond:'#0b0e16',carte:'#151a28',carte2:'#1b2236',bordure:'#28304a',
+      texte:'#eef1f8',texte2:'#8f9ab5',accent:'#22d3ee',accent2:'#8b5cf6',police:'moderne',rayon:0},
+    volt: {fond:'#101214',carte:'#1a1d20',carte2:'#22262a',bordure:'#33383d',
+      texte:'#f2f4f5',texte2:'#9aa3a9',accent:'#a3e635',accent2:'#f4f4f5',police:'moderne',rayon:0},
+    royal: {fond:'#0e1526',carte:'#182136',carte2:'#1e2740',bordure:'#2c3a58',
+      texte:'#eff2f9',texte2:'#9fabc6',accent:'#e8c15a',accent2:'#7dd3fc',police:'moderne',rayon:0},
+    classique: {fond:'#161008',carte:'#251a0e',carte2:'#2f2213',bordure:'#4a3a22',
+      texte:'#efe3c8',texte2:'#bda87c',accent:'#d4af37',accent2:'#f0d37a',police:'classique',rayon:9}
+  };
+  function hex2rgb(h){h=h.replace('#','');return [parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16)];}
+  function eclaircir(h,f){var c=hex2rgb(h).map(function(v){return Math.round(v+(255-v)*f);});
+    return '#'+c.map(function(v){return ('0'+v.toString(16)).slice(-2);}).join('');}
+  function lisible(h){var c=hex2rgb(h);var lum=(0.299*c[0]+0.587*c[1]+0.114*c[2])/255;
+    return lum>0.55?'#101418':'#ffffff';}
+  var styleDyn = document.createElement('style'); document.head.appendChild(styleDyn);
+  function appliquer(d){
+    var r = document.documentElement;
+    VARS.forEach(function(k){ r.style.setProperty('--'+k, d[k]); });
+    r.style.setProperty('--accent-doux', eclaircir(d.accent, .45));
+    r.style.setProperty('--accent2-doux', eclaircir(d.accent2, .45));
+    document.body.style.fontFamily = d.police === 'classique'
+      ? "Georgia,'Times New Roman',serif" : "'Segoe UI',Inter,system-ui,Arial,sans-serif";
+    styleDyn.textContent =
+      'button,.carte,.boite,#msg,#journal,.banniere-gratuit,.ruche,.ruche-cta,.boite input,.btn-lien,' +
+      '.rangee-taille,#chatBoite,#salonMessages,.btn-taille,#chatSaisie input{border-radius:' + d.rayon + 'px}' +
+      'button.sel,button.annonce,.ruche-cta{color:' + lisible(d.accent) + '}' +
+      '.banniere-gratuit{color:' + lisible(d.accent2) + '}' +
+      'body{background:radial-gradient(ellipse at 50% 0%, ' + eclaircir(d.fond, .06) + ' 0%, ' + d.fond + ' 65%)}';
+  }
+  function lireSauvegarde(){ try { var s = localStorage.getItem(CLE); return s ? JSON.parse(s) : null; } catch(e){ return null; } }
+  /* ---- Textes personnalisés (mode ✏️) ---- */
+  var CLE_TXT = 'eocTextesPerso';
+  function lireTextes(){ try { var s = localStorage.getItem(CLE_TXT); return s ? JSON.parse(s) : {}; } catch(e){ return {}; } }
+  function ecrireTextes(t){ try { localStorage.setItem(CLE_TXT, JSON.stringify(t)); } catch(e){} }
+  function cheminDe(el){
+    if (el.id) return '#' + el.id;
+    var seg = [], n = el;
+    while (n && n !== document.body && !n.id) {
+      var p = n.parentNode, i = 1, f = p ? p.firstElementChild : null;
+      while (f && f !== n) { i++; f = f.nextElementSibling; }
+      seg.unshift(n.tagName.toLowerCase() + ':nth-child(' + i + ')');
+      n = p;
+    }
+    return (n && n.id ? '#' + n.id + ' > ' : 'body > ') + seg.join(' > ');
+  }
+  function appliquerTextes(){
+    var t = lireTextes();
+    for (var ch in t) {
+      try { var el = document.querySelector(ch); if (el) el.textContent = t[ch]; } catch(e){}
+    }
+  }
+  /* Toujours appliquer palette ET textes sauvegardés sur CET appareil (même sans le panneau ouvert) */
+  var sauve = lireSauvegarde();
+  if (sauve) appliquer(sauve);
+  appliquerTextes();
+  /* Activation privée : ?atelier=EOC1999 dans l'adresse (mémorisée ensuite) */
+  try { if (new URLSearchParams(location.search).get('atelier') === CODE) localStorage.setItem(FLAG, '1'); } catch(e){}
+  var actif = false;
+  try { actif = localStorage.getItem(FLAG) === '1'; } catch(e){}
+  if (!actif) return;
+  var btn = document.getElementById('atelierBtn'), pan = document.getElementById('atelier');
+  var etat = document.getElementById('atelierEtat');
+  btn.classList.add('on');
+  function courant(){
+    var d = {};
+    VARS.forEach(function(k){ d[k] = document.getElementById('at_'+k).value; });
+    d.police = document.getElementById('at_police').value;
+    d.rayon = parseInt(document.getElementById('at_rayon').value, 10) || 0;
+    return d;
+  }
+  function remplir(d){
+    VARS.forEach(function(k){ document.getElementById('at_'+k).value = d[k]; });
+    document.getElementById('at_police').value = d.police;
+    document.getElementById('at_rayon').value = d.rayon;
+    document.getElementById('at_rayonVal').textContent = d.rayon;
+  }
+  remplir(sauve || DEFAUTS);
+  /* ---- Mode ✏️ textes : cliquer un texte de l'appli pour le modifier ---- */
+  var modeTexte = false;
+  var btnTxt = document.getElementById('at_textes');
+  btnTxt.addEventListener('click', function(){
+    modeTexte = !modeTexte;
+    document.body.classList.toggle('atelier-textes', modeTexte);
+    btnTxt.textContent = modeTexte
+      ? '✏️ Mode textes : ACTIF — clique un texte du jeu'
+      : '✏️ Mode textes : OFF — cliquer pour activer';
+    etat.textContent = modeTexte
+      ? 'Survole un texte (pointillé bleu) puis clique-le pour le changer.'
+      : 'Mode textes désactivé.';
+  });
+  document.addEventListener('click', function(e){
+    if (!modeTexte) return;
+    var el = e.target;
+    if (pan.contains(el) || el === btn || el.closest('#atelier') || el.closest('#atelierBtn')) return;
+    if (el.closest('#plateau')) { etat.textContent = 'Le plateau de jeu ne se modifie pas ici.'; return; }
+    e.preventDefault(); e.stopPropagation();
+    var actuel = (el.textContent || '').trim();
+    if (actuel.length > 300) { etat.textContent = 'Zone trop grande : clique un texte plus précis.'; return; }
+    var nouveau = prompt('Nouveau texte :', actuel);
+    if (nouveau === null || nouveau === actuel) return;
+    el.textContent = nouveau;
+    var t = lireTextes(); t[cheminDe(el)] = nouveau; ecrireTextes(t);
+    etat.textContent = '✏️ Texte modifié et retenu sur cet appareil.';
+  }, true);
+  btn.addEventListener('click', function(){ pan.classList.toggle('on'); });
+  document.getElementById('at_fermer').addEventListener('click', function(){ pan.classList.remove('on'); });
+  document.getElementById('at_quitter').addEventListener('click', function(){
+    try { localStorage.removeItem(FLAG); } catch(e){}
+    pan.classList.remove('on'); btn.classList.remove('on');
+  });
+  pan.addEventListener('input', function(e){
+    if (e.target.id === 'at_rayon') document.getElementById('at_rayonVal').textContent = e.target.value;
+    appliquer(courant());
+    etat.textContent = 'Aperçu en direct (pas encore sauvegardé)';
+  });
+  pan.querySelectorAll('.presets button').forEach(function(b){
+    b.addEventListener('click', function(){
+      var d = PRESETS[b.getAttribute('data-preset')];
+      remplir(d); appliquer(d);
+      etat.textContent = 'Préréglage « ' + b.textContent + ' » appliqué (pas encore sauvegardé)';
+    });
+  });
+  document.getElementById('at_sauver').addEventListener('click', function(){
+    try { localStorage.setItem(CLE, JSON.stringify(courant())); etat.textContent = '💾 Sauvegardé : cet appareil gardera ces couleurs.'; }
+    catch(e){ etat.textContent = 'Erreur de sauvegarde.'; }
+  });
+  document.getElementById('at_reset').addEventListener('click', function(){
+    if (!confirm('Revenir au design officiel ET effacer tes textes modifiés sur cet appareil ?')) return;
+    try { localStorage.removeItem(CLE); localStorage.removeItem(CLE_TXT); } catch(e){}
+    remplir(DEFAUTS); appliquer(DEFAUTS);
+    etat.textContent = 'Retour au design officiel. Recharge la page pour retrouver les textes originaux.';
+  });
+  document.getElementById('at_copier').addEventListener('click', function(){
+    var d = courant(), t = lireTextes();
+    var txt = 'REGLAGES EOC choisis par Alain (' + new Date().toLocaleDateString('fr-CA') + ') :\n' +
+      '--- COULEURS ---\n' +
+      VARS.map(function(k){ return '--' + k + ': ' + d[k] + ';'; }).join('\n') +
+      '\npolice: ' + d.police + '\ncoins arrondis: ' + d.rayon + 'px';
+    var cles = Object.keys(t);
+    if (cles.length) {
+      txt += '\n--- TEXTES MODIFIES ---';
+      cles.forEach(function(ch){ txt += '\n[' + ch + '] => ' + t[ch]; });
+    }
+    function ok(){ etat.textContent = '📋 Réglages copiés (couleurs + textes) ! Colle-les à Claude.'; }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(ok, function(){ prompt('Copie manuelle :', txt); ok(); });
+    else { prompt('Copie manuelle :', txt); ok(); }
+  });
+})();
+</script>
+</body>
+</html>

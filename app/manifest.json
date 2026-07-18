@@ -1,0 +1,19 @@
+﻿{
+  "name": "ÉCHEC O CUBE",
+  "short_name": "EOC",
+  "description": "Le jeu de stratégie inventé au Québec en 1999. Placer, connecter, observer, fermer.",
+  "lang": "fr",
+  "id": "/",
+  "scope": "./",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#a26967",
+  "theme_color": "#a26967",
+  "categories": ["games", "board"],
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
