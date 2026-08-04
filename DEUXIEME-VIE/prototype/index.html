@@ -1,0 +1,775 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Deuxième Vie — tranche jouable</title>
+</head>
+<body>
+<!--ARTIFACT-START-->
+<style>
+  :root{
+    --nuit:#0d1117; --panneau:rgba(14,20,28,.92); --bord:#2b3a4a;
+    --or:#e8c15c; --texte:#e6edf3; --doux:#93a4b5; --vert:#5fb87a; --rouge:#d9694f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#070b10;color:var(--texte);
+       font-family:ui-sans-serif,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       -webkit-font-smoothing:antialiased;overflow:hidden}
+  #scene{position:relative;width:100vw;height:100vh;overflow:hidden;background:#0a1119;touch-action:none}
+  canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;display:block}
+
+  .hud{position:absolute;pointer-events:none;font-size:13px;line-height:1.35}
+  .carte{background:var(--panneau);border:1px solid var(--bord);border-radius:10px;
+         padding:10px 12px;backdrop-filter:blur(6px);box-shadow:0 6px 24px rgba(0,0,0,.45)}
+
+  #haut{top:10px;left:10px;display:flex;gap:8px;flex-wrap:wrap;max-width:min(560px,72vw)}
+  #sacs{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  .res{display:flex;align-items:center;gap:5px;white-space:nowrap}
+  .res b{color:var(--or);font-variant-numeric:tabular-nums}
+  #jauges{display:flex;flex-direction:column;gap:6px;min-width:150px}
+  .jauge{height:8px;background:#1b2530;border-radius:6px;overflow:hidden}
+  .jauge i{display:block;height:100%;width:100%;transition:width .25s}
+  .etiq{display:flex;justify-content:space-between;font-size:11px;color:var(--doux);margin-bottom:2px}
+
+  #droite{top:10px;right:10px;width:min(260px,44vw)}
+  #droite h3{margin:0 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--doux)}
+  #objectifs{margin:0;padding:0;list-style:none}
+  #objectifs li{padding:3px 0 3px 20px;position:relative;color:var(--doux);font-size:12px}
+  #objectifs li::before{content:"○";position:absolute;left:2px;color:#41546a}
+  #objectifs li.fait{color:var(--vert);text-decoration:line-through;opacity:.7}
+  #objectifs li.fait::before{content:"●";color:var(--vert)}
+
+  #bas{bottom:10px;left:10px;color:var(--doux);font-size:12px}
+  #bas kbd{background:#1b2530;border:1px solid var(--bord);border-radius:4px;padding:1px 5px;color:var(--texte);font-size:11px}
+
+  #invite{position:absolute;left:50%;bottom:96px;transform:translateX(-50%);pointer-events:none;
+          background:rgba(10,15,22,.94);border:1px solid var(--or);color:var(--or);
+          padding:7px 14px;border-radius:20px;font-size:13px;white-space:nowrap;opacity:0;transition:opacity .12s}
+  #invite.on{opacity:1}
+
+  #journal{position:absolute;left:50%;top:150px;transform:translateX(-50%);display:flex;
+           flex-direction:column;gap:5px;align-items:center;pointer-events:none;max-width:90vw}
+  .msg{background:rgba(10,15,22,.9);border-left:3px solid var(--or);padding:6px 12px;border-radius:5px;
+       font-size:13px;animation:entre .3s ease-out}
+  .msg.mal{border-left-color:var(--rouge)}
+  .msg.bien{border-left-color:var(--vert)}
+  @keyframes entre{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+
+  .modale{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+          background:rgba(4,7,11,.72);z-index:20;padding:16px}
+  .modale.on{display:flex}
+  .boite{background:#0e1620;border:1px solid var(--bord);border-radius:14px;padding:18px 20px;
+         width:min(520px,94vw);max-height:86vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+  .boite h2{margin:0 0 4px;font-size:19px}
+  .boite p.sous{margin:0 0 14px;color:var(--doux);font-size:13px}
+  .ligne{display:flex;align-items:center;justify-content:space-between;gap:10px;
+         padding:9px 10px;border:1px solid #1e2a37;border-radius:9px;margin-bottom:7px;background:#0b121a}
+  .ligne .nom{font-size:13px}
+  .ligne .cout{font-size:11px;color:var(--doux)}
+  button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--bord);
+         background:#17222f;color:var(--texte);padding:6px 12px;font-size:12px;transition:.15s}
+  button:hover:not(:disabled){background:#213040;border-color:var(--or)}
+  button:disabled{opacity:.35;cursor:not-allowed}
+  button.or{border-color:var(--or);color:var(--or)}
+  .fermer{margin-top:10px;width:100%}
+  .barre-dem{height:5px;background:#1b2530;border-radius:4px;overflow:hidden;margin-top:5px;width:120px}
+  .barre-dem i{display:block;height:100%;background:var(--or)}
+
+  #dialogue{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);width:min(620px,94vw);
+            display:none;z-index:15}
+  #dialogue.on{display:block}
+  #dialogue .qui{color:var(--or);font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
+  #dialogue .txt{font-size:14px;line-height:1.5}
+  #dialogue .choix{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+
+  #tactile{position:absolute;inset:0;display:none;z-index:12;pointer-events:none}
+  #tactile.on{display:block}
+  #stick{position:absolute;left:22px;bottom:22px;width:118px;height:118px;border-radius:50%;
+         border:2px solid rgba(140,165,190,.35);background:rgba(10,16,24,.4);pointer-events:auto}
+  #pouce{position:absolute;left:50%;top:50%;width:48px;height:48px;margin:-24px 0 0 -24px;border-radius:50%;
+         background:rgba(232,193,92,.5)}
+  #btnA{position:absolute;right:24px;bottom:34px;width:86px;height:86px;border-radius:50%;
+        border:2px solid var(--or);background:rgba(232,193,92,.18);color:var(--or);
+        font-size:15px;pointer-events:auto;display:grid;place-items:center}
+  #btnB{position:absolute;right:120px;bottom:96px;width:62px;height:62px;border-radius:50%;
+        border:2px solid var(--bord);background:rgba(20,28,38,.7);color:var(--texte);
+        font-size:12px;pointer-events:auto;display:grid;place-items:center}
+
+  @media (max-width:720px){
+    #droite{width:190px}
+    #bas{display:none}
+    #haut{max-width:58vw}
+  }
+</style>
+
+<div id="scene">
+  <canvas id="jeu"></canvas>
+
+  <div class="hud carte" id="haut">
+    <div id="jauges">
+      <div>
+        <div class="etiq"><span>Faim</span><span id="vFaim">100%</span></div>
+        <div class="jauge"><i id="bFaim" style="background:var(--vert)"></i></div>
+      </div>
+      <div>
+        <div class="etiq"><span>Énergie</span><span id="vEnergie">100%</span></div>
+        <div class="jauge"><i id="bEnergie" style="background:#5b8fd6"></i></div>
+      </div>
+      <div>
+        <div class="etiq"><span id="lRel">Nova — inconnue</span><span id="vRel">0</span></div>
+        <div class="jauge"><i id="bRel" style="background:#c76fa8;width:0"></i></div>
+      </div>
+    </div>
+    <div id="sacs"></div>
+  </div>
+
+  <div class="hud carte" id="droite">
+    <h3 id="entete">Jour 1 — Aube</h3>
+    <ul id="objectifs"></ul>
+  </div>
+
+  <div class="hud" id="bas">
+    <kbd>W A S D</kbd> se déplacer &nbsp; <kbd>E</kbd> agir &nbsp; <kbd>B</kbd> bâtir &nbsp; <kbd>Échap</kbd> fermer
+  </div>
+
+  <div id="invite"></div>
+  <div id="journal"></div>
+
+  <div class="modale" id="mBatir">
+    <div class="boite">
+      <h2>Bâtir</h2>
+      <p class="sous">Tu construis avec ce que la planète donne. L'épave, elle, ne redonnera rien deux fois.</p>
+      <div id="listeBatir"></div>
+      <button class="fermer" data-ferme>Fermer</button>
+    </div>
+  </div>
+
+  <div class="modale" id="mMarche">
+    <div class="boite">
+      <h2>Bram, le colporteur</h2>
+      <p class="sous">Le marché n'a pas un appétit infini. Plus tu vends la même chose, moins il en veut — et le prix tombe. Il se refait pendant la nuit.</p>
+      <div id="listeVente"></div>
+      <h2 style="font-size:15px;margin:16px 0 8px">À vendre</h2>
+      <div id="listeAchat"></div>
+      <button class="fermer" data-ferme>Fermer</button>
+    </div>
+  </div>
+
+  <div class="modale" id="mFin">
+    <div class="boite">
+      <h2 id="finTitre">Jour 1 de ta Deuxième Vie</h2>
+      <p class="sous" id="finTexte"></p>
+      <button class="fermer or" onclick="location.reload()">Recommencer</button>
+    </div>
+  </div>
+
+  <div class="carte" id="dialogue">
+    <div class="qui" id="dQui">Nova</div>
+    <div class="txt" id="dTxt"></div>
+    <div class="choix" id="dChoix"></div>
+  </div>
+
+  <div id="tactile">
+    <div id="stick"><div id="pouce"></div></div>
+    <div id="btnA">Agir</div>
+    <div id="btnB">Bâtir</div>
+  </div>
+</div>
+
+<script>
+(() => {
+"use strict";
+
+/* ————— constantes du monde ————— */
+const T = 32, MW = 56, MH = 42;          // tuiles
+const JOUR = 200;                         // secondes par journée
+const cnv = document.getElementById('jeu');
+const ctx = cnv.getContext('2d');
+
+/* ————— aléatoire reproductible : la même île à chaque partie ————— */
+function prng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);
+  t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function bruit(seed, gw, gh){
+  const r = prng(seed), g = [];
+  for(let y=0;y<=gh;y++){g.push([]);for(let x=0;x<=gw;x++)g[y].push(r());}
+  return (x,y)=>{
+    const fx=x/MW*gw, fy=y/MH*gh, ix=Math.floor(fx), iy=Math.floor(fy);
+    const tx=fx-ix, ty=fy-iy, s=t=>t*t*(3-2*t);
+    const a=g[iy][ix], b=g[iy][ix+1], c=g[iy+1][ix], d=g[iy+1][ix+1];
+    return (a+(b-a)*s(tx))*(1-s(ty)) + (c+(d-c)*s(tx))*s(ty);
+  };
+}
+
+/* ————— génération de l'île ————— */
+const nRelief = bruit(1337, 7, 6), nBois = bruit(4242, 11, 9), nRoc = bruit(909, 10, 8);
+const carte = [];
+for(let y=0;y<MH;y++){
+  carte.push([]);
+  for(let x=0;x<MW;x++){
+    const nx=(x/MW-0.5)*2.05, ny=(y/MH-0.5)*2.25;
+    const d=Math.sqrt(nx*nx+ny*ny);
+    const h=nRelief(x,y)*0.55+0.72-d*0.78;
+    carte[y].push(h<0.20?'fond':h<0.29?'eau':h<0.36?'sable':'herbe');
+  }
+}
+const solide = (tx,ty) => tx<0||ty<0||tx>=MW||ty>=MH || carte[ty][tx]==='eau' || carte[ty][tx]==='fond';
+
+/* ————— ressources ————— */
+// arbre = bois, rocher = pierre, buisson = fibre + baies, banc = poisson, epave = fragment de technologie
+const noeuds = [];
+const rr = prng(77);
+for(let y=0;y<MH;y++) for(let x=0;x<MW;x++){
+  if(carte[y][x]!=='herbe') continue;
+  const b=nBois(x,y), r=nRoc(x,y);
+  if(b>0.70 && rr()<0.34)       noeuds.push(nd(x,y,'arbre'));
+  else if(r>0.78 && rr()<0.30)  noeuds.push(nd(x,y,'rocher'));
+  else if(b>0.58 && rr()<0.05)  noeuds.push(nd(x,y,'buisson'));
+}
+for(let y=1;y<MH-1;y++) for(let x=1;x<MW-1;x++){
+  if(carte[y][x]==='eau' && carte[y+1][x]==='sable' && rr()<0.14) noeuds.push(nd(x,y,'banc'));
+}
+function nd(x,y,type){
+  const c = {arbre:{v:3,r:70},rocher:{v:2,r:95},buisson:{v:2,r:45},banc:{v:1,r:60},epave:{v:1,r:0}}[type];
+  return {x:x*T+T/2, y:y*T+T/2, type, qte:c.v, max:c.v, delai:c.r, pret:0};
+}
+
+/* site du crash : le vaisseau-arche, au centre de l'île */
+const CRASH = {x: Math.floor(MW*0.5)*T, y: Math.floor(MH*0.42)*T};
+for(let i=0;i<6;i++){
+  const a = i/6*Math.PI*2;
+  noeuds.push(nd(Math.floor((CRASH.x+Math.cos(a)*T*3.2)/T), Math.floor((CRASH.y+Math.sin(a)*T*2.4)/T), 'epave'));
+}
+
+/* ————— état de la partie ————— */
+const J = {                                    // le joueur
+  x: CRASH.x, y: CRASH.y+T*3, vx:0, vy:0, dir:1,
+  faim:100, energie:100, or:0, jour:1, temps:JOUR*0.22,
+  sac:{bois:0,pierre:0,fibre:0,nourriture:0,fragment:0},
+  outils:{hache:false,pioche:false,canne:false,lanterne:false,licence:false},
+  batis:[], relation:0, parleAujourdhui:false, dormi:0
+};
+const NOVA = {x: CRASH.x-T*2.2, y: CRASH.y+T*1.4, nom:'Nova'};
+const BRAM = {x: Math.floor(MW*0.34)*T, y: Math.floor(MH*0.62)*T, nom:'Bram'};
+// Bram doit se tenir sur la terre ferme
+if(solide(Math.floor(BRAM.x/T),Math.floor(BRAM.y/T))){ BRAM.x=CRASH.x-T*6; BRAM.y=CRASH.y+T*5; }
+
+const RES = {
+  bois:      {nom:'Bois',      icone:'🪵', base:6,  demande:40},
+  pierre:    {nom:'Pierre',    icone:'🪨', base:9,  demande:30},
+  fibre:     {nom:'Fibre',     icone:'🌾', base:5,  demande:25},
+  nourriture:{nom:'Vivres',    icone:'🍖', base:12, demande:20},
+  fragment:  {nom:'Fragment',  icone:'⚙️', base:70, demande:4}
+};
+const marche = {};                              // demande restante, par ressource
+for(const k in RES) marche[k] = RES[k].demande;
+
+const PLANS = {
+  feu:     {nom:'Feu de camp', cout:{bois:5},                        note:'Éclaire la nuit. Cuit les vivres.'},
+  cabane:  {nom:'Cabane',      cout:{bois:20,fibre:10},              note:'Dormir jusqu\'au matin. Abri contre le froid.'},
+  atelier: {nom:'Atelier',     cout:{bois:30,pierre:15,fragment:2},  note:'Marie le bois et l\'alliage de l\'épave.'},
+  jardin:  {nom:'Potager',     cout:{fibre:8,bois:6},                note:'Donne des vivres chaque matin.'},
+  etal:    {nom:'Étal',        cout:{bois:15,pierre:5},              note:'Ton propre commerce. Exige un droit de commerce.'}
+};
+
+const BOUTIQUE = {
+  hache:    {nom:'Hache d\'alliage', prix:40,  note:'+2 bois par coupe'},
+  pioche:   {nom:'Pioche renforcée', prix:55,  note:'+2 pierre par frappe'},
+  canne:    {nom:'Canne à pêche',    prix:35,  note:'+2 vivres par prise'},
+  lanterne: {nom:'Lanterne à diode', prix:70,  note:'Tu portes ta lumière'},
+  licence:  {nom:'Droit de commerce',prix:150, note:'Vends 25 % plus cher. Ouvre l\'étal.'}
+};
+
+const OBJ = [
+  {id:'bois',   txt:'Récolter 10 bois',              fait:()=>total('bois')>=10},
+  {id:'feu',    txt:'Allumer un feu de camp',        fait:()=>a('feu')},
+  {id:'manger', txt:'Manger une première fois',      fait:()=>mange},
+  {id:'cabane', txt:'Bâtir la cabane',               fait:()=>a('cabane')},
+  {id:'vendre', txt:'Vendre au colporteur',          fait:()=>vendu},
+  {id:'parler', txt:'Parler à Nova (3 fois)',        fait:()=>echanges>=3},
+  {id:'atelier',txt:'Bâtir l\'atelier (2 fragments)',fait:()=>a('atelier')},
+  {id:'lien',   txt:'Atteindre 50 de lien avec Nova',fait:()=>J.relation>=50}
+];
+let mange=false, vendu=false, echanges=0, boisCumul=0, fini=false;
+const total = k => k==='bois' ? boisCumul : J.sac[k];
+const a = t => J.batis.some(b=>b.type===t);
+
+/* ————— entrées ————— */
+const touches = {};
+addEventListener('keydown', e=>{
+  const k=e.key.toLowerCase();
+  if([' ','arrowup','arrowdown','arrowleft','arrowright'].includes(k)) e.preventDefault();
+  touches[k]=true;
+  if(k==='e') agir();
+  if(k==='b') bascule('mBatir');
+  if(k==='escape') fermerTout();
+});
+addEventListener('keyup', e=>{ touches[e.key.toLowerCase()]=false; });
+document.querySelectorAll('[data-ferme]').forEach(b=>b.onclick=fermerTout);
+
+/* commandes tactiles */
+let axe={x:0,y:0};
+if(matchMedia('(pointer:coarse)').matches){
+  document.getElementById('tactile').classList.add('on');
+  const stick=document.getElementById('stick'), pouce=document.getElementById('pouce');
+  let id=null, c={x:0,y:0};
+  const debut=e=>{const t=e.changedTouches[0];id=t.identifier;const r=stick.getBoundingClientRect();
+    c={x:r.left+r.width/2,y:r.top+r.height/2};e.preventDefault();};
+  const bouge=e=>{for(const t of e.changedTouches){ if(t.identifier!==id) continue;
+    let dx=t.clientX-c.x, dy=t.clientY-c.y; const d=Math.hypot(dx,dy)||1, m=Math.min(d,46);
+    dx=dx/d*m; dy=dy/d*m; pouce.style.transform=`translate(${dx}px,${dy}px)`;
+    axe={x:dx/46,y:dy/46}; } e.preventDefault();};
+  const fin=e=>{for(const t of e.changedTouches) if(t.identifier===id){id=null;axe={x:0,y:0};
+    pouce.style.transform='';} };
+  stick.addEventListener('touchstart',debut,{passive:false});
+  stick.addEventListener('touchmove',bouge,{passive:false});
+  stick.addEventListener('touchend',fin); stick.addEventListener('touchcancel',fin);
+  document.getElementById('btnA').addEventListener('touchstart',e=>{e.preventDefault();agir();},{passive:false});
+  document.getElementById('btnB').addEventListener('touchstart',e=>{e.preventDefault();bascule('mBatir');},{passive:false});
+}
+
+function bascule(id){
+  const m=document.getElementById(id), etait=m.classList.contains('on');
+  fermerTout(); if(!etait){ if(id==='mBatir') dessineBatir(); m.classList.add('on'); }
+}
+function fermerTout(){
+  document.querySelectorAll('.modale').forEach(m=>{ if(m.id!=='mFin') m.classList.remove('on'); });
+  document.getElementById('dialogue').classList.remove('on');
+}
+const ouvert = () => document.querySelector('.modale.on') || document.getElementById('dialogue').classList.contains('on');
+
+/* ————— messages ————— */
+function dire(txt, ton){
+  const j=document.getElementById('journal'), d=document.createElement('div');
+  d.className='msg'+(ton?' '+ton:''); d.textContent=txt; j.appendChild(d);
+  setTimeout(()=>{d.style.transition='opacity .4s';d.style.opacity='0';setTimeout(()=>d.remove(),400);},2800);
+  while(j.children.length>4) j.firstChild.remove();
+}
+
+/* ————— action contextuelle ————— */
+function cible(){
+  let best=null, dm=T*1.6;
+  for(const n of noeuds){
+    if(n.qte<=0) continue;
+    const d=Math.hypot(n.x-J.x,n.y-J.y); if(d<dm){dm=d;best={genre:'noeud',ref:n};}
+  }
+  for(const p of [NOVA,BRAM]){
+    const d=Math.hypot(p.x-J.x,p.y-J.y); if(d<T*1.8 && d<dm){dm=d;best={genre:'pnj',ref:p};}
+  }
+  for(const b of J.batis){
+    if(b.type!=='cabane'&&b.type!=='feu') continue;
+    const d=Math.hypot(b.x-J.x,b.y-J.y); if(d<T*1.6 && d<dm){dm=d;best={genre:'bati',ref:b};}
+  }
+  return best;
+}
+const LIB = {arbre:'Couper du bois', rocher:'Casser la pierre', buisson:'Cueillir',
+             banc:'Pêcher', epave:'Fouiller l\'épave'};
+
+function agir(){
+  if(fini) return;
+  if(ouvert()){ fermerTout(); return; }
+  const c=cible(); if(!c) return;
+
+  if(c.genre==='pnj'){
+    if(c.ref===BRAM){ dessineMarche(); document.getElementById('mMarche').classList.add('on'); }
+    else parleNova();
+    return;
+  }
+  if(c.genre==='bati'){
+    if(c.ref.type==='cabane') dormir();
+    else if(J.sac.nourriture>0){ manger(); }
+    else dire('Rien à cuire. Le feu attendra.', 'mal');
+    return;
+  }
+
+  const n=c.ref;
+  if(J.energie<3){ dire('Tu n\'as plus de bras. Mange, ou dors.', 'mal'); return; }
+  J.energie=Math.max(0,J.energie-3);
+  n.qte--; if(n.qte<=0 && n.delai) n.pret=J.jour*JOUR+J.temps+n.delai;
+
+  const bonus = t => J.outils[t]?2:0;
+  if(n.type==='arbre'){ const g=2+bonus('hache'); J.sac.bois+=g; boisCumul+=g; dire(`+${g} bois`); }
+  if(n.type==='rocher'){ const g=1+bonus('pioche'); J.sac.pierre+=g; dire(`+${g} pierre`); }
+  if(n.type==='buisson'){ J.sac.fibre+=2; J.sac.nourriture+=1; dire('+2 fibre, +1 vivres'); }
+  if(n.type==='banc'){ const g=1+bonus('canne'); J.sac.nourriture+=g; dire(`+${g} vivres`); }
+  if(n.type==='epave'){ J.sac.fragment+=1;
+    dire('+1 fragment — un alliage que personne ici ne saura refaire.', 'bien'); }
+}
+
+function manger(){
+  if(J.sac.nourriture<=0) return;
+  J.sac.nourriture--; J.faim=Math.min(100,J.faim+28); mange=true;
+  dire('Tu manges. Le ventre se tait.', 'bien');
+}
+function dormir(){
+  J.dormi++; J.jour++; J.temps=JOUR*0.15;
+  J.energie=100; J.faim=Math.max(15,J.faim-18); J.parleAujourdhui=false;
+  for(const k in marche) marche[k]=Math.min(RES[k].demande, marche[k]+Math.ceil(RES[k].demande*0.55));
+  if(a('jardin')){ J.sac.nourriture+=3; dire('Le potager a donné : +3 vivres.', 'bien'); }
+  if(J.relation>=50){ J.sac.fragment+=1; dire('Nova a veillé et démonté un panneau : +1 fragment.', 'bien'); }
+  dire(`Jour ${J.jour}. Le marché a repris un peu d'appétit.`);
+}
+
+/* ————— Nova ————— */
+const REPLIQUES = [
+  ['Nova','J\'étais ingénieure de bord. Ici, mon diplôme vaut un tas de bois mouillé.',
+   ['Et pourtant tu tiens debout.','On repart de zéro, ensemble.']],
+  ['Nova','Les batteries de l\'arche sont mortes. Il nous reste le feu, la pierre, nos mains.',
+   ['Alors on rebâtit comme au premier âge.','On a l\'alliage. C\'est déjà énorme.']],
+  ['Nova','Un jour ce village aura un moulin. Avec une roue en chêne et un axe en alliage.',
+   ['Je bâtirai l\'atelier pour ça.','Raconte-moi encore.']],
+  ['Nova','Tu sais ce qui me manque le plus ? Pas la technologie. Quelqu\'un à qui parler le soir.',
+   ['Je suis là.','Moi aussi.']],
+  ['Nova','On ne se bat contre personne ici. C\'est peut-être ça, la deuxième vie.',
+   ['C\'est exactement ça.','Il n\'y a rien à conquérir. Juste à bâtir.']]
+];
+function parleNova(){
+  const d=document.getElementById('dialogue');
+  if(J.parleAujourdhui && J.relation<50){
+    montreDialogue('Nova','Va vivre ta journée. On se reparle demain.', [['D\'accord', fermerTout]]);
+    return;
+  }
+  const r=REPLIQUES[Math.min(echanges, REPLIQUES.length-1)];
+  const choix = r[2].map(t=>[t, ()=>{
+    echanges++; J.parleAujourdhui=true;
+    gagneLien(echanges<=3?10:6);
+    fermerTout();
+  }]);
+  if(J.sac.nourriture>0) choix.push(['Lui offrir des vivres', ()=>{
+    J.sac.nourriture--; gagneLien(8); dire('Nova sourit. Ça vaut plus que ça n\'en a l\'air.', 'bien'); fermerTout();
+  }]);
+  if(J.sac.fragment>0) choix.push(['Lui donner un fragment', ()=>{
+    J.sac.fragment--; gagneLien(14); dire('« Avec ça je peux faire quelque chose. » — Nova', 'bien'); fermerTout();
+  }]);
+  montreDialogue(r[0], r[1], choix);
+}
+function montreDialogue(qui, txt, choix){
+  fermerTout();
+  document.getElementById('dQui').textContent=qui;
+  document.getElementById('dTxt').textContent=txt;
+  const c=document.getElementById('dChoix'); c.innerHTML='';
+  choix.forEach(([t,f])=>{const b=document.createElement('button');b.textContent=t;b.onclick=f;c.appendChild(b);});
+  document.getElementById('dialogue').classList.add('on');
+}
+const PALIERS=[[25,'amitié','Nova te suit maintenant.'],[50,'complicité','Elle veillera la nuit pour toi.'],
+               [75,'attachement','Vous bâtissez la même maison.']];
+function gagneLien(n){
+  const av=J.relation; J.relation=Math.min(100,J.relation+n);
+  for(const [s,nom,note] of PALIERS) if(av<s && J.relation>=s) dire(`${nom.toUpperCase()} — ${note}`, 'bien');
+}
+
+/* ————— bâtir ————— */
+function dessineBatir(){
+  const l=document.getElementById('listeBatir'); l.innerHTML='';
+  for(const [id,p] of Object.entries(PLANS)){
+    const cout=Object.entries(p.cout).map(([k,v])=>`${v} ${RES[k].nom.toLowerCase()}`).join(', ');
+    const peut=Object.entries(p.cout).every(([k,v])=>J.sac[k]>=v)
+             && !(id==='etal' && !J.outils.licence)
+             && !(a(id) && id!=='feu');
+    const d=document.createElement('div'); d.className='ligne';
+    d.innerHTML=`<div><div class="nom">${p.nom}</div><div class="cout">${cout} — ${p.note}</div></div>`;
+    const b=document.createElement('button'); b.textContent=a(id)&&id!=='feu'?'Bâti':'Bâtir';
+    b.disabled=!peut; b.onclick=()=>batir(id); d.appendChild(b); l.appendChild(d);
+  }
+}
+function place(){
+  // cherche un emplacement libre autour du joueur : sol ferme, à l'écart des autres bâtis
+  for(let rayon=1.4; rayon<=5; rayon+=0.7){
+    for(let i=0;i<12;i++){
+      const a=(i/12)*Math.PI*2 + (J.dir>0?0:Math.PI);
+      const x=J.x+Math.cos(a)*T*rayon, y=J.y+Math.sin(a)*T*rayon;
+      if(solide(Math.floor(x/T),Math.floor(y/T))) continue;
+      if(J.batis.some(b=>Math.hypot(b.x-x,b.y-y)<T*2)) continue;
+      if(noeuds.some(n=>n.qte>0 && Math.hypot(n.x-x,n.y-y)<T*1.2)) continue;
+      if([NOVA,BRAM].some(q=>Math.hypot(q.x-x,q.y-y)<T*2)) continue;   // on ne bâtit pas sur quelqu'un
+      return {x,y};
+    }
+  }
+  return null;
+}
+function batir(id){
+  const p=PLANS[id];
+  if(!Object.entries(p.cout).every(([k,v])=>J.sac[k]>=v)){ dire('Il te manque des matériaux.', 'mal'); return; }
+  const pos=place();
+  if(!pos){ dire('Pas assez de place ici. Écarte-toi un peu.', 'mal'); return; }
+  for(const [k,v] of Object.entries(p.cout)) J.sac[k]-=v;
+  J.batis.push({type:id, x:pos.x, y:pos.y});
+  dire(`${p.nom} — bâti.`, 'bien'); fermerTout();
+}
+
+/* ————— marché à demande limitée : le cœur de l'idée ————— */
+function prix(k){
+  const r=RES[k], part=marche[k]/r.demande;
+  const p=r.base*(0.25+0.75*Math.pow(Math.max(0,part),0.7));
+  return Math.max(1, Math.round(p*(J.outils.licence?1.25:1)));
+}
+function dessineMarche(){
+  const lv=document.getElementById('listeVente'); lv.innerHTML='';
+  for(const k of Object.keys(RES)){
+    const part=Math.round(marche[k]/RES[k].demande*100);
+    const d=document.createElement('div'); d.className='ligne';
+    d.innerHTML=`<div><div class="nom">${RES[k].icone} ${RES[k].nom} — <b style="color:var(--or)">${prix(k)} or</b>
+      <span class="cout">(tu en as ${J.sac[k]})</span></div>
+      <div class="cout">appétit du marché : ${part}%</div>
+      <div class="barre-dem"><i style="width:${part}%"></i></div></div>`;
+    const b=document.createElement('button'); b.textContent='Vendre 1';
+    b.disabled = J.sac[k]<=0 || marche[k]<=0;
+    b.onclick=()=>{ J.sac[k]--; J.or+=prix(k); marche[k]=Math.max(0,marche[k]-1); vendu=true;
+      if(marche[k]===0) dire(`Le marché est saturé en ${RES[k].nom.toLowerCase()}. Plus personne n'en veut aujourd'hui.`,'mal');
+      dessineMarche(); };
+    d.appendChild(b); lv.appendChild(d);
+  }
+  const la=document.getElementById('listeAchat'); la.innerHTML='';
+  for(const [id,o] of Object.entries(BOUTIQUE)){
+    const d=document.createElement('div'); d.className='ligne';
+    d.innerHTML=`<div><div class="nom">${o.nom}</div><div class="cout">${o.note}</div></div>`;
+    const b=document.createElement('button'); b.className='or';
+    b.textContent = J.outils[id] ? 'Acquis' : `${o.prix} or`;
+    b.disabled = J.outils[id] || J.or<o.prix;
+    b.onclick=()=>{ J.or-=o.prix; J.outils[id]=true; dire(`${o.nom} — acquis.`,'bien'); dessineMarche(); };
+    d.appendChild(b); la.appendChild(d);
+  }
+}
+
+/* ————— boucle ————— */
+let dernier=performance.now();
+function boucle(now){
+  const dt=Math.min(0.05,(now-dernier)/1000); dernier=now;
+  if(!fini) maj(dt);
+  rendu();
+  requestAnimationFrame(boucle);
+}
+function maj(dt){
+  J.temps+=dt;
+  if(J.temps>JOUR){ J.temps-=JOUR; J.jour++; J.parleAujourdhui=false;
+    for(const k in marche) marche[k]=Math.min(RES[k].demande, marche[k]+Math.ceil(RES[k].demande*0.35)); }
+
+  // déplacement
+  let dx=0, dy=0;
+  if(!ouvert()){
+    if(touches['a']||touches['arrowleft']) dx--;
+    if(touches['d']||touches['arrowright']) dx++;
+    if(touches['w']||touches['arrowup']) dy--;
+    if(touches['s']||touches['arrowdown']) dy++;
+    dx+=axe.x; dy+=axe.y;
+  }
+  const m=Math.hypot(dx,dy); if(m>1){dx/=m;dy/=m;}
+  const v=118*(J.faim<20?0.6:1);
+  if(dx) J.dir=Math.sign(dx);
+  const nx=J.x+dx*v*dt, ny=J.y+dy*v*dt;
+  if(!solide(Math.floor(nx/T),Math.floor(J.y/T))) J.x=Math.max(T,Math.min(MW*T-T,nx));
+  if(!solide(Math.floor(J.x/T),Math.floor(ny/T))) J.y=Math.max(T,Math.min(MH*T-T,ny));
+
+  // besoins
+  J.faim=Math.max(0,J.faim-dt*(100/(JOUR*1.6)));
+  J.energie=Math.min(100,J.energie+dt*2.2);
+  if(J.faim<=0) J.energie=Math.max(0,J.energie-dt*6);
+  if(J.faim<25 && J.sac.nourriture>0 && Math.random()<dt*0.4) dire('Tu as faim. [E] près du feu pour manger.','mal');
+
+  // repousse
+  const t=J.jour*JOUR+J.temps;
+  for(const n of noeuds) if(n.qte<=0 && n.pret && t>n.pret){ n.qte=n.max; n.pret=0; }
+
+  // Nova suit à partir de l'amitié
+  if(J.relation>=25){
+    const d=Math.hypot(J.x-NOVA.x,J.y-NOVA.y);
+    if(d>T*2.4){ NOVA.x+=(J.x-NOVA.x)/d*70*dt; NOVA.y+=(J.y-NOVA.y)/d*70*dt; }
+  }
+
+  majHUD();
+  if(!fini && OBJ.every(o=>o.fait())) termine();
+}
+
+function termine(){
+  fini=true;
+  document.getElementById('finTexte').textContent =
+    `Jour ${J.jour}. Une cabane, un atelier, un feu, et quelqu'un à côté de toi. `+
+    `Tu as gagné ${J.or} pièces d'or sans lever la main sur personne. `+
+    `C'est ici que le vrai jeu commencerait : le village, les voisins, le commerce qui peut fermer.`;
+  document.getElementById('mFin').classList.add('on');
+}
+
+function majHUD(){
+  const set=(b,val,txt)=>{document.getElementById(b).style.width=val+'%';
+                          if(txt) document.getElementById(txt).textContent=Math.round(val)+'%';};
+  set('bFaim',J.faim,'vFaim'); set('bEnergie',J.energie,'vEnergie');
+  document.getElementById('bRel').style.width=J.relation+'%';
+  document.getElementById('vRel').textContent=Math.round(J.relation);
+  const pal=[...PALIERS].reverse().find(p=>J.relation>=p[0]);
+  document.getElementById('lRel').textContent='Nova — '+(pal?pal[1]:'inconnue');
+
+  const h=J.temps/JOUR;
+  const phase = h<0.25?'Aube':h<0.5?'Matin':h<0.7?'Après-midi':h<0.82?'Crépuscule':'Nuit';
+  document.getElementById('entete').textContent=`Jour ${J.jour} — ${phase} · ${J.or} or`;
+
+  const s=document.getElementById('sacs');
+  s.innerHTML=Object.entries(RES).map(([k,r])=>
+    `<span class="res">${r.icone} <b>${J.sac[k]}</b></span>`).join('');
+
+  const ul=document.getElementById('objectifs');
+  if(ul.children.length!==OBJ.length){ ul.innerHTML=OBJ.map(o=>`<li id="o_${o.id}">${o.txt}</li>`).join(''); }
+  OBJ.forEach(o=>document.getElementById('o_'+o.id).classList.toggle('fait',!!o.fait()));
+
+  const c=cible(), inv=document.getElementById('invite');
+  if(c && !ouvert()){
+    let t='';
+    if(c.genre==='noeud') t=`[E] ${LIB[c.ref.type]}`;
+    else if(c.genre==='pnj') t=c.ref===BRAM?'[E] Commercer avec Bram':'[E] Parler à Nova';
+    else t=c.ref.type==='cabane'?'[E] Dormir jusqu\'au matin':'[E] Manger au feu';
+    inv.textContent=t; inv.classList.add('on');
+  } else inv.classList.remove('on');
+}
+
+/* ————— rendu ————— */
+const COUL={fond:'#0b2438',eau:'#12455f',sable:'#c9b483',herbe:'#3f7346'};
+function rendu(){
+  const dpr=Math.min(2,devicePixelRatio||1);
+  const W=cnv.clientWidth, H=cnv.clientHeight;
+  if(cnv.width!==W*dpr||cnv.height!==H*dpr){cnv.width=W*dpr;cnv.height=H*dpr;}
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.imageSmoothingEnabled=false;
+
+  const cx=Math.max(0,Math.min(MW*T-W, J.x-W/2));
+  const cy=Math.max(0,Math.min(MH*T-H, J.y-H/2));
+  ctx.fillStyle='#081019'; ctx.fillRect(0,0,W,H);
+  ctx.save(); ctx.translate(-cx,-cy);
+
+  const x0=Math.max(0,Math.floor(cx/T)), x1=Math.min(MW,Math.ceil((cx+W)/T));
+  const y0=Math.max(0,Math.floor(cy/T)), y1=Math.min(MH,Math.ceil((cy+H)/T));
+  const eau = (x,y) => x<0||y<0||x>=MW||y>=MH || carte[y][x]==='eau' || carte[y][x]==='fond';
+  for(let y=y0;y<y1;y++) for(let x=x0;x<x1;x++){
+    const t=carte[y][x];
+    ctx.fillStyle=COUL[t]; ctx.fillRect(x*T,y*T,T,T);
+    const v=((x*7+y*13)%5)/5;
+    ctx.fillStyle=`rgba(255,255,255,${0.02+v*0.025})`; ctx.fillRect(x*T,y*T,T,T);
+    // rivage : un liseré d'écume du côté qui touche l'eau
+    if(t!=='eau'&&t!=='fond'){
+      ctx.fillStyle='rgba(226,214,178,.55)';
+      if(eau(x,y-1)) ctx.fillRect(x*T,y*T,T,4);
+      if(eau(x,y+1)) ctx.fillRect(x*T,(y+1)*T-4,T,4);
+      if(eau(x-1,y)) ctx.fillRect(x*T,y*T,4,T);
+      if(eau(x+1,y)) ctx.fillRect((x+1)*T-4,y*T,4,T);
+    }
+  }
+
+  // l'épave de l'arche : une coque éventrée, moitié enfoncée dans la terre
+  const ex=CRASH.x, ey=CRASH.y;
+  ctx.fillStyle='rgba(0,0,0,.22)'; ctx.beginPath();
+  ctx.ellipse(ex,ey+T*0.5,T*3.8,T*1.5,-0.2,0,7); ctx.fill();
+  ctx.fillStyle='#525f6b'; ctx.beginPath();
+  ctx.ellipse(ex,ey,T*3.4,T*1.4,-0.2,0,7); ctx.fill();
+  ctx.fillStyle='#6b7885'; ctx.beginPath();
+  ctx.ellipse(ex-T*0.4,ey-T*0.35,T*2.4,T*0.85,-0.2,0,7); ctx.fill();
+  ctx.strokeStyle='#39434d'; ctx.lineWidth=2;
+  for(let i=-2;i<=2;i++){ ctx.beginPath();
+    ctx.moveTo(ex+i*T*0.9, ey-T*0.9); ctx.lineTo(ex+i*T*0.9+T*0.3, ey+T*0.9); ctx.stroke(); }
+  ctx.fillStyle='#2b333c'; ctx.fillRect(ex+T*1.9,ey-T*0.18,T*2.3,T*0.4);   // l'aile arrachée
+  ctx.fillStyle='#7fd4e8';                                                  // hublots encore alimentés
+  ctx.fillRect(ex-T*1.5,ey-T*0.5,T*0.45,T*0.2); ctx.fillRect(ex-T*0.2,ey-T*0.5,T*0.35,T*0.18);
+  ctx.fillRect(ex+T*0.9,ey-T*0.35,T*0.3,T*0.16);
+
+  const tri=[...noeuds.filter(n=>n.qte>0), ...J.batis, {sprite:'nova'}, {sprite:'bram'}, {sprite:'joueur'}];
+  tri.sort((p,q)=>(p.y??(p.sprite==='joueur'?J.y:p.sprite==='nova'?NOVA.y:BRAM.y))
+                 -(q.y??(q.sprite==='joueur'?J.y:q.sprite==='nova'?NOVA.y:BRAM.y)));
+  for(const o of tri){
+    if(o.sprite==='joueur') perso(J.x,J.y,'#d8b07a','#2f4f7a');
+    else if(o.sprite==='nova') perso(NOVA.x,NOVA.y,'#e0c0b0','#8a4a72');
+    else if(o.sprite==='bram') perso(BRAM.x,BRAM.y,'#c9a97e','#6a5230');
+    else if(o.type in PLANS) batiment(o);
+    else ressource(o);
+  }
+
+  function ombre(x,y,r){ctx.fillStyle='rgba(0,0,0,.22)';ctx.beginPath();ctx.ellipse(x,y+2,r,r*0.4,0,0,7);ctx.fill();}
+  function ressource(n){
+    const {x,y,type}=n; ombre(x,y+8,9);
+    if(type==='arbre'){
+      ctx.fillStyle='#6b4a2c'; ctx.fillRect(x-3,y-2,6,12);
+      ctx.fillStyle='#2f5f38'; ctx.beginPath(); ctx.arc(x,y-8,12,0,7); ctx.fill();
+      ctx.fillStyle='#3d7546'; ctx.beginPath(); ctx.arc(x-4,y-12,8,0,7); ctx.fill();
+    } else if(type==='rocher'){
+      ctx.fillStyle='#7d8894'; ctx.beginPath();
+      ctx.moveTo(x-11,y+8);ctx.lineTo(x-6,y-8);ctx.lineTo(x+5,y-10);ctx.lineTo(x+12,y+8);ctx.closePath();ctx.fill();
+      ctx.fillStyle='#98a4b0'; ctx.beginPath();
+      ctx.moveTo(x-6,y-8);ctx.lineTo(x+5,y-10);ctx.lineTo(x+2,y+1);ctx.closePath();ctx.fill();
+    } else if(type==='buisson'){
+      ctx.fillStyle='#3f6b45'; ctx.beginPath(); ctx.arc(x,y,9,0,7); ctx.fill();
+      ctx.fillStyle='#b8484f'; ctx.beginPath(); ctx.arc(x-3,y-2,2.2,0,7); ctx.fill();
+      ctx.beginPath(); ctx.arc(x+4,y+2,2.2,0,7); ctx.fill();
+    } else if(type==='banc'){
+      ctx.strokeStyle='rgba(190,225,240,.75)'; ctx.lineWidth=2;
+      ctx.beginPath(); ctx.arc(x,y,7,0.5,2.4); ctx.stroke();
+      ctx.beginPath(); ctx.arc(x,y,11,0.7,2.2); ctx.stroke();
+    } else if(type==='epave'){
+      ctx.fillStyle='#8c9aa6'; ctx.fillRect(x-8,y-4,16,8);
+      ctx.fillStyle='#7fd4e8'; ctx.fillRect(x-5,y-2,10,3);
+    }
+  }
+  function batiment(b){
+    const {x,y,type}=b; ombre(x,y+10,14);
+    if(type==='feu'){
+      ctx.fillStyle='#5a4632'; ctx.fillRect(x-9,y+2,18,4);
+      const f=1+Math.sin(performance.now()/120)*0.18;
+      ctx.fillStyle='#e8913c'; ctx.beginPath();
+      ctx.moveTo(x-7,y+2); ctx.quadraticCurveTo(x,y-16*f,x+7,y+2); ctx.closePath(); ctx.fill();
+      ctx.fillStyle='#f6d565'; ctx.beginPath();
+      ctx.moveTo(x-3,y+2); ctx.quadraticCurveTo(x,y-8*f,x+3,y+2); ctx.closePath(); ctx.fill();
+    } else if(type==='cabane'){
+      ctx.fillStyle='#8b6b45'; ctx.fillRect(x-18,y-12,36,22);
+      ctx.fillStyle='#5d4630'; ctx.beginPath();
+      ctx.moveTo(x-22,y-12); ctx.lineTo(x,y-28); ctx.lineTo(x+22,y-12); ctx.closePath(); ctx.fill();
+      ctx.fillStyle='#3a2b1c'; ctx.fillRect(x-5,y-4,10,14);
+      ctx.fillStyle='#e8c15c'; ctx.fillRect(x+8,y-8,7,7);
+    } else if(type==='atelier'){
+      ctx.fillStyle='#6f7b86'; ctx.fillRect(x-20,y-14,40,24);
+      ctx.fillStyle='#4c5762'; ctx.fillRect(x-20,y-20,40,7);
+      ctx.fillStyle='#7fd4e8'; ctx.fillRect(x-14,y-8,9,7); ctx.fillRect(x+5,y-8,9,7);
+      ctx.fillStyle='#e8913c'; ctx.fillRect(x-4,y+1,9,9);
+    } else if(type==='jardin'){
+      ctx.fillStyle='#5b432c'; ctx.fillRect(x-16,y-8,32,18);
+      ctx.fillStyle='#4e8f52';
+      for(let i=0;i<4;i++) ctx.fillRect(x-13+i*8,y-6,4,13);
+    } else if(type==='etal'){
+      ctx.fillStyle='#7a5a38'; ctx.fillRect(x-18,y-2,36,12);
+      ctx.fillStyle='#b8484f'; ctx.fillRect(x-20,y-14,40,10);
+      ctx.fillStyle='#e8c15c'; ctx.fillRect(x-6,y+1,12,4);
+    }
+  }
+  function perso(x,y,peau,habit){
+    ombre(x,y+10,8);
+    ctx.fillStyle=habit; ctx.fillRect(x-6,y-4,12,14);
+    ctx.fillStyle=peau; ctx.beginPath(); ctx.arc(x,y-10,6,0,7); ctx.fill();
+    ctx.fillStyle='#2a2018'; ctx.fillRect(x-6,y-16,12,5);
+  }
+  ctx.restore();
+
+  // nuit + lumières
+  const h=J.temps/JOUR;
+  let noir=0;
+  if(h<0.16) noir=(0.16-h)/0.16*0.66;
+  else if(h>0.74) noir=Math.min(0.80,(h-0.74)/0.16*0.80);
+  if(noir>0.02){
+    ctx.save(); ctx.globalCompositeOperation='source-over';
+    ctx.fillStyle=`rgba(8,14,32,${noir})`; ctx.fillRect(0,0,W,H);
+    ctx.globalCompositeOperation='destination-out';
+    const lum=[...J.batis.filter(b=>b.type==='feu'||b.type==='atelier')];
+    if(J.outils.lanterne) lum.push({x:J.x,y:J.y,r:110});
+    for(const l of lum){
+      const px=l.x-cx, py=l.y-cy, r=l.r||130;
+      const g=ctx.createRadialGradient(px,py,0,px,py,r);
+      g.addColorStop(0,'rgba(0,0,0,.95)'); g.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=g; ctx.fillRect(px-r,py-r,r*2,r*2);
+    }
+    ctx.restore();
+  }
+}
+
+// accès de mise au point (tests automatisés)
+window.DV = {J, NOVA, BRAM, marche, noeuds, dessineMarche, dessineBatir, batir, parleNova, agir, dire};
+
+dire('Le vaisseau-arche est mort. Toi, non. [E] pour agir.', 'bien');
+requestAnimationFrame(boucle);
+})();
+</script>
+<!--ARTIFACT-END-->
+</body>
+</html>
