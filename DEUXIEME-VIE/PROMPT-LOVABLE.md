@@ -61,6 +61,12 @@ une boulangerie à vendre parce que le village n'en a pas encore. Maisons, meubl
 restaurants, nourriture, terrains. Ça change complètement le modèle d'affaires — et
 ça crée un vrai problème d'équilibre que je traite à la section 3.
 
+**Aucune guerre.** Il n'y a ni combat, ni armée, ni affrontement entre joueurs. Sur
+une planète où l'humanité recommence en sachant ce qui a tué la Terre, **ne pas se
+faire la guerre est la première erreur qu'on ne refait pas.** L'adversité vient
+d'ailleurs : les animaux sauvages, les intempéries, la maladie — et les bons comme les
+mauvais côtés de la vie. Détails à la section 5.
+
 **Aucun contenu explicite — et c'est moi qui avais mal lu.** J'ai pris « choses
 explicite » pour une demande de contenu sexuel explicite, alors qu'Alain disait
 « soyons clairs ». Sa position est l'inverse : la sexualité fait partie de la vie et
@@ -178,7 +184,70 @@ optionnel et les amendes sont lourdes. Les règles à intégrer dès maintenant 
 - **Achats** : consentement parental obligatoire sous 13 ans, et un plafond de dépense
   par défaut.
 
-## 5. Un point sur le nom
+## 5. Pas de guerre — l'adversité vient de la vie
+
+Alain a tranché : **aucune guerre, aucun combat, aucune armée, aucun affrontement entre
+joueurs.** C'est une décision structurante, et elle est excellente pour trois raisons.
+
+**Elle est cohérente avec ton histoire.** L'humanité a quitté une Terre ruinée en
+emportant le savoir de ses erreurs. La guerre est la première de ces erreurs. Un monde
+qui refuse de la refaire, ce n'est pas une absence de contenu — c'est **le sujet même
+du jeu**.
+
+**Elle rend l'adversité collective au lieu d'adversariale.** Un ennemi, ça se combat
+seul ou en équipe contre d'autres. Une tempête, une épidémie, un hiver dur, **ça frappe
+tout le village en même temps.** La seule réponse possible devient l'entraide. Autrement
+dit : ta source de difficulté pousse les joueurs les uns vers les autres, au lieu de les
+dresser les uns contre les autres. C'est exactement ce qu'il faut à un jeu dont le cœur
+est le voisinage et l'amitié.
+
+**Elle protège ton public.** De 5 à 110 ans, l'absence de violence garde ton classement
+bas et toutes tes portes ouvertes.
+
+### Les quatre sources d'adversité
+
+**Les animaux sauvages** — ils sont à la fois la ressource et le risque. On les chasse
+pour manger, mais les prédateurs rôdent : ils s'attaquent au bétail, aux cultures, et
+peuvent blesser quelqu'un qui s'aventure seul la nuit. On ne les combat pas — **on s'en
+protège** : clôtures, feux, chiens, ne pas sortir seul, bâtir loin des tanières.
+
+**Les intempéries** — tempêtes, sécheresse, gel, grêle, inondations, hivers durs. Elles
+abîment les récoltes, endommagent les bâtiments, épuisent et rendent malade. On ne les
+empêche pas : **on s'y prépare**, en faisant des réserves, en renforçant les toits, en
+plantant au bon moment.
+
+**La maladie** — blessures, refroidissements, épuisement, et parfois une épidémie qui
+traverse le village. Elle demande du repos, des remèdes, une clinique, quelqu'un qui
+sait soigner. Un voisin malade qui ne peut plus travailler a besoin qu'on s'occupe de
+lui.
+
+**Les bons et les mauvais côtés de la vie** — c'est ce qu'Alain demande, et c'est ce qui
+sépare un jeu honnête d'un jeu mièvre. Il y a les naissances, les mariages, les grandes
+récoltes, les fêtes, les réussites, les amitiés qui durent. Et il y a les accidents, les
+pertes, les chicanes, les malentendus, le vieillissement, et la mort de ceux qu'on
+aime. **Le jeu ne cache pas la peine** — il la traite avec pudeur et avec dignité, et il
+montre que c'est le village qui aide à la traverser.
+
+### Le vrai antagoniste : la tentation de refaire pareil
+
+Voici ce que je te propose en plus, et c'est ce qui donnerait au jeu son âme.
+
+**S'il n'y a pas d'ennemi, l'adversaire du joueur devient sa propre facilité.** Chasser
+tout le gibier remplit la réserve — et vide la forêt. Bûcher toute la colline donne du
+bois — et amène les inondations. Épuiser la terre gonfle une récolte — et ruine les
+suivantes. Rien n'est interdit, tout est possible, **et la planète se souvient**.
+
+Un indicateur discret par village — la **santé de la terre** — monte et descend selon
+ce que la colonie fait. Personne ne punit le joueur. Le monde répond, simplement. Et
+au moment d'atteindre la Civilisation, le jeu pose sa seule vraie question : *avons-nous
+fait mieux que la Terre ?*
+
+C'est ça, Deuxième Vie. Pas une deuxième planète — une deuxième chance, et le libre
+choix de la gâcher ou pas.
+
+---
+
+## 6. Un point sur le nom
 
 **Deuxième Vie** est la traduction littérale de **Second Life**, la marque de Linden
 Lab, toujours active — et ton concept est proche du leur : monde virtuel, économie
@@ -318,6 +387,65 @@ moyens, et le jeu le lui rappelle :
 Une jauge au plancher entraîne maladie, épuisement, isolement. **Jamais de mort
 permanente, jamais de perte de progression** — on peut tomber bas, on ne perd pas
 sa vie.
+
+### AUCUNE GUERRE — L'ADVERSITÉ VIENT DE LA VIE
+
+**Il n'y a ni guerre, ni combat, ni arme de guerre, ni armée, ni affrontement entre
+joueurs.** Aucun joueur ne peut attaquer, voler ni détruire le bien d'un autre. Sur une
+planète où l'humanité recommence en sachant ce qui a tué la Terre, ne pas se faire la
+guerre est la première erreur qu'on ne refait pas.
+
+La difficulté vient d'ailleurs — et elle frappe **tout le village en même temps**, ce
+qui pousse les gens à s'entraider au lieu de s'affronter.
+
+**Les animaux sauvages.** Ressource et risque à la fois. On chasse le gibier pour
+manger, mais les prédateurs rôdent : ils s'en prennent au bétail, aux cultures, et
+peuvent blesser quelqu'un qui sort seul la nuit. **On ne les combat pas, on s'en
+protège** : clôtures, feu, chien de garde, ne pas s'éloigner seul, bâtir loin des
+tanières. Une rencontre se règle en reculant, jamais en se battant.
+
+**Les intempéries.** Le monde a des saisons et une météo. Tempêtes, sécheresse, gel,
+grêle, inondations, hivers rudes. Elles abîment les récoltes, endommagent les bâtiments,
+épuisent et rendent malade. **On ne les empêche pas, on s'y prépare** : réserves de
+nourriture et de bois, toits renforcés, semis au bon moment. Le jeu annonce le mauvais
+temps à l'avance — la punition n'est jamais la surprise, c'est le manque de préparation.
+
+**La maladie.** Blessures, refroidissements, épuisement, et parfois une épidémie qui
+traverse le village. Elle se soigne par le repos, les remèdes, la clinique, ou l'aide
+de quelqu'un qui sait soigner. Un personnage malade travaille moins et a besoin des
+autres. **Jamais de mort par maladie chez un personnage joueur** — on tombe bas, on
+guérit, on repart.
+
+**Les bons et les mauvais côtés de la vie.** Le jeu fait arriver les deux, sans en
+cacher aucun.
+- *Les bons* : naissances, mariages, grandes récoltes, fêtes de village, réussites d'un
+  commerce, amitiés qui durent, retrouvailles, coups de chance.
+- *Les mauvais* : accidents, récoltes perdues, chicanes entre voisins, malentendus,
+  faillites, vieillissement, et la mort des personnages non-joueurs âgés.
+
+Traite la peine **avec pudeur et dignité, jamais crûment** — le public commence à 5 ans.
+Quand un personnage âgé s'éteint, le village se rassemble, on en parle avec douceur, et
+son souvenir reste inscrit quelque part. Le jeu montre que **c'est le voisinage qui aide
+à traverser**, et c'est là sa plus belle leçon.
+
+### LA SANTÉ DE LA TERRE — le seul vrai adversaire
+
+Sans ennemi, l'adversaire du joueur devient sa propre facilité. Chaque village porte un
+indicateur discret, la **santé de la terre**, qui monte et descend selon ce que la
+colonie fait :
+
+- chasser sans mesure **vide la forêt** — le gibier se raréfie, puis disparaît
+- bûcher toute une colline **amène les inondations** au printemps
+- cultiver le même sol sans repos **épuise la terre** — les récoltes suivantes chutent
+- laisser la terre se refaire, replanter, alterner les cultures, chasser avec mesure
+  **la fait remonter**
+
+**Rien n'est interdit et personne n'est puni.** Le monde répond, voilà tout. Affiche
+l'indicateur sans jamais faire la morale : pas de message de reproche, pas de sermon.
+Juste un état du monde que le joueur voit changer par ses propres gestes.
+
+Au moment d'atteindre la Civilisation, le jeu pose sa seule vraie question — **avons-nous
+fait mieux que la Terre ?** — et y répond avec la santé de la terre du village.
 
 ### TRAVAIL, RESSOURCES ET CONSTRUCTION
 
@@ -512,6 +640,23 @@ seulement qu'un moment a eu lieu, pour ses effets sur l'humeur et le lien.
 personnages sont adultes, ils forment un couple établi, et le lieu est une habitation
 privée. Aucune colonne descriptive — cette table ne contient aucun contenu.
 
+**`meteo`** — `id`, `village_id`, `saison` (enum : printemps, ete, automne, hiver),
+`evenement` (enum : beau, pluie, tempete, secheresse, gel, grele, inondation),
+`intensite`, `annonce_le`, `debute_le`, `duree_heures`.
+
+**`sante_evenements`** — `id`, `personnage_id`, `type` (enum : blessure, refroidissement,
+epuisement, epidemie), `gravite`, `soigne` (bool), `cree_le`, `gueri_le`.
+
+**`animaux_sauvages`** — `id`, `village_id`, `espece`, `type` (enum : gibier, predateur),
+`population`, `position_x`, `position_y`, `agressif` (bool).
+
+**`evenements_vie`** — `id`, `personnage_id`, `village_id`, `nature` (enum : heureux,
+difficile), `type` (naissance, mariage, grande_recolte, fete, reussite, accident,
+recolte_perdue, chicane, faillite, deuil), `titre`, `recit`, `cree_le`.
+
+**`sante_terre`** — `id`, `village_id`, `indice` (0-100), `gibier`, `foret`, `sol`,
+`derniere_maj`. Monte et descend selon les gestes de la colonie.
+
 **`progression`** — `id`, `personnage_id`, `etape_atteinte`, `seuil_ressources`,
 `seuil_population`, `seuil_relationnel`, `debloque_le`.
 
@@ -538,22 +683,34 @@ relations. La table `moments_intimes` n'est lisible que par les deux conjoints.
 8. **Relations** — liste des personnes connues, paliers, jauges, dernier contact.
    Fiche détaillée par personne.
 9. **Panneau d'interaction** — actions disponibles selon palier, étape et réglages.
-10. **Voisinage** — le quartier, ses habitants, la réputation collective, les avantages.
-11. **Ma famille** — conjoint, enfants, besoins de la famille, transmission du savoir.
-12. **Boutique de cristaux** — conversion, articles, panier, solde simulé.
-13. **Progression** — les cinq étapes, ce qui est atteint, ce qui manque, en séparant
+10. **Voisinage** — le quartier, ses habitants, la réputation collective, les
+    avantages, et les voisins qui ont besoin d'aide en ce moment.
+11. **Le village** — la météo annoncée et la saison en cours, la santé de la terre,
+    les événements heureux et difficiles du moment, les malades à visiter, les
+    chantiers d'entraide.
+12. **Ma famille** — conjoint, enfants, besoins de la famille, transmission du savoir,
+    et le livre de mémoire où restent inscrits ceux qui sont partis.
+13. **Ma santé** — état, blessures ou maladies en cours, remèdes, repos.
+14. **Boutique de cristaux** — conversion, articles, panier, solde simulé.
+15. **Progression** — les cinq étapes, ce qui est atteint, ce qui manque, en séparant
     ressources, population et relations.
-14. **Réglages** — taille du texte jusqu'à 200 %, contraste, mode sans animation,
+16. **Réglages** — taille du texte jusqu'à 200 %, contraste, mode sans animation,
     son, vitesse du temps, compte, confidentialité.
-15. **Contrôle parental** — protégé par mot de passe : activer ou couper le marché,
+17. **Contrôle parental** — protégé par mot de passe : activer ou couper le marché,
     les achats et les interactions entre joueurs, avec plafond de dépense.
 
 ### BOUCLE DE JEU
 
 Temps par **ticks de 30 secondes**. À chaque tick : les besoins descendent selon
 l'étape, la production passive s'accumule, les commerces produisent et vendent aux
-personnages non-joueurs, les bâtiments se dégradent légèrement, les personnages se
-déplacent et peuvent aborder le joueur. **Sauvegarde continue.**
+personnages non-joueurs, les bâtiments se dégradent légèrement, la météo avance, les
+animaux se déplacent, la santé de la terre se recalcule, et les personnages se déplacent
+et peuvent aborder le joueur. **Sauvegarde continue.**
+
+Les **saisons** tournent, et chacune change ce qui pousse, ce qui se chasse et ce qu'il
+faut craindre. Les intempéries sont **toujours annoncées à l'avance** — le joueur a le
+temps de se préparer. Les événements de la vie, heureux comme difficiles, arrivent à un
+rythme mesuré : jamais deux malheurs coup sur coup.
 
 Au retour après une absence, calcule le temps écoulé et applique la dérive — mais
 **plafonne-la**. Une absence de trois jours ne doit jamais ruiner une partie ni faire
@@ -588,9 +745,11 @@ faillite à un commerce.
 et habitations, commerces complets avec approvisionnement, production, prix et
 trésorerie, marché entre joueurs, emplois, personnages non-joueurs avec caractères,
 relations jusqu'au mariage et à la famille, voisinage et réputation, architecture
-intimité porte fermée représentée par ses seuls effets, protections des mineurs
-codées en contraintes, phrases prédéfinies, contrôle parental, boutique de cristaux à
-solde simulé, progression, sauvegarde, accessibilité complète.
+intimité porte fermée représentée par ses seuls effets, saisons et intempéries
+annoncées, animaux sauvages gibier et prédateurs, maladies et soins, événements de vie
+heureux et difficiles, santé de la terre, protections des mineurs codées en contraintes,
+phrases prédéfinies, contrôle parental, boutique de cristaux à solde simulé,
+progression, sauvegarde, accessibilité complète. **Aucun système de combat.**
 
 **Plus tard, laisse la place sans construire** : paiement réel, multijoueur en direct,
 visites entre joueurs, générations et héritage, événements saisonniers, application
@@ -605,17 +764,23 @@ Un jeu **réellement jouable** de bout en bout :
   goûts variés
 - au moins **3 commerces déjà tenus** par des personnages non-joueurs, avec stock et prix
 - un marché **garni d'offres actives**
+- une **tempête annoncée** pour le lendemain, afin qu'on voie tout de suite la mécanique
+  de préparation
+- quelques **animaux** : du gibier à chasser et un prédateur qui rôde près des enclos
+- un **voisin malade** à visiter, et un événement heureux en cours dans le village
+- une **santé de la terre** déjà entamée par la colonie, visible et remontable
 - une partie de démonstration déjà avancée, pour voir le jeu en pleine forme
 - des images d'espace réservé cohérentes partout
 
 Je veux ouvrir l'application et **jouer** : avoir faim, chasser, bûcher, bâtir, acheter
-la boulangerie, vendre mon pain, et me faire des amis.
+la boulangerie, vendre mon pain, me faire des amis, rentrer mes réserves avant la
+tempête, et aller porter de la soupe au voisin malade.
 
 --- FIN DU PROMPT ---
 
 ---
 
-## 6. Le coffre — pourquoi je ne l'ai toujours pas lu
+## 7. Le coffre — pourquoi je ne l'ai toujours pas lu
 
 Alain a raison sur un point : **c'est bien Claude qui a créé les dossiers** de
 `DEUXIEME-VIE` dans Obsidian et sur son ordinateur. Et l'autorisation d'accès est
