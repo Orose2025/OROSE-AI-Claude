@@ -1,9 +1,9 @@
 # DEUXIÈME VIE
 
-## Prompt Lovable.ai — version 2
+## Prompt Lovable.ai — version 3
 
 **Sources** : note manuscrite d'Alain Dupont, capture du coffre `DEUXIEME-VIE`,
-et corrections d'Alain du 4 août 2026 (décor, économie, contenu adulte).
+et corrections d'Alain du 4 août 2026 (décor, économie, contenu adulte, public 16-110 ans).
 
 ---
 
@@ -26,11 +26,23 @@ Le jeu est **gratuit**. Les revenus viennent de ce qui s'achète dans le monde :
 terre, les commerces, les maisons, les meubles, la nourriture, les vêtements, les
 services — et les cosmétiques d'avatar, qui ne sont qu'une partie du tout.
 
+**Le public : de 16 à 110 ans.** Ce n'est pas une formule, c'est une contrainte de
+conception qui touche tout. Le jeu doit être jouable par une adolescente de 16 ans
+comme par un homme de 82 ans : aucun réflexe rapide exigé, aucune manœuvre compliquée,
+du texte lisible, de gros boutons, un rythme patient, et un apprentissage qui ne prend
+jamais le joueur pour un imbécile. La règle est simple — **si ma mère ne peut pas y
+jouer, c'est mal fait.**
+
 ---
 
 ## 2. Ce qui change depuis la version 1
 
-Trois corrections d'Alain, et chacune démolit une partie de ce que j'avais écrit.
+Quatre corrections d'Alain, et chacune démolit une partie de ce que j'avais écrit.
+
+**Le public va de 16 à 110 ans.** Ça devient la contrainte de conception la plus forte
+du projet : aucun réflexe rapide, aucune pression de temps, du gros texte, du
+vocabulaire de la vraie vie. Et ça entre en conflit frontal avec le contenu explicite —
+conflit résolu à la section 4 par un modèle à deux couches.
 
 **Le décor n'est pas médiéval.** J'avais transposé les âges d'Age of Empires en Moyen
 Âge européen. C'est une colonisation spatiale. Les « âges » deviennent les **étapes de
@@ -99,47 +111,74 @@ rareté crée la valeur, et la valeur crée l'envie d'acheter.
 
 ---
 
-## 4. Le contenu adulte — cadrage obligatoire
+## 4. Le contenu adulte — et le conflit avec « 16 à 110 ans »
 
-Alain a tranché pour l'explicite. C'est sa décision et elle est appliquée. Voici ce que
-ça implique concrètement — ce ne sont pas des recommandations, ce sont les conditions
-pour que le jeu existe légalement et trouve un moyen d'encaisser.
+Alain veut deux choses qui, telles quelles, ne peuvent pas coexister dans un même
+produit : **un jeu ouvert dès 16 ans** et **du contenu explicite**.
 
-**Non négociable, à coder en dur :**
+Ce n'est pas une question de goût, c'est un mur : un mineur de 16 ans ne peut pas
+recevoir de contenu sexuel explicite. Aucune plateforme, aucun processeur de paiement,
+aucune juridiction ne l'autorise. Un produit unique qui contiendrait les deux serait
+illégal partout où il serait vendu.
 
-- **Vérification d'âge réelle** à l'inscription — pas une case à cocher. Plusieurs
-  juridictions l'exigent maintenant pour le contenu explicite. Prévois un fournisseur
-  de vérification tiers.
+**La solution : deux couches, un seul jeu.** C'est le modèle standard de l'industrie,
+et il donne à Alain exactement ses deux volontés sans en sacrifier aucune.
+
+### Couche de base — DEUXIÈME VIE, 16 ans et plus
+
+Le jeu complet. La planète, la colonie, les cinq étapes, la survie, l'économie, les
+commerces, le marché, les emplois, le voisinage, l'amitié, la séduction, l'amour, le
+couple, le mariage, la famille, les enfants.
+
+Rien n'est amputé. **Les relations amoureuses y sont entières** — on se fréquente, on
+tombe en amour, on se marie, on fonde une famille. L'intimité existe : elle est
+suggérée, elle se manifeste par ses effets, comme dans n'importe quel jeu de vie grand
+public. C'est ce jeu-là qui est classé 16+.
+
+### Couche adulte — extension vérifiée 18 ans et plus
+
+Une **extension séparée**, activable uniquement par un compte dont l'âge a été
+réellement vérifié. Elle ajoute les scènes explicites entre adultes consentants. Elle
+n'ajoute **aucun avantage de jeu** : ni ressource, ni argent, ni progression, ni
+relation impossible autrement. Un joueur de 16 ans n'est jamais désavantagé — il joue
+au même jeu.
+
+### Ce que ça change pour toi, et c'est une bonne nouvelle
+
+Hier je t'ai dit que l'App Store, Google Play et Stripe t'étaient fermés. **Avec deux
+couches, ce n'est plus vrai pour la couche de base.**
+
+| | Couche de base 16+ | Extension 18+ |
+|---|---|---|
+| App Store / Google Play | **Ouverts** | Fermés |
+| Steam | **Ouvert**, classé 16+ | Ouvert avec étiquette adulte |
+| Paiement | **Stripe standard, 3 %** | CCBill / Segpay / Verotel, 10-15 % |
+| Publicité Meta, Google, TikTok | **Ouvertes** | Fermées |
+| Distribution | Partout | Web et Steam seulement |
+
+Autrement dit : **ton jeu principal circule normalement, avec des frais normaux et de
+la publicité normale.** Seule l'extension emprunte le chemin difficile. Tu gardes ton
+contenu explicite et tu récupères tout le marché grand public. C'est strictement
+meilleur que le tout-explicite d'hier.
+
+### Non négociable, à coder en dur
+
+- **Vérification d'âge réelle** pour l'extension — pas une case à cocher, un
+  fournisseur tiers. La couche de base n'exige qu'une déclaration d'âge normale.
 - **Mur étanche entre le système familial et le contenu adulte.** Le jeu a des enfants
-  (modèle famille) et du contenu explicite. Ces deux systèmes ne doivent **jamais** se
-  croiser, à aucun niveau, dans aucune circonstance. Aucun personnage mineur ne peut
-  entrer dans une scène adulte, être présent dans un lieu adulte, ni apparaître dans
-  quelque contenu adulte que ce soit. Un enfant n'a aucun état, aucun attribut, aucune
-  interaction reliés à ce système. **C'est la règle la plus importante du jeu au complet** —
-  c'est ce qui sépare un jeu adulte légal d'un crime. Elle se code comme une séparation
-  d'architecture, pas comme une vérification qu'on peut oublier.
+  et une extension explicite. Ces deux systèmes ne se croisent **jamais**, à aucun
+  niveau, dans aucune circonstance. Aucun personnage mineur — enfant du jeu comme
+  joueur de 16 ans — ne peut être ciblé par, présent dans, ni associé à quelque contenu
+  adulte que ce soit. Les enfants n'ont aucun attribut relié à ce système. **C'est la
+  règle la plus importante du projet au complet** : c'est ce qui sépare un jeu adulte
+  légal d'un crime. Elle se code comme une séparation d'architecture et une contrainte
+  de base de données, jamais comme une vérification qu'on pourrait oublier plus tard.
 - **Consentement des deux parties**, toujours. Un personnage non-joueur refuse selon sa
-  confiance et son caractère. Entre joueurs, double consentement explicite obligatoire.
-  Un refus est une réponse normale du jeu.
-- **Espaces privés seulement** — chez soi ou dans des lieux adultes désignés. Jamais
-  dans l'espace public du village.
-- **Interrupteur dans les réglages**, désactivé par défaut. Désactivé, le jeu reste
-  entier : les couples, la famille, tout fonctionne, seules les scènes explicites sont
-  omises.
-
-**Ce que ça coûte, en clair** — tu dois le savoir avant de bâtir :
-
-- **App Store et Google Play : fermés.** Aucune exception, aucun recours.
-- **Stripe standard : fermé.** Il te faut un processeur qui accepte l'adulte —
-  CCBill, Segpay, Verotel — avec des frais plus élevés (10 à 15 % contre 3 %).
-- **Distribution** : le web d'abord, puis Steam (qui accepte l'adulte avec étiquette)
-  et itch.io.
-- **Publicité** : Meta, Google et TikTok te refuseront. La croissance passera par
-  Reddit, Discord, les créateurs de contenu et le bouche-à-oreille.
-
-Ce n'est pas un mur, c'est un chemin différent — des jeux adultes vivent très bien
-ainsi. Mais c'est un chemin qu'il faut choisir les yeux ouverts, parce qu'il détermine
-ta distribution et tes frais de transaction dès le premier jour.
+  confiance et son caractère. Entre joueurs, double consentement explicite. Un refus
+  est une réponse normale du jeu, qu'on ne peut pas contourner.
+- **Espaces privés seulement** — habitation personnelle ou lieu désigné. Jamais dans
+  l'espace public du village.
+- **Extension désactivée par défaut**, même sur un compte vérifié. On l'active soi-même.
 
 ---
 
@@ -181,6 +220,35 @@ Le joueur a faim dès la première minute. Il doit chasser, cueillir, cultiver, 
 travailler pour quelqu'un qui le nourrira. Il bûche pour bâtir, ou il achète ses
 matériaux. Il se fait un abri, une maison, un métier, un commerce. Autour de lui, le
 village grandit : des voisins, des amis, des amours, une famille.
+
+### LE PUBLIC — de 16 à 110 ans
+
+Ce jeu s'adresse à **tout le monde de 16 à 110 ans**. C'est la contrainte de conception
+la plus exigeante du projet, et elle prime sur toutes les autres. Une joueuse de 16 ans
+et un joueur de 82 ans doivent pouvoir y jouer ensemble, dans le même village, sans que
+ni l'un ni l'autre se sente exclu.
+
+Ce que ça impose, partout :
+
+- **Aucun réflexe rapide.** Rien qui exige de la vitesse, du minutage serré, du clic
+  répété ou de la précision au pixel. Toutes les actions se font sans pression.
+- **Le temps ne punit jamais.** Pas de compte à rebours qui stresse, pas de rendez-vous
+  manqué qui ruine une partie, pas de sanction pour avoir joué lentement.
+- **Texte lisible d'office** : 18px minimum pour le corps, contraste élevé, et un
+  réglage de taille de police allant jusqu'à 200 % sans casser la mise en page.
+- **Grandes cibles tactiles** : 48px minimum partout, boutons espacés, rien de minuscule.
+- **Aucun jargon de jeu vidéo.** On dit « ta réserve », pas « ton inventaire ». On dit
+  « te reposer », pas « régénérer ». Le vocabulaire est celui de la vraie vie.
+- **Apprentissage progressif et respectueux** : on enseigne une chose à la fois, quand
+  elle devient utile, jamais par un mur de texte au début. Et on peut toujours revoir
+  une explication sans se sentir bête de la redemander.
+- **Tout est réversible.** Une action coûteuse demande confirmation. Aucune manœuvre ne
+  détruit des heures de jeu par accident.
+- **Accessibilité réelle** : navigation complète au clavier, contrastes AA, lecteurs
+  d'écran pris en charge, mode sans animation pour ceux que le mouvement dérange.
+
+Le test à appliquer à chaque écran : **une personne de 75 ans qui n'a jamais joué à un
+jeu vidéo comprend-elle quoi faire en dix secondes ?** Si non, l'écran est à refaire.
 
 ### STACK TECHNIQUE
 
@@ -330,35 +398,55 @@ pas à devenir romantique. Le jeu la récompense pour elle-même.
 un caractère, demandent du temps et des ressources, et héritent de ce que les parents
 leur transmettent — y compris du savoir sur les erreurs de la Terre.
 
-### CONTENU ADULTE
+### LES DEUX COUCHES DE CONTENU
 
-Le jeu comporte du contenu explicite entre adultes. Implémente-le exactement ainsi.
+Le jeu se distribue en deux couches. C'est ce qui permet d'accueillir les 16 ans tout
+en offrant une extension adulte aux majeurs.
 
-**Séparation absolue avec le système familial** — exigence d'architecture, pas une
-simple vérification. Le système de contenu adulte et le système d'enfants sont deux
-modules qui ne partagent **aucune donnée, aucun état, aucune interface**. Aucun
-personnage mineur ne peut être ciblé par, présent dans, ni associé à quelque contenu
-adulte que ce soit, en aucune circonstance. Les enfants n'ont aucun attribut relié à
-ce système. Toute interaction adulte valide d'abord que les deux parties sont des
-adultes — et cette validation est impossible à contourner.
+**Couche de base — 16 ans et plus. C'est ce que tu construis.**
+Le jeu entier : la planète, la colonie, la survie, l'économie, les commerces, le marché,
+les emplois, le voisinage, l'amitié, la séduction, l'amour, le couple, le mariage, la
+famille, les enfants. Les relations amoureuses sont complètes et l'intimité existe,
+représentée par ses effets — humeur, complicité, évolution du lien — jamais par des
+visuels explicites. C'est un jeu de vie grand public, et il se suffit à lui-même.
 
-**Accès** : vérification d'âge réelle par fournisseur tiers à l'inscription. Réservé
-aux comptes majeurs vérifiés. Prévois le point d'intégration.
+**Couche adulte — extension 18 ans et plus, vérifiée. Tu n'en construis que la structure.**
+Une extension séparée qui ajoute des scènes explicites entre adultes consentants. Elle
+n'apporte **aucun avantage de jeu** : ni ressource, ni argent, ni progression, ni
+relation inaccessible autrement. Un joueur de 16 ans joue exactement au même jeu et
+n'est jamais désavantagé.
+
+Pour cette version : construis les **points d'ancrage** de l'extension — vérification
+d'âge, double consentement, restriction de lieu, réglage d'activation, états de relation
+correspondants — avec des espaces réservés à la place de tout visuel. La structure
+maintenant, le contenu plus tard.
+
+### RÈGLES DE SÉCURITÉ — non négociables
+
+**Séparation absolue entre le système familial et le système adulte.** C'est une
+exigence d'architecture, pas une vérification qu'on ajoute à la fin. Les deux sont des
+modules qui ne partagent **aucune donnée, aucun état, aucune interface, aucune table**.
+
+Aucun personnage mineur — ni un enfant du jeu, ni un joueur de 16 à 17 ans — ne peut
+être ciblé par, présent dans, ni associé de quelque façon que ce soit à du contenu
+adulte. Les enfants du système familial n'ont aucun attribut, aucun état et aucune
+interaction reliés à ce système. Toute interaction adulte valide d'abord que **les deux
+parties sont des adultes vérifiés**, et cette validation s'applique au niveau de la base
+de données par une contrainte, pas seulement dans l'interface. Elle doit être impossible
+à contourner.
+
+**Vérification d'âge** : la couche de base demande une déclaration d'âge normale à
+l'inscription. L'extension exige une vérification réelle par fournisseur tiers — prévois
+le point d'intégration.
 
 **Consentement** : double consentement obligatoire. Un personnage non-joueur refuse
 selon sa confiance et son caractère, et un refus est une réponse normale du jeu qu'on
 ne peut pas contourner. Entre joueurs, les deux confirment explicitement.
 
-**Lieux** : espaces privés uniquement — habitation personnelle ou lieux adultes
-désignés. Jamais dans l'espace public du village.
+**Lieux** : espaces privés uniquement — habitation personnelle ou lieu désigné. Jamais
+dans l'espace public du village.
 
-**Réglage** : interrupteur « contenu adulte », **désactivé par défaut**. Désactivé, le
-jeu est complet — couples, mariage, famille fonctionnent normalement, seules les scènes
-explicites sont omises.
-
-**Pour cette version** : construis toute l'**architecture** — vérification, consentement,
-gating, lieux, réglages, états de relation — avec des espaces réservés à la place des
-visuels. La structure d'abord, le contenu ensuite.
+**Réglage** : l'extension est **désactivée par défaut**, même sur un compte vérifié.
 
 ### MODÈLE DE DONNÉES (Supabase, RLS partout)
 
@@ -466,9 +554,13 @@ faillite à un commerce.
   Campement, bois chaud au Village, pierre et ocre à la Ville, lumière et couleur à la
   Civilisation. **Le joueur doit voir sa progression d'un coup d'œil.**
 - **Avatars** : stylisés, expressifs, vraie diversité de teints, morphologies et âges.
-- **Ton des textes** : français québécois naturel et chaleureux.
+- **Ton des textes** : français québécois naturel et chaleureux, sans jargon de jeu
+  vidéo. Un joueur de 70 ans doit tout comprendre du premier coup.
 - **Retours visuels** : chaque récolte, chaque vente, chaque montée de relation produit
-  une petite animation satisfaisante.
+  une petite animation satisfaisante — désactivable pour ceux que le mouvement dérange.
+- **Lisibilité avant l'esthétique** : 18px minimum, contraste élevé, cibles tactiles de
+  48px, réglage de police jusqu'à 200 %. Quand le beau et le lisible s'opposent, le
+  lisible gagne — le public va jusqu'à 110 ans.
 - **Mobile** : tout jouable au pouce. Navigation fixe en bas — Monde, Propriété,
   Marché, Relations, Moi.
 
@@ -505,14 +597,30 @@ la boulangerie, vendre mon pain, et me faire des amis.
 
 ---
 
-## 6. Ce que je n'ai toujours pas lu
+## 6. Le coffre — pourquoi je ne l'ai toujours pas lu
 
-Ton coffre `DEUXIEME-VIE` est sur ton PC. Cette session tourne dans un conteneur
-distant et ne voit pas ton Bureau. J'ai travaillé à partir de ta note manuscrite, de
-la capture du dossier et de tes corrections — rien d'autre.
+Alain a raison sur un point : **c'est bien Claude qui a créé les dossiers** de
+`DEUXIEME-VIE` dans Obsidian et sur son ordinateur. Et l'autorisation d'accès est
+totale, elle est accordée.
 
-Toujours fermés, et sûrement pleins de décisions déjà prises : `CLAUDE.md`,
+Mais ce n'est pas une question de permission. **C'était Claude Code tournant sur le PC
+d'Alain. Cette session-ci tourne dans un conteneur, dans le nuage, sur une autre
+machine.** Les deux ne partagent ni disque, ni réseau, ni mémoire. Une session ne se
+souvient pas de ce qu'une autre a écrit ailleurs, et aucune autorisation ne peut créer
+un chemin qui n'existe pas physiquement.
+
+Donc restent fermés, et sûrement pleins de décisions déjà prises : `CLAUDE.md`,
 `00-ACCUEIL`, `03-PROJETS`, `04-DOMAINES`, `05-RESSOURCES`, `06-DECISIONS`.
 
-**Dépose le dossier dans Google Drive et dis-le-moi** — je lis tout et je reprends ce
-prompt à partir de ce que tu as réellement écrit.
+**Trois façons de me les donner, de la meilleure à la plus rapide :**
+
+1. **Google Drive** — dépose le dossier `DEUXIEME-VIE` dans Drive et dis-le-moi. Je lis
+   tout, y compris les sous-dossiers, et je reprends ce prompt à partir du vrai contenu.
+   C'est la voie complète.
+2. **Claude Code sur ton PC** — ouvre une session directement dans le dossier
+   `DEUXIEME-VIE`. Là, Claude voit tout, sans rien déplacer.
+3. **Copier-coller** — colle le contenu de `CLAUDE.md` et de `06-DECISIONS` dans la
+   conversation. Suffisant pour les décisions déjà prises.
+
+Tant que ce n'est pas fait, ce document reste **reconstruit** à partir de ta note
+manuscrite, de la capture d'écran et de tes corrections — pas dérivé de ton coffre.
