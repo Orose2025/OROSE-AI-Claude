@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test du micro — OROSE AI</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #666666;
+    --border: #d8d8d8;
+    --card: #f7f7f5;
+    --ok: #1a7f4b;
+    --bad: #c0392b;
+    --warn: #b8860b;
+    --accent: #c2185b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #191817;
+      --fg: #f0efed;
+      --muted: #a3a09b;
+      --border: #3a3836;
+      --card: #232120;
+      --ok: #4ade80;
+      --bad: #f87171;
+      --warn: #fbbf24;
+      --accent: #f472b6;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 24px 16px 64px;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+  }
+  main { max-width: 720px; margin: 0 auto; }
+  h1 { font-size: 1.5rem; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 28px; font-size: 0.95rem; }
+  h2 { font-size: 1.05rem; margin: 32px 0 12px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .row { display: flex; gap: 10px; align-items: baseline; padding: 6px 0; }
+  .row + .row { border-top: 1px solid var(--border); }
+  .label { flex: 0 0 190px; color: var(--muted); font-size: 0.9rem; }
+  .value { flex: 1; word-break: break-word; }
+  .ok { color: var(--ok); font-weight: 600; }
+  .bad { color: var(--bad); font-weight: 600; }
+  .warn { color: var(--warn); font-weight: 600; }
+  button {
+    font: inherit;
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+  }
+  button:disabled { opacity: 0.5; cursor: default; }
+  button.secondary { background: transparent; color: var(--fg); border-color: var(--border); }
+  .meter {
+    height: 28px;
+    border-radius: 6px;
+    background: var(--border);
+    overflow: hidden;
+    margin: 14px 0 6px;
+  }
+  .meter > div {
+    height: 100%;
+    width: 0%;
+    background: var(--ok);
+    transition: width 60ms linear;
+  }
+  .verdict {
+    border-left: 4px solid var(--border);
+    padding: 12px 14px;
+    margin-top: 14px;
+    border-radius: 0 8px 8px 0;
+    background: var(--card);
+    display: none;
+  }
+  .verdict.show { display: block; }
+  .verdict.good { border-left-color: var(--ok); }
+  .verdict.bad { border-left-color: var(--bad); }
+  ul { padding-left: 20px; }
+  li { margin: 6px 0; }
+  code {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-size: 0.88em;
+  }
+  #transcript {
+    min-height: 70px;
+    padding: 12px;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    margin-top: 12px;
+    color: var(--muted);
+  }
+  #transcript.filled { color: var(--fg); border-style: solid; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Test du micro</h1>
+  <p class="sub">Ouvre cette page dans le même navigateur que celui où la dictée ne marche pas, puis lance le test.</p>
+
+  <h2>1. Environnement</h2>
+  <div class="card" id="env"></div>
+
+  <h2>2. Test du micro</h2>
+  <div class="card">
+    <button id="start">Démarrer le test</button>
+    <button id="stop" class="secondary" disabled>Arrêter</button>
+    <div class="meter"><div id="bar"></div></div>
+    <p class="sub" id="hint" style="margin:0">Parle normalement : la barre doit bouger.</p>
+    <div class="verdict" id="verdict"></div>
+  </div>
+
+  <h2>3. Périphériques d'entrée détectés</h2>
+  <div class="card" id="devices">
+    <span class="sub">Lance le test ci-dessus pour voir la liste (les noms ne sont visibles qu'après autorisation).</span>
+  </div>
+
+  <h2>4. Test de dictée (reconnaissance vocale)</h2>
+  <div class="card">
+    <button id="dictate" class="secondary">Dicter en français</button>
+    <div id="transcript">Le texte reconnu s'affichera ici.</div>
+  </div>
+
+  <h2>Comment lire le résultat</h2>
+  <div class="card">
+    <ul>
+      <li><strong>La barre bouge quand tu parles</strong> → ton micro, tes pilotes et les permissions du navigateur sont bons. Le problème vient alors de l'app Claude elle-même : vérifie l'autorisation micro accordée au site <code>claude.ai</code> (cadenas dans la barre d'adresse → Micro → Autoriser), puis recharge la page.</li>
+      <li><strong>Erreur « permission refusée »</strong> → l'autorisation a été bloquée. Clique sur le cadenas dans la barre d'adresse, remets le micro sur « Autoriser », puis recharge.</li>
+      <li><strong>Erreur « aucun micro trouvé »</strong> → aucun périphérique d'entrée n'est vu par le système. Rebranche le micro / le casque, ou change le périphérique d'entrée par défaut dans les réglages du système.</li>
+      <li><strong>Erreur « micro déjà utilisé »</strong> → une autre application le monopolise (Zoom, Teams, Meet, Discord, OBS). Ferme-la complètement, puis relance le test.</li>
+      <li><strong>La barre ne bouge pas mais aucune erreur</strong> → le navigateur écoute le mauvais périphérique. Choisis le bon micro dans les réglages du système, puis relance.</li>
+      <li><strong>Autorisation impossible à donner</strong> → au niveau du système : macOS <em>Réglages → Confidentialité et sécurité → Microphone</em> ; Windows <em>Paramètres → Confidentialité → Microphone</em>. Le navigateur doit y être autorisé.</li>
+    </ul>
+  </div>
+</main>
+
+<script>
+(function () {
+  var envEl = document.getElementById('env');
+  var devicesEl = document.getElementById('devices');
+  var barEl = document.getElementById('bar');
+  var hintEl = document.getElementById('hint');
+  var verdictEl = document.getElementById('verdict');
+  var startBtn = document.getElementById('start');
+  var stopBtn = document.getElementById('stop');
+  var dictateBtn = document.getElementById('dictate');
+  var transcriptEl = document.getElementById('transcript');
+
+  var stream = null;
+  var audioCtx = null;
+  var raf = null;
+  var peak = 0;
+
+  function row(label, value, cls) {
+    var d = document.createElement('div');
+    d.className = 'row';
+    var l = document.createElement('span');
+    l.className = 'label';
+    l.textContent = label;
+    var v = document.createElement('span');
+    v.className = 'value' + (cls ? ' ' + cls : '');
+    v.textContent = value;
+    d.appendChild(l);
+    d.appendChild(v);
+    return d;
+  }
+
+  // --- 1. Environnement ---
+  var secure = window.isSecureContext;
+  var hasGUM = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+  var hasSR = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+
+  envEl.appendChild(row('Origine', location.origin || location.protocol));
+  envEl.appendChild(row(
+    'Contexte sécurisé',
+    secure ? 'oui' : 'NON — le micro est bloqué hors HTTPS',
+    secure ? 'ok' : 'bad'
+  ));
+  envEl.appendChild(row(
+    'API micro (getUserMedia)',
+    hasGUM ? 'disponible' : 'INDISPONIBLE',
+    hasGUM ? 'ok' : 'bad'
+  ));
+  envEl.appendChild(row(
+    'API dictée (SpeechRecognition)',
+    hasSR ? 'disponible' : 'non supportée par ce navigateur',
+    hasSR ? 'ok' : 'warn'
+  ));
+  envEl.appendChild(row('Navigateur', navigator.userAgent));
+
+  if (navigator.permissions && navigator.permissions.query) {
+    navigator.permissions.query({ name: 'microphone' }).then(function (st) {
+      var map = { granted: 'accordée', denied: 'REFUSÉE', prompt: 'sera demandée' };
+      var cls = st.state === 'granted' ? 'ok' : (st.state === 'denied' ? 'bad' : 'warn');
+      envEl.appendChild(row('Permission micro', map[st.state] || st.state, cls));
+    }).catch(function () { /* non supporté : sans conséquence */ });
+  }
+
+  if (!hasSR) dictateBtn.disabled = true;
+
+  // --- 2. Test du micro ---
+  function showVerdict(good, html) {
+    verdictEl.className = 'verdict show ' + (good ? 'good' : 'bad');
+    verdictEl.innerHTML = html;
+  }
+
+  function explain(err) {
+    var name = err && err.name ? err.name : 'Erreur';
+    var msgs = {
+      NotAllowedError: 'Permission refusée. Clique sur le cadenas dans la barre d\'adresse, autorise le micro, puis recharge la page. Si l\'option est grisée, débloque d\'abord le navigateur dans les réglages micro du système.',
+      SecurityError: 'Permission refusée par la politique de sécurité. La page doit être servie en HTTPS (ou ouverte en fichier local).',
+      NotFoundError: 'Aucun micro détecté par le système. Rebranche le micro ou le casque, puis relance.',
+      DevicesNotFoundError: 'Aucun micro détecté par le système. Rebranche le micro ou le casque, puis relance.',
+      NotReadableError: 'Le micro est déjà utilisé par une autre application (Zoom, Teams, Meet, Discord, OBS). Ferme-la entièrement, puis relance.',
+      TrackStartError: 'Le micro est déjà utilisé par une autre application. Ferme-la entièrement, puis relance.',
+      OverconstrainedError: 'Le périphérique demandé n\'est pas disponible. Change le micro par défaut dans les réglages du système.',
+      AbortError: 'Le système a interrompu l\'accès au micro. Redémarre le navigateur, puis relance.'
+    };
+    return '<strong>' + name + '</strong><br>' + (msgs[name] || (err && err.message) || 'Erreur inconnue.');
+  }
+
+  function listDevices() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return;
+    navigator.mediaDevices.enumerateDevices().then(function (list) {
+      var inputs = list.filter(function (d) { return d.kind === 'audioinput'; });
+      devicesEl.innerHTML = '';
+      if (!inputs.length) {
+        devicesEl.appendChild(row('Résultat', 'Aucun micro détecté', 'bad'));
+        return;
+      }
+      inputs.forEach(function (d, i) {
+        devicesEl.appendChild(row('Micro ' + (i + 1), d.label || '(nom masqué — autorisation requise)'));
+      });
+    }).catch(function () { /* rien à afficher */ });
+  }
+
+  function loop(analyser, data) {
+    analyser.getByteTimeDomainData(data);
+    var max = 0;
+    for (var i = 0; i < data.length; i++) {
+      var v = Math.abs(data[i] - 128);
+      if (v > max) max = v;
+    }
+    var level = Math.min(100, Math.round((max / 128) * 300));
+    barEl.style.width = level + '%';
+    if (level > peak) peak = level;
+
+    if (peak > 6 && !verdictEl.classList.contains('show')) {
+      showVerdict(true,
+        '<strong>Le micro fonctionne.</strong> Le son arrive bien jusqu\'au navigateur. ' +
+        'La panne de dictée vient donc de l\'app Claude : ouvre <code>claude.ai</code>, clique sur le cadenas ' +
+        'dans la barre d\'adresse, autorise le micro, puis recharge la page.');
+    }
+    raf = requestAnimationFrame(function () { loop(analyser, data); });
+  }
+
+  startBtn.addEventListener('click', function () {
+    verdictEl.className = 'verdict';
+    peak = 0;
+    startBtn.disabled = true;
+    hintEl.textContent = 'Autorise l\'accès au micro dans la fenêtre du navigateur…';
+
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(function (s) {
+      stream = s;
+      stopBtn.disabled = false;
+      hintEl.textContent = 'Parle normalement : la barre doit bouger.';
+      listDevices();
+
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new Ctx();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      var src = audioCtx.createMediaStreamSource(stream);
+      var analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 2048;
+      src.connect(analyser);
+      loop(analyser, new Uint8Array(analyser.fftSize));
+
+      setTimeout(function () {
+        if (peak <= 6 && stream) {
+          showVerdict(false,
+            '<strong>Autorisation accordée, mais aucun son ne rentre.</strong> ' +
+            'Le navigateur écoute probablement le mauvais périphérique, ou le micro est coupé (mute matériel). ' +
+            'Choisis le bon micro dans les réglages du système, vérifie qu\'il n\'est pas muet, puis relance le test.');
+        }
+      }, 6000);
+    }).catch(function (err) {
+      startBtn.disabled = false;
+      hintEl.textContent = 'Le test n\'a pas pu démarrer.';
+      showVerdict(false, explain(err));
+      listDevices();
+    });
+  });
+
+  stopBtn.addEventListener('click', function () {
+    if (raf) { cancelAnimationFrame(raf); raf = null; }
+    if (stream) {
+      stream.getTracks().forEach(function (t) { t.stop(); });
+      stream = null;
+    }
+    if (audioCtx) { audioCtx.close(); audioCtx = null; }
+    barEl.style.width = '0%';
+    startBtn.disabled = false;
+    stopBtn.disabled = true;
+    hintEl.textContent = 'Test arrêté.';
+  });
+
+  // --- 4. Dictée ---
+  var recognition = null;
+  dictateBtn.addEventListener('click', function () {
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) return;
+
+    if (recognition) {
+      recognition.stop();
+      return;
+    }
+
+    recognition = new SR();
+    recognition.lang = 'fr-FR';
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    var settled = '';
+    transcriptEl.textContent = 'Écoute en cours… parle maintenant.';
+    transcriptEl.className = '';
+    dictateBtn.textContent = 'Arrêter la dictée';
+
+    recognition.onresult = function (e) {
+      var interim = '';
+      for (var i = e.resultIndex; i < e.results.length; i++) {
+        if (e.results[i].isFinal) settled += e.results[i][0].transcript;
+        else interim += e.results[i][0].transcript;
+      }
+      transcriptEl.textContent = (settled + interim) || 'Écoute en cours…';
+      transcriptEl.className = 'filled';
+    };
+
+    recognition.onerror = function (e) {
+      var msgs = {
+        'not-allowed': 'Permission micro refusée pour la dictée.',
+        'service-not-allowed': 'Le service de reconnaissance vocale est bloqué par le navigateur ou le système.',
+        'no-speech': 'Aucune parole détectée.',
+        'audio-capture': 'Aucun micro accessible.',
+        'network': 'La reconnaissance vocale n\'a pas pu joindre son service en ligne.'
+      };
+      transcriptEl.textContent = 'Erreur : ' + (msgs[e.error] || e.error);
+      transcriptEl.className = 'filled';
+    };
+
+    recognition.onend = function () {
+      recognition = null;
+      dictateBtn.textContent = 'Dicter en français';
+    };
+
+    recognition.start();
+  });
+})();
+</script>
+</body>
+</html>
