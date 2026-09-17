@@ -18,6 +18,9 @@ import App from '../App';
 // jsdom n'implémente pas scrollIntoView, utilisé par l'auto-défilement.
 beforeEach(() => {
   Element.prototype.scrollIntoView = vi.fn();
+  // Les conversations sont persistées : sans ce nettoyage, un cas hériterait
+  // de l'historique du précédent et démarrerait sur la conversation ouverte.
+  localStorage.clear();
 });
 
 // Sans globals, @testing-library ne démonte pas automatiquement entre les cas.
@@ -31,7 +34,8 @@ function dernierHistorique(): ChatMessage[] {
 
 async function envoyer(texte: string) {
   render(<App />);
-  fireEvent.click(screen.getAllByText(/Commencer/i)[0]);
+  const entrer = screen.queryAllByText(/Commencer/i);
+  if (entrer.length > 0) fireEvent.click(entrer[0]);
   const zone = await screen.findByPlaceholderText('Écrivez votre message...');
   fireEvent.change(zone, { target: { value: texte } });
   fireEvent.click(screen.getByLabelText('Envoyer le message'));
@@ -42,6 +46,7 @@ describe("l'historique envoyé au moteur", () => {
   beforeEach(() => {
     askAldup.mockClear();
   });
+
 
   it("contient la question de l'utilisateur", async () => {
     await envoyer('Combien font 12 fois 8 ?');
