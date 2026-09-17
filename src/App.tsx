@@ -1,12 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { askAldup, AllProvidersFailedError, CancelledError } from './lib/ai/client';
-
-interface Message {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-  timestamp: Date;
-}
+import ChatMessage, { type Message } from './components/ChatMessage';
+import { chargerSessions, sauverSessions, type SessionStockee } from './lib/storage';
 
 interface ChatSession {
   id: string;
@@ -19,9 +14,21 @@ const buildTitle = (content: string) =>
   content.slice(0, 50) + (content.length > 50 ? '...' : '');
 
 function App() {
-  const [showLanding, setShowLanding] = useState(true);
-  const [sessions, setSessions] = useState<ChatSession[]>([]);
-  const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
+  // Lecture unique du stockage : elle sert à la fois aux conversations, à
+  // l'écran affiché au démarrage et à la conversation rouverte.
+  const [sessions, setSessions] = useState<ChatSession[]>(() =>
+    chargerSessions().map(s => ({
+      ...s,
+      createdAt: new Date(s.createdAt),
+      messages: s.messages.map(m => ({ ...m, timestamp: new Date(m.timestamp) })),
+    })),
+  );
+  // Revenir sur le site avec un historique doit rouvrir la conversation, pas
+  // renvoyer sur la page de présentation.
+  const [showLanding, setShowLanding] = useState(() => sessions.length === 0);
+  const [activeSessionId, setActiveSessionId] = useState<string | null>(
+    () => sessions[0]?.id ?? null,
+  );
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [showDonateModal, setShowDonateModal] = useState(false);
@@ -36,6 +43,22 @@ function App() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
+
+  // Les conversations survivent au rechargement de la page.
+  useEffect(() => {
+    const stockables: SessionStockee[] = sessions.map(s => ({
+      id: s.id,
+      title: s.title,
+      createdAt: s.createdAt.toISOString(),
+      messages: s.messages.map(m => ({
+        id: m.id,
+        role: m.role,
+        content: m.content,
+        timestamp: m.timestamp.toISOString(),
+      })),
+    }));
+    sauverSessions(stockables);
+  }, [sessions]);
 
   // Auto-resize textarea
   useEffect(() => {
@@ -65,7 +88,10 @@ function App() {
     }
   };
 
-  const handleSendMessage = useCallback(async (content: string) => {
+  // `base` remplace l'historique de la session quand il est fourni : « Régénérer »
+  // s'en sert pour repartir d'avant la réponse à refaire, sans dépendre d'un
+  // setSessions dont l'effet n'est visible qu'au rendu suivant.
+  const handleSendMessage = useCallback(async (content: string, base?: Message[]) => {
     if (!content.trim()) return;
 
     const sessionId = activeSessionId ?? `session-${Date.now()}`;
@@ -82,9 +108,8 @@ function App() {
     // l'intérieur laissait un historique vide, et le moteur ne recevait que le
     // system prompt — d'où la même réponse d'accueil à toutes les questions.
     const sessionCourante = sessions.find(s => s.id === sessionId);
-    const history: Message[] = sessionCourante
-      ? [...sessionCourante.messages, userMsg]
-      : [userMsg];
+    const precedents = base ?? sessionCourante?.messages ?? [];
+    const history: Message[] = [...precedents, userMsg];
 
     setSessions(prev => {
       const existing = prev.find(s => s.id === sessionId);
@@ -97,10 +122,11 @@ function App() {
         };
         return [newSession, ...prev];
       }
+      const anterieurs = base ?? existing.messages;
       return prev.map(s => s.id === sessionId ? {
         ...s,
-        messages: [...s.messages, userMsg],
-        title: s.messages.length === 0 ? buildTitle(content) : s.title
+        messages: [...anterieurs, userMsg],
+        title: anterieurs.length === 0 ? buildTitle(content) : s.title
       } : s);
     });
 
@@ -165,6 +191,17 @@ function App() {
     setIsTyping(false);
   };
 
+  // Refait la dernière réponse : on repart de l'historique tel qu'il était
+  // juste avant la dernière question, puis on la repose.
+  const handleRegenerate = useCallback(() => {
+    if (isTyping) return;
+    const session = sessions.find(s => s.id === activeSessionId);
+    if (!session) return;
+    const index = session.messages.map(m => m.role).lastIndexOf('user');
+    if (index === -1) return;
+    handleSendMessage(session.messages[index].content, session.messages.slice(0, index));
+  }, [sessions, activeSessionId, isTyping, handleSendMessage]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim() && !isTyping) {
@@ -180,14 +217,6 @@ function App() {
     }
   };
 
-  // Format markdown basique
-  const formatContent = (text: string) => {
-    return text
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.*?)\*/g, '<em>$1</em>')
-      .replace(/`(.*?)`/g, '<code class="bg-gray-800/50 px-1.5 py-0.5 rounded text-sm font-mono">$1</code>')
-      .replace(/\n/g, '<br/>');
-  };
 
   // Landing Page - Design Premium
   if (showLanding) {
@@ -492,33 +521,14 @@ function App() {
           ) : (
             <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-8">
               {messages.map((msg, idx) => (
-                <div key={msg.id} className={`flex gap-4 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  {msg.role === 'assistant' && (
-                    <div className="w-8 h-8 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-purple-500/10">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="text-white">
-                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="currentColor"/>
-                      </svg>
-                    </div>
-                  )}
-                  <div className={`max-w-[85%] ${
-                    msg.role === 'user'
-                      ? 'bg-gradient-to-br from-blue-600 to-purple-600 text-white px-5 py-3.5 rounded-2xl rounded-br-md shadow-lg shadow-blue-600/10'
-                      : 'bg-white/[0.04] text-gray-200 px-5 py-4 rounded-2xl rounded-bl-md border border-white/5'
-                  }`}>
-                    <div 
-                      className="text-sm leading-relaxed"
-                      dangerouslySetInnerHTML={{ __html: formatContent(msg.content) }}
-                    />
-                  </div>
-                  {msg.role === 'user' && (
-                    <div className="w-8 h-8 bg-white/10 rounded-xl flex items-center justify-center shrink-0 border border-white/10">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-300">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                      </svg>
-                    </div>
-                  )}
-                </div>
+                <ChatMessage
+                  key={msg.id}
+                  msg={msg}
+                  actionsVisibles={
+                    msg.role === 'assistant' && idx === messages.length - 1 && !isTyping
+                  }
+                  onRegenerer={handleRegenerate}
+                />
               ))}
 
               {isTyping && messages[messages.length - 1]?.role !== 'assistant' && (
