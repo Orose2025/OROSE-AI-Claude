@@ -1,0 +1,40 @@
+import { describe, it, expect, beforeAll } from 'vitest';
+import { build } from 'vite';
+import { readFileSync, readdirSync, rmSync } from 'node:fs';
+import { join } from 'node:path';
+
+// Construit réellement le projet et inspecte la feuille de style produite :
+// c'est le seul moyen de vérifier ce que le navigateur recevra en production.
+const OUT = 'dist-test-styles';
+let css = '';
+
+beforeAll(async () => {
+  rmSync(OUT, { recursive: true, force: true });
+  await build({
+    logLevel: 'silent',
+    build: { outDir: OUT, emptyOutDir: true },
+  });
+  const dir = join(OUT, 'assets');
+  const nom = readdirSync(dir).find((f: string) => f.endsWith('.css'));
+  if (!nom) throw new Error(`Aucun fichier CSS produit dans ${dir}`);
+  css = readFileSync(join(dir, nom), 'utf8');
+}, 120_000);
+
+describe('la feuille de style de production', () => {
+  it('contient les utilitaires Tailwind', () => {
+    expect(css).toContain('.flex{display:flex}');
+    expect(css).toContain('.min-h-screen{min-height:100vh}');
+  });
+
+  // Sans le preflight, les boutons et les champs gardent l'apparence native du
+  // navigateur : bordure grise, police système. C'est le symptôme signalé.
+  it('contient le preflight qui neutralise le style natif des contrôles', () => {
+    expect(css).toMatch(/button[^{]*\{[^}]*appearance:button/);
+    expect(css).toMatch(/font:inherit/);
+  });
+
+  it('réinitialise les marges et les listes', () => {
+    expect(css).toMatch(/margin:0/);
+    expect(css).toMatch(/list-style:none/);
+  });
+});

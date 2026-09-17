@@ -1,8 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Tailwind v4 : un seul point d'entrée, qui apporte le thème, le preflight
+   (reset des boutons, champs, titres et listes) et les utilitaires. Les
+   anciennes directives @tailwind base/components/utilities sont celles de la
+   v3 : les utilitaires étaient encore générés, mais pas le preflight, d'où
+   des contrôles qui gardaient l'apparence native du navigateur. */
+@import "tailwindcss";
 
 * {
   margin: 0;
