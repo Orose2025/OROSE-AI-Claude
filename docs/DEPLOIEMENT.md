@@ -10,7 +10,28 @@ npm run dev
 L'application s'ouvre sur http://localhost:3000 et fonctionne immédiatement :
 sans configuration, elle utilise les sources IA qui ne demandent pas de clé.
 
-## Le déploiement automatique
+## Pour tester : GitHub Pages (aucun secret)
+
+C'est la voie la plus simple. Aucune clé, aucun compte de service : le jeton
+que GitHub fournit tout seul suffit.
+
+**Adresse du site :** https://orose2025.github.io/OROSE-AI-Claude/
+
+### Une seule chose à activer, une fois
+
+Dans GitHub : **Settings → Pages → Build and deployment → Source** →
+choisir **« GitHub Actions »**. C'est tout, il n'y a rien à coller.
+
+### Ensuite
+
+Le workflow `.github/workflows/github-pages.yml` construit l'application et la
+publie à chaque push sur `main`. Le chemin de base `/OROSE-AI-Claude/` est
+géré automatiquement (variable `VITE_BASE_PATH`) ; en local et sur Firebase la
+base reste `/`.
+
+## Firebase Hosting (facultatif, plus tard)
+
+### Le déploiement automatique
 
 Un seul workflow s'occupe de tout :
 `.github/workflows/firebase-hosting-ai-aldup.yml`
@@ -21,7 +42,7 @@ Un seul workflow s'occupe de tout :
 | Ouverture d'une Pull Request | Un lien d'aperçu privé est publié en commentaire (7 jours) |
 | Bouton « Run workflow » | Déploiement manuel |
 
-### Où ça se déploie
+#### Où ça se déploie
 
 - Projet Firebase : `alaindupont-projet`
 - Site : **`ai-aldup` uniquement**
@@ -29,7 +50,7 @@ Un seul workflow s'occupe de tout :
 La cible est écrite directement dans `.firebaserc`, donc **aucune commande
 `firebase target:apply` n'est nécessaire**.
 
-### Les sites protégés
+#### Les sites protégés
 
 `alaindupont-projet` (jeu.echecocube.ca) et `associe-numerique` ne sont jamais
 touchés. Trois protections :
@@ -39,7 +60,7 @@ touchés. Trois protections :
 3. Une étape « Garde-fou » arrête le déploiement si un nom de site interdit
    apparaît, s'il y a plus d'une cible, ou si la cible n'est pas `ai-aldup`
 
-## La seule chose à configurer : le secret
+### Le secret, si vous voulez activer Firebase
 
 1. https://console.cloud.google.com/iam-admin/serviceaccounts?project=alaindupont-projet
 2. « Créer un compte de service » → nom : `github-deploy-ai-aldup`
@@ -49,9 +70,9 @@ touchés. Trois protections :
    - Nom : `FIREBASE_SERVICE_ACCOUNT_ALAINDUPONT_PROJET`
    - Valeur : tout le contenu du fichier JSON
 
-Tant que le secret n'est pas ajouté : sur une Pull Request l'aperçu est
-simplement sauté (le workflow reste vert) ; sur `main` le déploiement échoue
-avec un message clair, pour que ça ne passe pas inaperçu.
+Tant que le secret n'est pas ajouté, le déploiement Firebase est **simplement
+sauté** et le workflow reste vert — sur une Pull Request comme sur `main`. Rien
+ne casse : l'application reste publiée sur GitHub Pages.
 
 ## La passerelle (sources à clé) — facultative
 

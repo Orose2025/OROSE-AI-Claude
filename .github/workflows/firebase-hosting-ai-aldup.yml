@@ -3,6 +3,10 @@ name: Déploiement ai-aldup
 # Construit l'application (Vite -> dossier dist) puis la publie sur le site
 # Firebase Hosting "ai-aldup" du projet "alaindupont-projet".
 #
+# Facultatif : sans le secret FIREBASE_SERVICE_ACCOUNT_ALAINDUPONT_PROJET, le
+# déploiement est simplement sauté et le workflow reste vert. La publication de
+# test se fait sur GitHub Pages (workflow github-pages.yml), sans aucun secret.
+#
 # Les sites "alaindupont-projet" (jeu.echecocube.ca) et "associe-numerique"
 # ne sont jamais touchés : la cible est verrouillée dans .firebaserc et
 # vérifiée par l'étape « Garde-fou » ci-dessous.
@@ -92,12 +96,13 @@ jobs:
           target: ${{ env.FIREBASE_TARGET }}
           expires: 7d
 
-      - name: Secret manquant pour la mise en ligne
-        if: github.event_name != 'pull_request' && steps.secret.outputs.present != 'true'
+      - name: Déploiement Firebase sauté
+        if: steps.secret.outputs.present != 'true'
         run: |
-          echo "Le secret FIREBASE_SERVICE_ACCOUNT_ALAINDUPONT_PROJET est absent."
-          echo "Ajoutez-le dans Settings > Secrets and variables > Actions (voir docs/DEPLOIEMENT.md)."
-          exit 1
+          echo "Le secret FIREBASE_SERVICE_ACCOUNT_ALAINDUPONT_PROJET est absent :"
+          echo "le déploiement Firebase est sauté, ce n'est pas une erreur."
+          echo "L'application est publiée sur GitHub Pages, qui ne demande aucun secret."
+          echo "Pour activer Firebase plus tard, voir docs/DEPLOIEMENT.md."
 
       - name: Mise en ligne
         if: github.event_name != 'pull_request' && steps.secret.outputs.present == 'true'
