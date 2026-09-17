@@ -77,13 +77,18 @@ function App() {
       timestamp: new Date()
     };
 
-    // Historique envoyé au moteur : l'état React n'est pas encore à jour ici.
-    let history: Message[] = [];
+    // L'historique doit être calculé ici, de façon synchrone. La fonction passée
+    // à setSessions n'est exécutée qu'au rendu suivant : la remplir depuis
+    // l'intérieur laissait un historique vide, et le moteur ne recevait que le
+    // system prompt — d'où la même réponse d'accueil à toutes les questions.
+    const sessionCourante = sessions.find(s => s.id === sessionId);
+    const history: Message[] = sessionCourante
+      ? [...sessionCourante.messages, userMsg]
+      : [userMsg];
 
     setSessions(prev => {
       const existing = prev.find(s => s.id === sessionId);
       if (!existing) {
-        history = [userMsg];
         const newSession: ChatSession = {
           id: sessionId,
           title: buildTitle(content),
@@ -92,7 +97,6 @@ function App() {
         };
         return [newSession, ...prev];
       }
-      history = [...existing.messages, userMsg];
       return prev.map(s => s.id === sessionId ? {
         ...s,
         messages: [...s.messages, userMsg],
@@ -153,7 +157,7 @@ function App() {
     }
 
     setIsTyping(false);
-  }, [activeSessionId]);
+  }, [activeSessionId, sessions]);
 
   const handleStop = () => {
     abortRef.current?.abort();
