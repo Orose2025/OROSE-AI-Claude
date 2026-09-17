@@ -1,0 +1,13 @@
+{
+  "name": "ai-aldup-functions",
+  "private": true,
+  "type": "module",
+  "main": "index.mjs",
+  "engines": { "node": "20" },
+  "scripts": {
+    "serve": "firebase emulators:start --only functions"
+  },
+  "dependencies": {
+    "firebase-functions": "^5.0.0"
+  }
+}

@@ -1,0 +1,71 @@
+name: Publication GitHub Pages
+
+# Publie l'application sur GitHub Pages, sans aucun secret à configurer :
+# le GITHUB_TOKEN fourni automatiquement par GitHub suffit.
+#
+# Adresse du site : https://orose2025.github.io/OROSE-AI-Claude/
+#
+# Ce workflow ne touche à aucun site Firebase.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Une seule publication à la fois ; on laisse finir celle en cours.
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - run: npm ci
+
+      - name: Construire l'application
+        run: npm run build
+        env:
+          # Le site est servi depuis /OROSE-AI-Claude/ et non depuis la racine.
+          VITE_BASE_PATH: /OROSE-AI-Claude/
+          VITE_AI_GATEWAY_URL: ${{ vars.VITE_AI_GATEWAY_URL }}
+
+      - name: Vérifier le chemin de base
+        run: |
+          test -f dist/index.html || { echo "ERREUR: dist/index.html absent."; exit 1; }
+          grep -q '"/OROSE-AI-Claude/assets/' dist/index.html || {
+            echo "ERREUR: dist/index.html ne pointe pas vers /OROSE-AI-Claude/assets/."
+            echo "--- contenu ---"; cat dist/index.html; exit 1; }
+          echo "OK : les fichiers sont référencés sous /OROSE-AI-Claude/."
+
+      # GitHub Pages ne sert pas les fichiers commençant par un souligné et
+      # n'a pas besoin du traitement Jekyll.
+      - run: touch dist/.nojekyll
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
