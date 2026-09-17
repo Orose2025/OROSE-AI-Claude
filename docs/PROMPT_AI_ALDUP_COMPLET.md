@@ -1,23 +1,23 @@
-# 🚀 AI ALDUP — PROMPT DE CONCEPTION COMPLÈTE (A à Z)
+# 🚀 AIDUP — PROMPT DE CONCEPTION COMPLÈTE (A à Z)
 
 ---
 
 ## 📌 1. CONCEPT GLOBAL
 
-**Nom de l'application :** AI Aldup
+**Nom de l'application :** AIDup
 **Type :** Application Web (SaaS)
 **Plateforme :** Firebase (Google)
 **Langue principale :** Français (multi-langue possible)
 
 ### 🎯 Vision
-AI Aldup est une application web qui regroupe toutes les intelligences artificielles gratuites disponibles sur le marché (ChatGPT free, Claude free, Gemini free, Mistral, Llama, DeepSeek, Qwen, Phi, etc.) en une seule interface unifiée. L'utilisateur ne voit qu'un seul assistant : "AI Aldup". En arrière-plan, l'application puise dans toutes les sources IA gratuites et switch automatiquement d'une source à l'autre quand l'une est épuisée ou indisponible.
+AIDup est une application web qui regroupe toutes les intelligences artificielles gratuites disponibles sur le marché (ChatGPT free, Claude free, Gemini free, Mistral, Llama, DeepSeek, Qwen, Phi, etc.) en une seule interface unifiée. L'utilisateur ne voit qu'un seul assistant : "AIDup". En arrière-plan, l'application puise dans toutes les sources IA gratuites et switch automatiquement d'une source à l'autre quand l'une est épuisée ou indisponible.
 
 ### 💡 Proposition de valeur
 - **Pour l'utilisateur :** Un seul accès, une seule interface, 100% gratuit, sans abonnement, sans limite apparente
-- **Pour AI Aldup :** Agrégation intelligente de toutes les IA gratuites, optimisation des ressources, service fiable et continu
+- **Pour AIDup :** Agrégation intelligente de toutes les IA gratuites, optimisation des ressources, service fiable et continu
 
 ### 🔐 Principe fondamental
-L'utilisateur ne doit JAMAIS savoir quelles sources d'IA sont utilisées en arrière-plan. Pour lui, c'est "AI Aldup" qui répond. Les sources sont totalement invisibles.
+L'utilisateur ne doit JAMAIS savoir quelles sources d'IA sont utilisées en arrière-plan. Pour lui, c'est "AIDup" qui répond. Les sources sont totalement invisibles.
 
 ---
 
@@ -56,7 +56,7 @@ L'utilisateur ne doit JAMAIS savoir quelles sources d'IA sont utilisées en arri
 
 ### Architecture du switch automatique
 ```
-Utilisateur → AI Aldup Frontend → Cloud Function → Router IA
+Utilisateur → AIDup Frontend → Cloud Function → Router IA
                                                       ↓
                                               ┌───────────────┐
                                               │  Source 1     │ → Épuisée?
@@ -102,11 +102,11 @@ Utilisateur → AI Aldup Frontend → Cloud Function → Router IA
 
 #### B. Interface de Chat (page principale)
 - **Sidebar gauche :**
-  - Logo AI Aldup
+  - Logo AIDup
   - Bouton "Nouvelle conversation"
   - Liste des conversations précédentes (avec titre auto-généré)
   - Bouton supprimer par conversation
-  - Bouton "Soutenir AI Aldup" en bas
+  - Bouton "Soutenir AIDup" en bas
 - **Zone centrale :**
   - Header minimal avec logo + statut "En ligne"
   - Zone de messages (bulles style moderne)
@@ -142,7 +142,7 @@ Utilisateur → AI Aldup Frontend → Cloud Function → Router IA
 4. **Rate limiting** — gestion des quotas par source
 5. **Cache des réponses** — pour les questions fréquentes
 6. **Contexte conversationnel** — envoie l'historique à l'IA pour des réponses cohérentes
-7. **System prompt personnalisé** — "Tu es AI Aldup, un assistant intelligent..."
+7. **System prompt personnalisé** — "Tu es AIDup, un assistant intelligent..."
 8. **Monitoring des sources** — détecte les sources indisponibles
 9. **Fallback chain** — ordre de priorité des sources
 10. **Logs et analytics** — pour optimiser les performances
@@ -210,7 +210,7 @@ Trigger: HTTP Request (appelé par le frontend)
 Input: { messages[], sessionId, userId }
 Process:
   1. Récupérer le contexte de la session
-  2. Ajouter le system prompt "AI Aldup"
+  2. Ajouter le system prompt "AIDup"
   3. Router vers la meilleure source IA disponible
   4. Si échec → switch vers source suivante
   5. Sauvegarder la réponse dans Firestore
@@ -346,7 +346,7 @@ Process:
 
 ## 📋 11. RÉSUMÉ EN UNE PHRASE
 
-> **AI Aldup est une application web hébergée sur Firebase qui offre un assistant IA gratuit et élégant en agrégeant toutes les sources d'IA gratuites disponibles, avec un switch automatique invisible entre les sources quand l'une est épuisée, le tout dans une interface premium dark mode où l'utilisateur ne voit que "AI Aldup" — sans jamais connaître les sources en arrière-plan.**
+> **AIDup est une application web hébergée sur Firebase qui offre un assistant IA gratuit et élégant en agrégeant toutes les sources d'IA gratuites disponibles, avec un switch automatique invisible entre les sources quand l'une est épuisée, le tout dans une interface premium dark mode où l'utilisateur ne voit que "AIDup" — sans jamais connaître les sources en arrière-plan.**
 
 ---
 
@@ -368,5 +368,5 @@ Process:
 
 ---
 
-*Document de conception complet — AI Aldup v1.0*
+*Document de conception complet — AIDup v1.0*
 *Dernière mise à jour : 2024*
