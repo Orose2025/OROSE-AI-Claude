@@ -37,7 +37,7 @@ export interface RouteRequest extends Omit<CallOptions, 'onToken'> {
 }
 
 /**
- * Routeur IA d'AI Aldup.
+ * Routeur IA d'AIDup.
  *
  * Il essaie les sources dans l'ordre de priorité, saute celles qui sont au
  * repos, et passe silencieusement à la suivante dès qu'une source est épuisée,
