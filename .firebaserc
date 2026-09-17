@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "alaindupont-projet"
+  },
+  "targets": {
+    "alaindupont-projet": {
+      "hosting": {
+        "ai-aldup": [
+          "ai-aldup"
+        ]
+      }
+    }
+  }
+}

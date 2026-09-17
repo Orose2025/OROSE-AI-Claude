@@ -1,0 +1,115 @@
+name: Déploiement ai-aldup
+
+# Construit l'application (Vite -> dossier dist) puis la publie sur le site
+# Firebase Hosting "ai-aldup" du projet "alaindupont-projet".
+#
+# Facultatif : sans le secret FIREBASE_SERVICE_ACCOUNT_ALAINDUPONT_PROJET, le
+# déploiement est simplement sauté et le workflow reste vert. La publication de
+# test se fait sur GitHub Pages (workflow github-pages.yml), sans aucun secret.
+#
+# Les sites "alaindupont-projet" (jeu.echecocube.ca) et "associe-numerique"
+# ne sont jamais touchés : la cible est verrouillée dans .firebaserc et
+# vérifiée par l'étape « Garde-fou » ci-dessous.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  FIREBASE_PROJECT: alaindupont-projet
+  FIREBASE_TARGET: ai-aldup
+
+concurrency:
+  group: firebase-ai-aldup-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Garde-fou - aucune autre cible Firebase
+        run: |
+          set -e
+          for interdit in "jeu.echecocube.ca" "associe-numerique"; do
+            if grep -rq "$interdit" firebase.json .firebaserc; then
+              echo "ERREUR: '$interdit' trouve dans la configuration Firebase. Deploiement annule."
+              exit 1
+            fi
+          done
+          if [ "$(grep -c '"target"' firebase.json)" != "1" ]; then
+            echo "ERREUR: firebase.json doit contenir exactement une cible hosting."
+            exit 1
+          fi
+          grep -q '"target": "ai-aldup"' firebase.json || {
+            echo "ERREUR: la cible hosting n'est pas ai-aldup."; exit 1; }
+          grep -q '"ai-aldup"' .firebaserc || {
+            echo "ERREUR: la cible ai-aldup est absente de .firebaserc."; exit 1; }
+          echo "OK : seule la cible ai-aldup sera deployee."
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - run: npm ci
+
+      - name: Construire l'application
+        run: npm run build
+        env:
+          # Vide tant que la passerelle n'est pas déployée : l'application
+          # utilise alors uniquement les sources sans clé.
+          VITE_AI_GATEWAY_URL: ${{ vars.VITE_AI_GATEWAY_URL }}
+
+      - name: Vérifier que dist/ a bien été produit
+        run: |
+          test -f dist/index.html || { echo "ERREUR: dist/index.html absent."; exit 1; }
+          echo "Contenu de dist/ :"
+          ls -la dist
+
+      - name: Le secret est-il configuré ?
+        id: secret
+        env:
+          SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ALAINDUPONT_PROJET }}
+        run: |
+          if [ -n "$SA" ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Le secret FIREBASE_SERVICE_ACCOUNT_ALAINDUPONT_PROJET n'est pas encore configuré. Voir docs/DEPLOIEMENT.md."
+          fi
+
+      - name: Aperçu sur une Pull Request
+        if: github.event_name == 'pull_request' && steps.secret.outputs.present == 'true'
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ALAINDUPONT_PROJET }}
+          projectId: ${{ env.FIREBASE_PROJECT }}
+          target: ${{ env.FIREBASE_TARGET }}
+          expires: 7d
+
+      - name: Déploiement Firebase sauté
+        if: steps.secret.outputs.present != 'true'
+        run: |
+          echo "Le secret FIREBASE_SERVICE_ACCOUNT_ALAINDUPONT_PROJET est absent :"
+          echo "le déploiement Firebase est sauté, ce n'est pas une erreur."
+          echo "L'application est publiée sur GitHub Pages, qui ne demande aucun secret."
+          echo "Pour activer Firebase plus tard, voir docs/DEPLOIEMENT.md."
+
+      - name: Mise en ligne
+        if: github.event_name != 'pull_request' && steps.secret.outputs.present == 'true'
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ALAINDUPONT_PROJET }}
+          projectId: ${{ env.FIREBASE_PROJECT }}
+          target: ${{ env.FIREBASE_TARGET }}
+          channelId: live
