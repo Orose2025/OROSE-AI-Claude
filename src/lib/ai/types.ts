@@ -1,4 +1,4 @@
-// Types partagés du moteur AI Aldup.
+// Types partagés du moteur AIDup.
 // Règle d'or : rien de ce qui identifie une source IA ne doit remonter à l'écran.
 
 export type ChatRole = 'system' | 'user' | 'assistant';

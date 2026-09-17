@@ -207,7 +207,7 @@ function App() {
                 <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="currentColor"/>
               </svg>
             </div>
-            <span className="text-white font-semibold text-xl tracking-tight">AI Aldup</span>
+            <span className="text-white font-semibold text-xl tracking-tight">AIDup</span>
           </div>
           <div className="flex items-center gap-6">
             <button
@@ -242,7 +242,7 @@ function App() {
             </h1>
             
             <p className="text-lg sm:text-xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed">
-              AI Aldup est votre compagnon intelligent, disponible gratuitement et sans limite. 
+              AIDup est votre compagnon intelligent, disponible gratuitement et sans limite. 
               Posez vos questions, créez, apprenez, codez — tout est possible.
             </p>
 
@@ -282,7 +282,7 @@ function App() {
         {/* Footer */}
         <footer className="relative z-10 px-6 py-8 border-t border-white/5 text-center">
           <p className="text-gray-600 text-sm">
-            © 2024 AI Aldup — Service gratuit financé par la communauté
+            © 2024 AIDup — Service gratuit financé par la communauté
           </p>
         </footer>
 
@@ -294,9 +294,9 @@ function App() {
                 <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-purple-500/20">
                   <span className="text-2xl">❤️</span>
                 </div>
-                <h2 className="text-white text-2xl font-bold mb-3">Soutenir AI Aldup</h2>
+                <h2 className="text-white text-2xl font-bold mb-3">Soutenir AIDup</h2>
                 <p className="text-gray-400 text-sm mb-8 leading-relaxed">
-                  AI Aldup est gratuit pour tous. Votre soutien nous aide à couvrir les coûts 
+                  AIDup est gratuit pour tous. Votre soutien nous aide à couvrir les coûts 
                   de serveurs et à garder le service accessible.
                 </p>
                 
@@ -363,7 +363,7 @@ function App() {
                 </svg>
               </div>
               <div>
-                <h2 className="text-white font-semibold text-sm">AI Aldup</h2>
+                <h2 className="text-white font-semibold text-sm">AIDup</h2>
                 <p className="text-gray-500 text-xs">Assistant gratuit</p>
               </div>
             </div>
@@ -420,7 +420,7 @@ function App() {
               className="w-full py-2.5 text-sm text-gray-400 hover:text-white transition-colors flex items-center justify-center gap-2 rounded-xl hover:bg-white/5"
             >
               <span>❤️</span>
-              <span>Soutenir AI Aldup</span>
+              <span>Soutenir AIDup</span>
             </button>
           </div>
         </div>
@@ -447,7 +447,7 @@ function App() {
                   <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="currentColor"/>
                 </svg>
               </div>
-              <span className="text-white font-semibold text-sm">AI Aldup</span>
+              <span className="text-white font-semibold text-sm">AIDup</span>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -469,7 +469,7 @@ function App() {
               </div>
               <h2 className="text-white text-3xl font-bold mb-3 tracking-tight">Comment puis-je vous aider ?</h2>
               <p className="text-gray-500 max-w-md mb-10 text-base">
-                Je suis AI Aldup, votre assistant intelligent gratuit. Posez-moi n'importe quelle question.
+                Je suis AIDup, votre assistant intelligent gratuit. Posez-moi n'importe quelle question.
               </p>
               <div className="grid sm:grid-cols-2 gap-3 max-w-lg w-full">
                 {[
@@ -581,7 +581,7 @@ function App() {
               )}
             </div>
             <p className="text-center text-gray-600 text-xs mt-3">
-              AI Aldup peut faire des erreurs. Vérifiez les informations importantes.
+              AIDup peut faire des erreurs. Vérifiez les informations importantes.
             </p>
           </form>
         </div>
@@ -595,9 +595,9 @@ function App() {
               <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-purple-500/20">
                 <span className="text-2xl">❤️</span>
               </div>
-              <h2 className="text-white text-2xl font-bold mb-3">Soutenir AI Aldup</h2>
+              <h2 className="text-white text-2xl font-bold mb-3">Soutenir AIDup</h2>
               <p className="text-gray-400 text-sm mb-8 leading-relaxed">
-                AI Aldup est gratuit pour tous. Votre soutien nous aide à couvrir les coûts 
+                AIDup est gratuit pour tous. Votre soutien nous aide à couvrir les coûts 
                 de serveurs et à garder le service accessible.
               </p>
               

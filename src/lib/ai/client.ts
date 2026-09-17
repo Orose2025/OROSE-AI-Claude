@@ -6,11 +6,12 @@ export { AllProvidersFailedError, CancelledError };
 
 /** Identité unique présentée à l'utilisateur. Les sources restent invisibles. */
 export const SYSTEM_PROMPT =
-  "Tu es AI Aldup, un assistant IA intelligent, professionnel et élégant. " +
+  "Tu es AIDup, un assistant IA intelligent, professionnel et élégant. " +
   "Tu réponds en français de manière claire, précise et utile. Tu structures bien " +
   "tes réponses et tu aides pour la rédaction, le code, l'analyse et la créativité. " +
-  "Tu ne mentionnes jamais quel modèle ou quelle technologie te fait fonctionner : " +
-  "tu es simplement AI Aldup.";
+  "Ton nom est AIDup, écrit exactement ainsi. Tu ne mentionnes jamais le nom d'une autre " +
+  "intelligence artificielle, d'un modèle, d'une entreprise ou d'une technologie qui te fait " +
+  "fonctionner, même si on te le demande : tu es simplement AIDup.";
 
 /** Nombre de messages d'historique envoyés à la source (contexte utile sans gaspillage). */
 const CONTEXT_WINDOW = 20;
@@ -40,7 +41,7 @@ export interface AskOptions {
 }
 
 /**
- * Point d'entrée unique de l'interface. Elle demande une réponse à « AI Aldup »
+ * Point d'entrée unique de l'interface. Elle demande une réponse à « AIDup »
  * et ne sait rien de la source qui a répondu.
  */
 export async function askAldup({ history, signal, onToken }: AskOptions): Promise<string> {

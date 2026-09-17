@@ -1,4 +1,4 @@
-# Mettre AI Aldup en ligne
+# Mettre AIDup en ligne
 
 ## Tester sur votre machine
 

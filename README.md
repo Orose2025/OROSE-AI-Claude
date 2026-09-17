@@ -1,8 +1,8 @@
-# AI Aldup
+# AIDup
 
 Un seul assistant à l'écran. Plusieurs IA gratuites derrière.
 
-L'utilisateur écrit à « AI Aldup ». En arrière-plan, l'application interroge des
+L'utilisateur écrit à « AIDup ». En arrière-plan, l'application interroge des
 sources d'IA gratuites une par une : dès que l'une est épuisée, en panne ou trop
 lente, elle passe à la suivante **sans jamais le signaler à l'utilisateur**.
 Aucun abonnement, aucune inscription obligatoire.

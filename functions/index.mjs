@@ -1,4 +1,4 @@
-// Passerelle HTTP d'AI Aldup : expose une API compatible OpenAI au frontend,
+// Passerelle HTTP d'AIDup : expose une API compatible OpenAI au frontend,
 // et masque entièrement les sources IA utilisées derrière.
 import { onRequest } from 'firebase-functions/v2/https';
 import { route, RECIPES } from './router.mjs';
